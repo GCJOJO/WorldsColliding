@@ -1,0 +1,12 @@
+{
+  "type": "worldscolliding:story_type",
+  "generator": {
+    "type": "minecraft:flat",
+    "settings": {
+      "biome": "minecraft:plains",
+      "features": false,
+      "lakes": false,
+      "layers": []
+    }
+  }
+}
