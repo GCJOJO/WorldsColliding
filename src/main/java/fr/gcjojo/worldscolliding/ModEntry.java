@@ -1,5 +1,9 @@
 package fr.gcjojo.worldscolliding;
 
+import fr.gcjojo.worldscolliding.entity.ModEntities;
+import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
+import fr.gcjojo.worldscolliding.client.ScourgeRenderer;
+
 import com.mojang.logging.LogUtils;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import net.minecraft.client.Minecraft;
@@ -50,6 +54,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent; // IMPORT DE L'ÉVÉNEMENT DE RENDU
 import org.slf4j.Logger;
 
 import java.util.Optional;
@@ -67,8 +73,12 @@ public class ModEntry
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        ModEntities.register(modEventBus);
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
+
+        modEventBus.addListener(this::registerAttributes);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
@@ -106,6 +116,10 @@ public class ModEntry
                 level.random,
                 2
         );
+    }
+
+    private void registerAttributes(EntityAttributeCreationEvent event) {
+        event.put(ModEntities.SCOURGE.get(), ScourgeEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -158,6 +172,7 @@ public class ModEntry
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         // Some common setup code
+        event.enqueueWork(fr.gcjojo.worldscolliding.network.ModNetwork::register);
         LOGGER.info("HELLO FROM COMMON SETUP");
     }
 
@@ -179,6 +194,12 @@ public class ModEntry
             // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
+        }
+
+        // CORRECTION : Événement indispensable pour lier ton entité à son système d'affichage graphique
+        @SubscribeEvent
+        public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerEntityRenderer(ModEntities.SCOURGE.get(), ScourgeRenderer::new);
         }
     }
 }
