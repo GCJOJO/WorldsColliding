@@ -60,11 +60,11 @@ public class DialogueScreen extends Screen {
             int btnHeight = 20;
             int yPos = this.height / 2 + 50;
 
-            this.addRenderableWidget(Button.builder(Component.literal(currentLine.option1()), b -> {
+            this.addRenderableWidget(Button.builder(Component.translatable(currentLine.option1()), b -> {
                 handleChoiceSelection(currentLine.next1(), currentLine.save1(), currentLine.action1());
             }).bounds(this.width / 4 - btnWidth / 2, yPos, btnWidth, btnHeight).build());
 
-            this.addRenderableWidget(Button.builder(Component.literal(currentLine.option2()), b -> {
+            this.addRenderableWidget(Button.builder(Component.translatable(currentLine.option2()), b -> {
                 handleChoiceSelection(currentLine.next2(), currentLine.save2(), currentLine.action2());
             }).bounds(3 * this.width / 4 - btnWidth / 2, yPos, btnWidth, btnHeight).build());
         }
@@ -95,7 +95,7 @@ public class DialogueScreen extends Screen {
                                     obj.get("option2").getAsString(), obj.get("action2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString()
                             ));
                         } else {
-                            this.dialogues.add(new DialogueLine(speaker, obj.get("text").getAsString()));
+                            this.dialogues.add(new DialogueLine(speaker, Component.translatable(obj.get("text").getAsString()).getString()));
                         }
                     });
                     this.currentIndex = 0;
@@ -130,7 +130,7 @@ public class DialogueScreen extends Screen {
                                     obj.get("option2").getAsString(), obj.get("action2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString()
                             ));
                         } else {
-                            lines.add(new DialogueLine(speaker, obj.get("text").getAsString()));
+                            lines.add(new DialogueLine(speaker, Component.translatable(obj.get("text").getAsString()).getString()));
                         }
                     });
                     Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(lines)));
@@ -173,11 +173,11 @@ public class DialogueScreen extends Screen {
         DialogueLine currentLine = dialogues.get(currentIndex);
 
         if ("choix".equals(currentLine.speaker())) {
-            String opt1 = currentLine.option1();
-            graphics.drawCenteredString(this.font, opt1, this.width / 4, this.height / 2, 0xFFFFFF);
+            String opt1 = Component.translatable(currentLine.option1()).getString();
+            //graphics.drawCenteredString(this.font, opt1, this.width / 4, this.height / 2, 0xFFFFFF);
 
-            String opt2 = currentLine.option2();
-            graphics.drawCenteredString(this.font, opt2, 3 * this.width / 4, this.height / 2, 0xFFFFFF);
+            String opt2 = Component.translatable(currentLine.option2()).getString();
+            //graphics.drawCenteredString(this.font, opt2, 3 * this.width / 4, this.height / 2, 0xFFFFFF);
         } else {
             int boxWidth = 300;
             int boxHeight = 80;
@@ -185,8 +185,8 @@ public class DialogueScreen extends Screen {
             int boxY = this.height - boxHeight - 20;
 
             graphics.fill(boxX, boxY, boxX + boxWidth, boxY + boxHeight, 0x80000000);
-            String speaker = currentLine.speaker();
-            graphics.drawString(this.font, speaker, boxX + 10, boxY + 5, getSpeakerColor(speaker), false);
+            String speakerTranslated = Component.translatable(currentLine.speaker()).getString();
+            graphics.drawString(this.font, speakerTranslated, boxX + 10, boxY + 5, getSpeakerColor(currentLine.speaker()), false);
 
             if (currentLine.text() != null) {
                 String displayedText = currentLine.text().substring(0, charIndex);
@@ -249,9 +249,9 @@ public class DialogueScreen extends Screen {
 
     private int getSpeakerColor(String speaker) {
         return switch (speaker) {
-            case "The One" -> 0xFFD700;
-            case "The Scourge" -> 0x555555;
-            case "The Voice" -> 0xFF0000;
+            case "worldscolliding.speaker.the_one" -> 0xFFD700;
+            case "worldscolliding.speaker.scourge" -> 0x555555;
+            case "worldscolliding.speaker.the_voice" -> 0xFF0000;
             default -> 0xFFFFFF;
         };
     }

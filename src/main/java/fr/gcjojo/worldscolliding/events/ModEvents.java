@@ -43,7 +43,6 @@ public class ModEvents {
         if (event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer serverPlayer) {
             FreezeData data = frozenPlayers.get(serverPlayer.getUUID());
             if (data != null) {
-
                 serverPlayer.setDeltaMovement(0, 0, 0);
                 serverPlayer.teleportTo(data.position.x, data.position.y, data.position.z);
             }
@@ -64,9 +63,7 @@ public class ModEvents {
                     ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
 
                     if (player != null) {
-
                         player.setGameMode(data.previousGameMode);
-
                         ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
                     }
                     iterator.remove();

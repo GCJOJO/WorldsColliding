@@ -1,0 +1,43 @@
+{
+    "worldscolliding.speaker.scourge" : "The Scourge",
+    "worldscolliding.speaker.the_one" : "The One",
+    "worldscolliding.speaker.the_voice" : "The Voice",
+
+    "worldscolliding.dialogue.choice.yes" : "Yes",
+    "worldscolliding.dialogue.choice.no" : "No",
+
+    "worldscolliding.dialogue.chapter0_set.1": "Come...",
+    "worldscolliding.dialogue.chapter0_set.2": "Come closer...",
+    "worldscolliding.dialogue.chapter0_set.3": "Good... A little bit closer...",
+    "worldscolliding.dialogue.chapter0_set.4": "Stop. Don't listen to him.",
+    "worldscolliding.dialogue.chapter0_set.5": "The one who stands before you is know as The Scourge, he is evil incarnate, in this world and countless others.",
+    "worldscolliding.dialogue.chapter0_set.6": "I am surprised to see you here... yet, it can't just be a coincidence.",
+    "worldscolliding.dialogue.chapter0_set.7": "I believe you are a kindhearted soul, sent here to rescue this tiny world.",
+    "worldscolliding.dialogue.chapter0_set.8": "But I must warn you, every world, every dimension, have been haunted by a one and only being : him.",
+    "worldscolliding.dialogue.chapter0_set.9": "He is capable of taking different forms, of adapting and corrupting everything he touches, world after the other.",
+    "worldscolliding.dialogue.chapter0_set.10": "You must be a lone survivor of his cruelty... as all traces of humanity has disappeared from this world.",
+    "worldscolliding.dialogue.chapter0_set.11": "[weakly] Lies. Ignore this voice, she is manipulating you.",
+    "worldscolliding.dialogue.chapter0_set.12": "Leave, now. Come back when armed, when you have fought the first manifestations of his hatred.",
+    "worldscolliding.dialogue.chapter0_set.13": "Come back with an iron sword. I'll explain your mission in due time, if you so choose to help us.",
+
+    "worldscolliding.dialogue.chapter_1_ask.text" : "Are you ready for your first sealing ?",
+
+    "worldscolliding.dialogue.chapter1_set.1": "",
+    "worldscolliding.dialogue.chapter1.set.2": "",
+    "worldscolliding.dialogue.chapter1_set.3": "",
+    "worldscolliding.dialogue.chapter1_set.4": "",
+    "worldscolliding.dialogue.chapter1_set.5": "",
+    "worldscolliding.dialogue.chapter1_set.6": "",
+    "worldscolliding.dialogue.chapter1_set.7": "",
+
+    "worldscolliding.dialogue.chapter1_yes_set.1" : "",
+    "worldscolliding.dialogue.chapter1_yes_set.2" : "",
+    "worldscolliding.dialogue.chapter1_yes_set.3" : "",
+    "worldscolliding.dialogue.chapter1_yes_set.4" : "",
+    "worldscolliding.dialogue.chapter1_yes_set.5" : "",
+    "worldscolliding.dialogue.chapter1_yes_set.6" : "",
+    "worldscolliding.dialogue.chapter1_yes_set.7" : "",
+
+    "worldscolliding.dialogue.chapter1_no_set.1" : ""
+}
+
