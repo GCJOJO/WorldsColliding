@@ -1,0 +1,17 @@
+{
+  "sword_draw": {
+    "sounds": [
+      { "name": "8d82b5_TLOZ_Ocarina_Of_Time_Sword_Draw_Sound_Effect.ogg", "stream": false }
+    ]
+  },
+  "protoss_electric": {
+    "sounds": [
+      { "name": "protoss-electric.ogg", "stream": false }
+    ]
+  },
+  "master_sword": {
+    "sounds": [
+      { "name": "zelda-master-sword.ogg", "stream": false }
+    ]
+  }
+}

@@ -1,5 +1,7 @@
 package fr.gcjojo.worldscolliding.entity;
 
+import fr.gcjojo.worldscolliding.ModSounds;
+
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +19,7 @@ import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
+import net.minecraft.sounds.SoundSource;
 
 public class ScourgeEntity extends PathfinderMob implements GeoEntity {
 
@@ -31,7 +34,6 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 69.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
-
     }
 
     @Override
@@ -41,9 +43,8 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 0, event -> {
-            return event.setAndContinue(RawAnimation.begin().thenLoop("idle"));
-        }));
+        controllers.add(new AnimationController<>(this, "controller", 0, event ->
+                event.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
 
         controllers.add(new AnimationController<>(this, "seal_controller", 0, event -> PlayState.CONTINUE)
                 .triggerableAnim("sceal1", RawAnimation.begin().thenPlay("sceal1"))
@@ -54,6 +55,16 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                 .triggerableAnim("sceal6", RawAnimation.begin().thenPlay("sceal6"))
                 .triggerableAnim("sceal7", RawAnimation.begin().thenPlay("sceal7"))
                 .triggerableAnim("sceal8", RawAnimation.begin().thenPlay("sceal8"))
+                .setSoundKeyframeHandler(event -> {
+                    String sound = event.getKeyframeData().getSound();
+                    if (sound.contains("sword_draw")) {
+                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.SWORD_DRAW.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    } else if (sound.contains("protoss")) {
+                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.PROTOSS_ELECTRIC.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    } else if (sound.contains("master_sword") || sound.contains("zeldamastersword")) {
+                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.MASTER_SWORD.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    }
+                })
         );
     }
 

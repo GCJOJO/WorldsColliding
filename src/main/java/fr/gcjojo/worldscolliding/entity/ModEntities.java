@@ -14,7 +14,7 @@ public class ModEntities {
 
     public static final RegistryObject<EntityType<ScourgeEntity>> SCOURGE =
             ENTITY_TYPES.register("scourge", () -> EntityType.Builder.of(ScourgeEntity::new, MobCategory.MONSTER)
-                    .sized(1.0f, 2.0f)
+                    .sized(3.0f, 2.0f)
                     .build("scourge"));
 
     public static void register(IEventBus eventBus) {

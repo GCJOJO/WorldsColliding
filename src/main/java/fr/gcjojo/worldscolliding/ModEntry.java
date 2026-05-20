@@ -29,36 +29,32 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.RegistryObject;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent; // IMPORT DE L'ÉVÉNEMENT DE RENDU
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import org.slf4j.Logger;
 
 import java.util.Optional;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(ModEntry.MODID)
 public class ModEntry
 {
-    // Define mod id in a common place for everything to reference
     public static final String MODID = "worldscolliding";
-    // Directly reference a slf4j logger
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public ModEntry(FMLJavaModLoadingContext context)
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        // Enregistrement des composants
         ModEntities.register(modEventBus);
+        ModSounds.register(modEventBus); // AJOUTÉ : Enregistrement des sons
 
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
-
         modEventBus.addListener(this::registerAttributes);
 
-        // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
 
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
@@ -67,7 +63,6 @@ public class ModEntry
     private static void placeScourgeDenStructure(ServerLevel level, BlockPos pos)
     {
         ResourceLocation structureID = ResourceLocation.tryParse(Config.storyStructure);
-        // MERCI COPISPLOP
         StructureTemplateManager manager = level.getStructureManager();
         Optional<StructureTemplate> templateOpt = manager.get(structureID);
 
@@ -108,7 +103,7 @@ public class ModEntry
     {
         Player player = event.getEntity();
         LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
-        //event.getEntity().changeDimension()
+
         if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
             LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
@@ -134,10 +129,8 @@ public class ModEntry
 
             placeScourgeDenStructure(player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY), blockPos);
 
-            //Spawn structure
             player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
             StoryDimensionData.setLastSpot(newPlayerSpot);
-            //player.level().setBlock(player.getOnPos(), Blocks.STONE.defaultBlockState(), 0);
 
             StoryDimensionData.setPlayerData(player, data);
             StoryDimensionData.save(player.getServer().overworld());
@@ -146,32 +139,26 @@ public class ModEntry
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
-        // Some common setup code
         event.enqueueWork(fr.gcjojo.worldscolliding.network.ModNetwork::register);
         LOGGER.info("HELLO FROM COMMON SETUP");
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
     public void onServerStarting(ServerStartingEvent event)
     {
-        // Do something when the server starts
         LOGGER.info("HELLO from server starting");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents
     {
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-            // Some client setup code
             LOGGER.info("HELLO FROM CLIENT SETUP");
             LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
         }
 
-        // CORRECTION : Événement indispensable pour lier ton entité à son système d'affichage graphique
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.SCOURGE.get(), ScourgeRenderer::new);
