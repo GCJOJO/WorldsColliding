@@ -1,7 +1,9 @@
 package fr.gcjojo.worldscolliding;
 
+import net.minecraft.core.Vec3i;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -13,58 +15,55 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-// An example config class. This is not required, but it's a good idea to have one to keep your config organized.
-// Demonstrates how to use Forge's config APIs
 @Mod.EventBusSubscriber(modid = ModEntry.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
 {
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
+    private static final ForgeConfigSpec.ConfigValue<String> STORY_STRUCTURE = BUILDER
+            .define("story_structure", "worldscoliding:scourge_den");
+
     private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_SIZE = BUILDER
             .comment("What the size of the structure in the story dimension is. This value is used to layout the grid of structures for each player.")
-            .defineInRange("story_structure_size", 16, 0, Integer.MAX_VALUE);
+            .defineInRange("story_structure_size", 61, 0, Integer.MAX_VALUE);
 
-    /*private static final ForgeConfigSpec.BooleanValue LOG_DIRT_BLOCK = BUILDER
-            .comment("Whether to log the dirt block on common setup")
-            .define("logDirtBlock", true);
+    private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_X = BUILDER
+            .comment("The x position of the spawnpoint of players in the structure relatives to the structure's origin")
+            .defineInRange("story_structure_player_spawnpoint_x", 0, -32, 32);
 
-    private static final ForgeConfigSpec.IntValue MAGIC_NUMBER = BUILDER
-            .comment("A magic number")
-            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
+    private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y = BUILDER
+            .comment("The y position of the spawnpoint of players in the structure relatives to the structure's origin")
+            .defineInRange("story_structure_player_spawnpoint_y", 0, -32, 32);
 
-    public static final ForgeConfigSpec.ConfigValue<String> MAGIC_NUMBER_INTRODUCTION = BUILDER
-            .comment("What you want the introduction message to be for the magic number")
-            .define("magicNumberIntroduction", "The magic number is... ");
+    private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z = BUILDER
+            .comment("The z position of the spawnpoint of players in the structure relatives to the structure's origin")
+            .defineInRange("story_structure_player_spawnpoint_z", 0, -32, 32);
 
     // a list of strings that are treated as resource locations for items
-    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
+    /*private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
             .comment("A list of items to log on common setup.")
-            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
-    */
+            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);*/
+
     static final ForgeConfigSpec SPEC = BUILDER.build();
 
+    public static String storyStructure;
     public static int storyStructureSize;
-
-    /*public static boolean logDirtBlock;
-    public static int magicNumber;
-    public static String magicNumberIntroduction;
-    public static Set<Item> items;*/
-
-    /*private static boolean validateItemName(final Object obj)
-    {
-        return obj instanceof final String itemName && ForgeRegistries.ITEMS.containsKey(new ResourceLocation(itemName));
-    }*/
+    public static Vec3 storyStructureSpawnpoint;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
     {
+        storyStructure = STORY_STRUCTURE.get();
         storyStructureSize = STORY_STRUCTURE_SIZE.get();
-        /*logDirtBlock = LOG_DIRT_BLOCK.get();
-        magicNumber = MAGIC_NUMBER.get();
-        magicNumberIntroduction = MAGIC_NUMBER_INTRODUCTION.get();
+
+        int spawnpointX = STORY_STRUCTURE_PLAYER_SPAWNPOINT_X.get();
+        int spawnpointY = STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y.get();
+        int spawnpointZ = STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z.get();
+
+        storyStructureSpawnpoint = new Vec3(spawnpointX, spawnpointY, spawnpointY);
 
         // convert the list of strings into a set of items
-        items = ITEM_STRINGS.get().stream()
+        /*items = ITEM_STRINGS.get().stream()
                 .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))
                 .collect(Collectors.toSet());*/
     }

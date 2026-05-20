@@ -3,8 +3,10 @@ package fr.gcjojo.worldscolliding;
 import com.mojang.logging.LogUtils;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.telemetry.events.WorldLoadEvent;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.food.FoodProperties;
@@ -16,11 +18,14 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,16 +66,38 @@ public class ModEntry
     public static Logger getLogger() { return LOGGER; }
 
     @SubscribeEvent
+    public void onServerStarted(ServerStartedEvent event)
+    {
+        StoryDimensionData.read(event.getServer().overworld());
+    }
+
+    @SubscribeEvent
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
     {
-        LOGGER.info("Player {} changed dimension {}", event.getEntity().getName().getString(), event.getTo().toString());
+        Player player = event.getEntity();
+        LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
         //event.getEntity().changeDimension()
         if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
-            LOGGER.info("Player {} joined STORY Dimension", event.getEntity().getName().getString());
-            event.getEntity().teleportTo(100, 100, 100);
-            CompoundTag additionalSaveData = new CompoundTag();
-            event.getEntity().readAdditionalSaveData(additionalSaveData);
+            LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
+            if(StoryDimensionData.hasPlayer(player))
+            {
+                PlayerStoryDimensionData playerData = StoryDimensionData.getPlayerData(player);
+                player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
+                return;
+            }
+
+            Vec3 newPlayerSpot = StoryDimensionData.getNextAvailableSpot();
+            Vec3 newPlayerSpawnpoint = StoryDimensionData.getNextAvailableSpawnpoint();
+            PlayerStoryDimensionData data = new PlayerStoryDimensionData(newPlayerSpawnpoint, event.getFrom().location().getPath(), player.getPosition(1.0f));
+
+            //Spawn structure
+            player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
+            StoryDimensionData.setLastSpot(newPlayerSpot);
+            //player.level().setBlock(player.getOnPos(), Blocks.STONE.defaultBlockState(), 0);
+
+            StoryDimensionData.addPlayer(player, data);
+            StoryDimensionData.save(player.getServer().overworld());
         }
     }
 
