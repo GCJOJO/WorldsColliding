@@ -34,18 +34,17 @@ public class StoryCommand {
             if(StoryDimensionData.hasPlayer(player))
             {
                 PlayerStoryDimensionData playerData = StoryDimensionData.getPlayerData(player);
-
                 ServerLevel toLevel;
 
                 switch(playerData.playerDimension)
                 {
-                    case "minecraft:the_end":
+                    case "the_end":
                         toLevel = player.getServer().getLevel(Level.END);
                         break;
-                    case "minecraft:nether":
+                    case "nether":
                         toLevel = player.getServer().getLevel(Level.NETHER);
                         break;
-                    case "minecraft:overworld":
+                    case "overworld":
                     default:
                         toLevel = player.getServer().getLevel(Level.OVERWORLD);
                         break;
@@ -59,7 +58,19 @@ public class StoryCommand {
         }
 
         Vec3 playerPos = new Vec3(player.getX(), player.getY(), player.getZ());
-
+        if(StoryDimensionData.hasPlayer(player))
+        {
+            var playerData = StoryDimensionData.getPlayerData(player);
+            playerData.playerPos = playerPos;
+            StoryDimensionData.setPlayerData(player, playerData);
+        }
+        else
+        {
+            String dimension = player.level().dimension().location().getPath();
+            var playerData = new PlayerStoryDimensionData(Vec3.ZERO, dimension, playerPos);
+            StoryDimensionData.setPlayerData(player, playerData);
+        }
+        StoryDimensionData.save(player.getServer().overworld());
         ServerLevel storyLevel = player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
         player.teleportTo(storyLevel, playerPos.x, playerPos.y, playerPos.z, Set.of(), 0.0f, 0.0f);
 

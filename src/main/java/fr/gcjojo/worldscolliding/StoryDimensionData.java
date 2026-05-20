@@ -36,10 +36,18 @@ public class StoryDimensionData {
         playersData.put(uuid, data);
     }
 
+    public static void setPlayerData(Player player, PlayerStoryDimensionData data)
+    {
+        if(!hasPlayer(player))
+            addPlayer(player, data);
+        else
+            playersData.replace(player.getStringUUID(), data);
+    }
+
     public static PlayerStoryDimensionData getPlayerData(Player player)
     {
         if(!hasPlayer(player))
-            return null;
+            return new PlayerStoryDimensionData(Vec3.ZERO, "overworld", Vec3.ZERO);
 
         String uuid = player.getStringUUID();
         return playersData.get(uuid);

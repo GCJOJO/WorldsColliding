@@ -80,23 +80,30 @@ public class ModEntry
         if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
             LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
+            PlayerStoryDimensionData data = StoryDimensionData.getPlayerData(player);
+            String dimension = event.getFrom().location().getPath();
+            data.playerDimension = dimension;
+
             if(StoryDimensionData.hasPlayer(player))
             {
                 PlayerStoryDimensionData playerData = StoryDimensionData.getPlayerData(player);
                 player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
+                StoryDimensionData.setPlayerData(player, data);
+                StoryDimensionData.save(player.getServer().overworld());
                 return;
             }
 
             Vec3 newPlayerSpot = StoryDimensionData.getNextAvailableSpot();
             Vec3 newPlayerSpawnpoint = StoryDimensionData.getNextAvailableSpawnpoint();
-            PlayerStoryDimensionData data = new PlayerStoryDimensionData(newPlayerSpawnpoint, event.getFrom().location().getPath(), player.getPosition(1.0f));
+
+            data.storyDimensionSpawnpoint = newPlayerSpawnpoint;
 
             //Spawn structure
             player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
             StoryDimensionData.setLastSpot(newPlayerSpot);
             //player.level().setBlock(player.getOnPos(), Blocks.STONE.defaultBlockState(), 0);
 
-            StoryDimensionData.addPlayer(player, data);
+            StoryDimensionData.setPlayerData(player, data);
             StoryDimensionData.save(player.getServer().overworld());
         }
     }
