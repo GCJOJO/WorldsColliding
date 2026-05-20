@@ -21,23 +21,27 @@ public class Config
     private static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
 
     private static final ForgeConfigSpec.ConfigValue<String> STORY_STRUCTURE = BUILDER
-            .define("story_structure", "worldscoliding:scourge_den");
+            .define("story_structure", "worldscolliding:scourge_den");
 
     private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_SIZE = BUILDER
             .comment("What the size of the structure in the story dimension is. This value is used to layout the grid of structures for each player.")
             .defineInRange("story_structure_size", 61, 0, Integer.MAX_VALUE);
 
-    private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_X = BUILDER
+    private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_X = BUILDER
             .comment("The x position of the spawnpoint of players in the structure relatives to the structure's origin")
-            .defineInRange("story_structure_player_spawnpoint_x", 0, -32, 32);
+            .defineInRange("story_structure_player_spawnpoint_x", 55.5d, -32.0d, 32.0);
 
-    private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y = BUILDER
+    private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y = BUILDER
             .comment("The y position of the spawnpoint of players in the structure relatives to the structure's origin")
-            .defineInRange("story_structure_player_spawnpoint_y", 0, -32, 32);
+            .defineInRange("story_structure_player_spawnpoint_y", 6.0d, -32.0d, 32.0d);
 
-    private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z = BUILDER
+    private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z = BUILDER
             .comment("The z position of the spawnpoint of players in the structure relatives to the structure's origin")
-            .defineInRange("story_structure_player_spawnpoint_z", 0, -32, 32);
+            .defineInRange("story_structure_player_spawnpoint_z", 30.5d, -32.0d, 32.0d);
+
+    private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_ROTATION = BUILDER
+            .comment("The angle of rotation of the player when teleporting to Story Dimension")
+            .defineInRange("story_structure_player_rotation", 90.0d, 0.0d, 360.0d);
 
     // a list of strings that are treated as resource locations for items
     /*private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
@@ -49,6 +53,7 @@ public class Config
     public static String storyStructure;
     public static int storyStructureSize;
     public static Vec3 storyStructureSpawnpoint;
+    public static float storyStructurePlayerRotation;
 
     @SubscribeEvent
     static void onLoad(final ModConfigEvent event)
@@ -56,12 +61,12 @@ public class Config
         storyStructure = STORY_STRUCTURE.get();
         storyStructureSize = STORY_STRUCTURE_SIZE.get();
 
-        int spawnpointX = STORY_STRUCTURE_PLAYER_SPAWNPOINT_X.get();
-        int spawnpointY = STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y.get();
-        int spawnpointZ = STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z.get();
+        double spawnpointX = STORY_STRUCTURE_PLAYER_SPAWNPOINT_X.get();
+        double spawnpointY = STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y.get();
+        double spawnpointZ = STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z.get();
+        storyStructureSpawnpoint = new Vec3(spawnpointX, spawnpointY, spawnpointZ);
 
-        storyStructureSpawnpoint = new Vec3(spawnpointX, spawnpointY, spawnpointY);
-
+        storyStructurePlayerRotation = (float)(double)STORY_STRUCTURE_PLAYER_ROTATION.get();
         // convert the list of strings into a set of items
         /*items = ITEM_STRINGS.get().stream()
                 .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))

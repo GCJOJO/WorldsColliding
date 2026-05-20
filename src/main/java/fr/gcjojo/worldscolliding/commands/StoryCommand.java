@@ -5,6 +5,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandExceptionType;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import fr.gcjojo.worldscolliding.Config;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.StoryDimensionData;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
@@ -72,7 +73,7 @@ public class StoryCommand {
         }
         StoryDimensionData.save(player.getServer().overworld());
         ServerLevel storyLevel = player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
-        player.teleportTo(storyLevel, playerPos.x, playerPos.y, playerPos.z, Set.of(), 0.0f, 0.0f);
+        player.teleportTo(storyLevel, playerPos.x, playerPos.y, playerPos.z, Set.of(), Config.storyStructurePlayerRotation, 0.0f);
 
         return 1;
     }

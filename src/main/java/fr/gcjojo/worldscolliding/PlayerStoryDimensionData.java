@@ -7,6 +7,7 @@ import net.minecraft.world.phys.Vec3;
 public class PlayerStoryDimensionData
 {
     //String uuid;
+    public boolean scourgeDenPlaced = false;
     public Vec3 storyDimensionSpawnpoint;
     public String playerDimension;
     public Vec3 playerPos;
@@ -27,7 +28,7 @@ public class PlayerStoryDimensionData
     public static PlayerStoryDimensionData load(CompoundTag nbt)
     {
         PlayerStoryDimensionData data = new PlayerStoryDimensionData();
-
+        data.scourgeDenPlaced = nbt.getBoolean("ScourgeDenPlaced");
         //data.uuid = nbt.getString("uuid");
         CompoundTag spawnpointTag = nbt.getCompound("Spawnpoint");
         double spawnpointX = spawnpointTag.getDouble("x");
@@ -49,6 +50,7 @@ public class PlayerStoryDimensionData
     public CompoundTag save(CompoundTag nbt)
     {
         //nbt.putString("uuid", this.uuid);
+        nbt.putBoolean("ScourgeDenPlaced", this.scourgeDenPlaced);
 
         CompoundTag spawnpointTag = new CompoundTag();
         spawnpointTag.putDouble("x", this.storyDimensionSpawnpoint.x);

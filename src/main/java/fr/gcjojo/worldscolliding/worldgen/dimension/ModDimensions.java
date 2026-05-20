@@ -67,7 +67,7 @@ public class ModDimensions
         HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 
         FlatLevelSource chunkGenerator = new FlatLevelSource(
-                new FlatLevelGeneratorSettings(Optional.empty(), biomeRegistry.getOrThrow(Biomes.PLAINS), new ArrayList<Holder<PlacedFeature>>()));
+                new FlatLevelGeneratorSettings(Optional.empty(), biomeRegistry.getOrThrow(Biomes.THE_VOID), new ArrayList<>()));
 
         LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.STORY_DIM_TYPE), chunkGenerator);
         context.register(STORY_DIM_KEY, stem);

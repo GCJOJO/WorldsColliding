@@ -4,8 +4,13 @@ import com.mojang.logging.LogUtils;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.telemetry.events.WorldLoadEvent;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.jfr.event.WorldLoadFinishedEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -14,9 +19,16 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 import net.minecraft.world.phys.Vec3;
@@ -39,6 +51,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.slf4j.Logger;
+
+import java.util.Optional;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(ModEntry.MODID)
@@ -65,6 +79,35 @@ public class ModEntry
 
     public static Logger getLogger() { return LOGGER; }
 
+    private static void placeScourgeDenStructure(ServerLevel level, BlockPos pos)
+    {
+        ResourceLocation structureID = ResourceLocation.tryParse(Config.storyStructure);
+        // MERCI COPISPLOP
+        StructureTemplateManager manager = level.getStructureManager();
+        Optional<StructureTemplate> templateOpt = manager.get(structureID);
+
+        if (templateOpt.isEmpty()) {
+            System.out.println("Structure introuvable : " + structureID);
+            return;
+        }
+
+        StructureTemplate template = templateOpt.get();
+
+        StructurePlaceSettings settings = new StructurePlaceSettings()
+                .setIgnoreEntities(false)
+                .setRotation(Rotation.NONE)
+                .setMirror(Mirror.NONE);
+
+        template.placeInWorld(
+                level,
+                pos,
+                pos,
+                settings,
+                level.random,
+                2
+        );
+    }
+
     @SubscribeEvent
     public void onServerStarted(ServerStartedEvent event)
     {
@@ -84,7 +127,7 @@ public class ModEntry
             String dimension = event.getFrom().location().getPath();
             data.playerDimension = dimension;
 
-            if(StoryDimensionData.hasPlayer(player))
+            if(StoryDimensionData.hasPlayer(player) && StoryDimensionData.getPlayerData(player).scourgeDenPlaced)
             {
                 PlayerStoryDimensionData playerData = StoryDimensionData.getPlayerData(player);
                 player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
@@ -95,8 +138,12 @@ public class ModEntry
 
             Vec3 newPlayerSpot = StoryDimensionData.getNextAvailableSpot();
             Vec3 newPlayerSpawnpoint = StoryDimensionData.getNextAvailableSpawnpoint();
-
             data.storyDimensionSpawnpoint = newPlayerSpawnpoint;
+            data.scourgeDenPlaced = true;
+
+            BlockPos blockPos = new BlockPos((int)newPlayerSpot.x, (int)newPlayerSpot.y, (int)newPlayerSpot.z);
+
+            placeScourgeDenStructure(player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY), blockPos);
 
             //Spawn structure
             player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
