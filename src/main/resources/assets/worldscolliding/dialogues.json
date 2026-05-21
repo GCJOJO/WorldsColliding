@@ -45,164 +45,182 @@
   ],
 
   "chapter_2_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tu es là. Et tu as réussi à éliminer ses serviteurs, je sais que ça n'a pas dû être facile mais..." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Tout ça ne sert à rien. Ces sceaux ne font que le décor." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Elle ne cherche qu'à augmenter son emprise sur moi, à me voler mes pouvoirs. Je ne fais pas de mal, moi." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Je vis, et je me protège. Ceux qu'elle appelle mes serviteurs vivent, eux aussi." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "La seule qui tue véritablement, c'est elle... et toi, à son service, comme un pantin." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_set.1" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.2" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.3" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.4" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.5" }
   ],
+
   "chapter_2_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Es-tu prêt pour le scellement ?" },
-    { "speaker": "choix", "option1": "Oui", "action1": "seal_2", "next1": "chapter_2_yes_set", "save1": "chapter_3_set", "option2": "Non", "action2": "none", "next2": "chapter_2_no_set", "save2": "chapter_2_ask" }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_2_ask.text" },
+    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_2", "next1": "chapter_2_yes_set", "save1": "chapter_3_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_2_no_set", "save2": "chapter_2_ask" }
   ],
+
   "chapter_2_yes_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Inutile. Tout ça est parfaitement inutile." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Son emprise sur les différents mondes s'amenuise." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il est grand temps d'explorer ce qui se cache au-delà de l'Overworld." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Deux endroits méritent ton attention : le Nether, royaume des flammes, et les Deepwater, grottes marines infinies." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Dans chacune de ces dimensions, tu trouveras des monstres à vaincre et des ressources précieuses à récupérer." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "C'est ta nouvelle mission. Et n'oublie pas l'Overworld, il pullule encore de mauvaises âmes." }
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_yes_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.2" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.3" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.4" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.5" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.6" }
   ],
+
   "chapter_2_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Prends le temps d'y réfléchir..." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_no_set.1" }
   ],
 
   "chapter_3_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Tu as tué mon Léviathan. Tu as tué mon animal de compagnie. Tu lui as volé sa progéniture." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "C'est... c'est maléfique. C'est d'une cruauté sans nom. Et tu crois que ça va s'arrêter là ?" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Je te le jure, tu vas le regretter. Si tu veux vraiment m'arrêter... c'est impossible." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "À partir de maintenant, j'envoie sur toi mes forces les plus puissantes. Mes Sept Péchés Capitaux." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Ils vont te tourmenter jusqu'à la fin de tes jours. Profite bien de," },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Ne l'écoute pas. Ce ne sont que de vulgaires spectres." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Dangereux, certes, mais pas différents des autres bosses que tu as déjà vaincus." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Ta prochaine cible est l'une des manifestations les plus puissantes du Fléau : le Dragon de l'Ender." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Pour y accéder, tu auras besoin des douze Yeux." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il t'a facilité la tâche en invoquant ses Péchés Capitaux, chacun d'eux devrait porter un fragment." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il te faudra aussi explorer la Lune, où se cachent des morts-vivants qui fuient la lumière du soleil." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Descendre au plus profond des grottes, dans l'Otherside, pour y affronter des créatures obscures et terrifiantes." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Et vaincre un Gardien du Gaïa, il te prouvera, et te prouveras à toi-même, que tu es devenu assez fort." }
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.1" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.2" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.3" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.4" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.5" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.6" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.7" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.8" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.9" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.10" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.11" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.12" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.13." }
   ],
+
   "chapter_3_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Es-tu prêt à le sceller à nouveau ?" },
-    { "speaker": "choix", "option1": "Oui", "action1": "seal_3", "next1": "chapter_3_yes_set", "save1": "chapter_4_set", "option2": "Non", "action2": "none", "next2": "chapter_3_no_set", "save2": "chapter_3_ask" }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_ask.text" },
+    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_3", "next1": "chapter_3_yes_set", "save1": "chapter_4_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_3_no_set", "save2": "chapter_3_ask" }
   ],
+
   "chapter_3_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tout ce chemin... pour améliorer ce que tu possèdes déjà." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Forge les éléments que tu as rassemblés en quelque chose de véritablement ultime." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_yes_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_yes_set.2" }
   ],
+
   "chapter_3_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Ne tarde pas trop. Ses sbires t'attendent." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_no_set.1" }
   ],
 
   "chapter_4_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tu as vaincu le Dragon de l'Ender. Tu as libéré tout le poids de cette dimension." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "C'est l'une des premières à être enfin libre. Malheureusement, elle a été ravagée, vidée de toute vie." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Arrête. S'il te plaît. Tu ne comprends pas ce que tu fais. Ça ne va pas bien se terminer." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Elle te ment. Elle ne cherche qu'à voler ta puissance, et la mienne." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Elle te fait forger une arme pour mieux te la dérober quand elle sera à son apogée." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "La plupart des êtres que tu as tués ne sont même pas mes émissaires. Ce sont des gardiens de reliques ancestrales." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "En les éliminant, tu attires sur toi la colère des dieux. Je t'en supplie," },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Assez." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.2" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.3" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.4" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.5" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.6" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.7" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.8" }
   ],
+
   "chapter_4_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Scelle-le maintenant, ou je te jure que tu regretteras d'avoir hésité." },
-    { "speaker": "choix", "option1": "Oui", "action1": "seal_4", "next1": "chapter_4_yes_set", "save1": "chapter_5_6_past_set", "option2": "Non", "action2": "none", "next2": "chapter_4_no_set", "save2": "chapter_4_ask" }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_ask.text" },
+    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_4", "next1": "chapter_4_yes_set", "save1": "chapter_5_6_past_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_4_no_set", "save2": "chapter_4_ask" }
   ],
+
   "chapter_4_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Maintenant, écoute bien. Pour les deux prochains sceaux, il te faudra deux armes légendaires." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "La première : l'Épée de Légende. La trouver ne suffira pas, la rendre véritablement légendaire sera une autre affaire." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il te faudra parcourir l'espace, explorer les différentes planètes du système solaire et traverser des donjons obscurs." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "La seconde : la Grande Épée de Gael. C'est le véritable test de ta force." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Cette épée est l'accumulation d'une douzaine de lames, chacune plus puissante que la précédente." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tu devras pénétrer la dimension Astrale, contrôlée par le Titan du Vide, pour y localiser d'autres serviteurs." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Ces deux épées peuvent être forgées dans l'ordre que tu veux. Mais les deux sont nécessaires." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.2" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.3" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.4" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.5" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.6" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.7" }
   ],
+
   "chapter_4_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Hésiter est une preuve de faiblesse que tu ne peux pas te permettre." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_no_set.1" }
   ],
 
   "chapter_5_6_past_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "J'ai beaucoup réfléchi. Il y a quelque chose que je voudrais te montrer. Mon passé." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Tu peux refuser... mais si tu acceptes, tu comprendras enfin." },
-    { "speaker": "choix", "option1": "Accepter", "action1": "none", "next1": "chapter_5_6_past_accept_set", "save1": "chapter_5_6_seal_set", "option2": "Refuser", "action2": "none", "next2": "chapter_5_6_seal_set", "save2": "chapter_5_6_seal_set" }
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_set.1" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_set.2" },
+    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.accept", "action1": "none", "next1": "chapter_5_6_past_accept_set", "save1": "chapter_5_6_seal_set", "option2": "worldscolliding.dialogue.choice.refuse", "action2": "none", "next2": "chapter_5_6_seal_set", "save2": "chapter_5_6_seal_set" }
   ],
+
   "chapter_5_6_past_accept_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "[Dans le noir] Il fut un temps où j'étais parmi eux. Les divinités." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Je gérais les monstres, les créatures sauvages, dangereuses, celles que personne d'autre ne voulait approcher." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "On me moquait pour ça. On me méprisait." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Un jour, l'un de mes monstres a tué un humain. Sans que je l'aie ordonné, sans que je le sache." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Et elle... elle en a profité. Elle a organisé un tribunal. Elle m'a lynché devant les autres dieux." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Mais ce que tu ne sais pas, c'est pourquoi elle me détestait vraiment." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Il y avait une femme, une femme qu'elle aimait. Et moi, sans le vouloir, je l'avais transformée en monstre." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Quand ELLE l'a appris... elle a tué la femme qu'elle aimait de sa propre main. Et elle m'en a voulu pour ça." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Ils m'ont banni. Scellé. Envoyé le plus loin possible, au sommet du monde, là où rien ne m'atteignait." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Et c'est là... que j'ai entendu une voix. Un jeune homme. Il m'a dit que mes semblables n'étaient que des imposteurs." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Pour une fois, il a dit la vérité. Il a bien été banni. C'est vrai." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Mais ne te laisse pas attendrir. Il n'a jamais été une divinité, c'est un menteur." }
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.2" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.3" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.4" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.5" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.6" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.7" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.8" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.9" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.10" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.11" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.12" }
   ],
+
   "chapter_5_6_seal_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tu as tout ce qu'il te fallait. Je suis... impressionnée." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Scelle-le. Il ne reste plus qu'un sceau après celui-ci, et on pourra enfin en finir." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Son emprise sur les différents mondes s'effrite. Il ne lui reste presque plus aucun subalterne. C'est presque terminé." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.2" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.3" }
   ],
+
   "chapter_5_6_seal_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Es-tu prêt ?" },
-    { "speaker": "choix", "option1": "Oui", "action1": "seal_5", "next1": "chapter_5_6_seal_yes_set", "save1": "chapter_7_prologue_set", "option2": "Non", "action2": "none", "next2": "chapter_5_6_seal_no_set", "save2": "chapter_5_6_seal_ask" }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_ask.text" },
+    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_5", "next1": "chapter_5_6_seal_yes_set", "save1": "chapter_7_prologue_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_5_6_seal_no_set", "save2": "chapter_5_6_seal_ask" }
   ],
+
   "chapter_5_6_seal_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Prépare-toi bien. La fin approche." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_no_set.1" }
   ],
+
   "chapter_5_6_seal_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Attends. Ce vestige ne suffira pas. Il te faudra quelque chose de bien plus puissant." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Sa puissance ne cesse de croître. Plus ses variantes meurent, plus la puissance se concentre en un seul être : lui." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Je vais te donner une Essence de Lumière. Avec elle, tu pourras fusionner l'Épée de Légende et la Grande Épée de Gael." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tu forgeras Excalibur, l'Épée de Lumière. Puis tu pourras créer l'Épée Royale, l'arme la plus puissante qui soit." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Quand elle sera forgée... reviens. Je libèrerai le Fléau, car tant qu'il est scellé, il est intouchable." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Une très bonne idée. Vraiment. Mais j'en ai une meilleure." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Prends ça. Avec cette essence, tu pourras forger l'Épée du Roi des Démons." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Elle te permettra de créer l'Épée des Cauchemars, qui pourra briser les liens de mon sceau et me libérer." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Si tu me libères, je te promets de calmer mes monstres. Je retournerai parmi les dieux pour les gérer." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Ne l'écoute pas. Il ne veut qu'une chose : être libre pour te tuer aussitôt après." },
-    { "speaker": "choix", "option1": "Essence de Lumière", "action1": "none", "next1": "chapter_5_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "Essence des Ténèbres", "action2": "none", "next2": "chapter_5_6_seal_dark_set", "save2": "chapter_7_dark_set" }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.7" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.8" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.9" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.10" },
+    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.seal_light", "action1": "none", "next1": "chapter_5_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "worldscolliding.dialogue.choice.seal_dark", "action2": "none", "next2": "chapter_5_6_seal_dark_set", "save2": "chapter_7_dark_set" }
   ],
+
   "chapter_5_6_seal_light_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Stupide. Vraiment stupide. Peu importe, quand je serai libre, ce monde sera à moi de toute façon." }
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" }
   ],
+
   "chapter_5_6_seal_dark_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "C'est une très mauvaise idée. Mais... je respecte ton choix. Je m'en remets au destin." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" }
   ],
 
   "chapter_7_prologue_set": [
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "Tu es là. Après tout ce chemin... tu es vraiment là." },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "J'ai construit cette aventure pour toi, minutieusement. J'espère que tu t'es bien amusé." },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "Le moment est venu de terminer tout ça, et de libérer ces pauvres âmes coincées dans un conflit perpétuel." },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "Peu importe le chemin que tu as choisi, sache que tu pourras toujours revenir pour expérimenter l'autre." },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "Bonne chance." }
+    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.1" },
+    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.2" },
+    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.3" },
+    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.4" },
+    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.5" }
   ],
+
   "chapter_7_light_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "[Elle voit l'épée] C'est... une merveille. Grâce à elle, nous allons enfin être libres de ce tourment." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Je dois t'avouer quelque chose. Ce qu'il t'a dit... n'était pas entièrement faux." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il a bien transformé la femme que j'aimais en monstre. Mais je ne pense pas qu'il ait jamais compris ce qu'il faisait." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il ne ressent rien. Ni colère, ni joie, ni haine. Il ne ment pas quand il dit qu'il cherche à faire le bien." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il ne perçoit simplement pas le mal qu'il cause. C'est ce qui le rend si dangereux." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Il est temps. Bonne chance. Je suis fière de toi." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Tu as duré longtemps. Vraiment longtemps. Et tu as bien joué, grâce à toi, j'ai récupéré toute cette puissance." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Même si elle ne me sert pas à grand-chose, au fond." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Mais c'est comme ça que ça finit, toujours. Je joue avec vous... et je vous jette." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "[Riant] L'homme là-haut fera en sorte que je revienne. Chaque fois que quelqu'un aura besoin de divertissement..." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Je serai là. Même pour mourir, tant que je peux vivre, tant que je peux expérimenter..." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.1" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.2" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.3" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.4" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.5" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.6" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.7" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.8" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.9" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.10" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.11" }
   ],
+
   "chapter_7_dark_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Ce que tu t'apprêtes à faire est une erreur. Tu vas causer plus de mal que nécessaire. Mais c'est ton destin." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Enfin. Voilà quelqu'un qui m'écoute." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Pour me libérer, il faut vaincre ma dernière incarnation. Je t'y emmène, je te demande sincèrement de me vaincre là-bas." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Tu as tenu ta parole... Et moi, je tiendrai la mienne." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Je sais que tu t'es laissé manipuler. Mais c'est fini. Je ne m'occuperai plus de rien, ici." },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "Je vais essayer de m'élever... de rejoindre la voix qui m'a guidé. Je crois que c'est mon Dieu." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Tu as réussi. D'une façon que je n'avais pas prévue... mais tu l'as banni." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "C'était ma mission dans ce monde : le bannir, et te guider jusqu'à la fin." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Cette mission est accomplie. Je n'ai plus de raison d'être ici." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Je vais rejoindre un autre monde. C'est une boucle infinie, les péchés que j'ai commis font que je suis condamnée à y revenir." },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "Merci. Vraiment. Pour tout ce que tu as accompli." }
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.1" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.2" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.3" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.4" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.5" },
+    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.6" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.7" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.8" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.9" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.10" },
+    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.11" }
   ]
 }

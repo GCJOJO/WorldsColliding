@@ -6,6 +6,12 @@
     "worldscolliding.dialogue.choice.yes": "Oui",
     "worldscolliding.dialogue.choice.no": "Non",
 
+    "worldscolliding.dialogue.choice.accept" : "Accepter",
+    "worldscolliding.dialogue.choice.refuse" : "Refuser",
+
+    "worldscolliding.dialogue.choice.seal_light" : "Essence de Lumière",
+    "worldscolliding.dialogue.choice.seal_dark" : "Essence des Ténèbres",
+
     "worldscolliding.dialogue.chapter0_set.1": "Approche...",
     "worldscolliding.dialogue.chapter0_set.2": "Approche encore...",
     "worldscolliding.dialogue.chapter0_set.3": "C'est bien... Encore plus près...",
@@ -38,5 +44,135 @@
     "worldscolliding.dialogue.chapter1_yes_set.6" : "Et si le cœur t'en dit... tu pourrais aussi essayer de reconstruire la civilisation qui a disparu.",
     "worldscolliding.dialogue.chapter1_yes_set.7" : "Crée un village, et si je le vois naître, j'userai de mes forces divines pour y ramener la vie humaine.",
 
-    "worldscolliding.dialogue.chapter1_no_set.1" : "Je vois... Reviens me parler quand tu te seras décidé."
+    "worldscolliding.dialogue.chapter1_no_set.1" : "Je vois... Reviens me parler quand tu te seras décidé.",
+
+    "worldscolliding.dialogue.chapter2_set.1": "Tu es là. Et tu as réussi à éliminer ses serviteurs, je sais que ça n'a pas dû être facile mais...",
+    "worldscolliding.dialogue.chapter2_set.2": "Tout ça ne sert à rien. Ces sceaux ne font que le décor.",
+    "worldscolliding.dialogue.chapter2_set.3": "Elle ne cherche qu'à augmenter son emprise sur moi, à me voler mes pouvoirs. Je ne fais pas de mal, moi.",
+    "worldscolliding.dialogue.chapter2_set.4": "Je vis, et je me protège. Ceux qu'elle appelle mes serviteurs vivent, eux aussi.",
+    "worldscolliding.dialogue.chapter2_set.5": "La seule qui tue véritablement, c'est elle... et toi, à son service, comme un pantin.",
+
+    "worldscolliding.dialogue.chapter_2_ask.text": "Es-tu prêt pour le scellement ?",
+
+    "worldscolliding.dialogue.chapter2_yes_set.1": "Inutile. Tout ça est parfaitement inutile.",
+    "worldscolliding.dialogue.chapter2_yes_set.2": "Son emprise sur les différents mondes s'amenuise.",
+    "worldscolliding.dialogue.chapter2_yes_set.3": "Il est grand temps d'explorer ce qui se cache au-delà de l'Overworld.",
+    "worldscolliding.dialogue.chapter2_yes_set.4": "Deux endroits méritent ton attention : le Nether, royaume des flammes, et les Deepwater, grottes marines infinies.",
+    "worldscolliding.dialogue.chapter2_yes_set.5": "Dans chacune de ces dimensions, tu trouveras des monstres à vaincre et des ressources précieuses à récupérer.",
+    "worldscolliding.dialogue.chapter2_yes_set.6": "C'est ta nouvelle mission. Et n'oublie pas l'Overworld, il pullule encore de mauvaises âmes.",
+
+    "worldscolliding.dialogue.chapter2_no_set.1": "Prends le temps d'y réfléchir...",
+
+    "worldscolliding.dialogue.chapter3_set.1" : "Tu as tué mon Léviathan. Tu as tué mon animal de compagnie. Tu lui as volé sa progéniture.",
+    "worldscolliding.dialogue.chapter3_set.2" : "C'est... c'est maléfique. C'est d'une cruauté sans nom. Et tu crois que ça va s'arrêter là ?",
+    "worldscolliding.dialogue.chapter3_set.3" : "Je te le jure, tu vas le regretter. Si tu veux vraiment m'arrêter... c'est impossible.",
+    "worldscolliding.dialogue.chapter3_set.4" : "À partir de maintenant, j'envoie sur toi mes forces les plus puissantes. Mes Sept Péchés Capitaux.",
+    "worldscolliding.dialogue.chapter3_set.5" : "Ils vont te tourmenter jusqu'à la fin de tes jours. Profite bien de,",
+    "worldscolliding.dialogue.chapter3_set.6" : "Ne l'écoute pas. Ce ne sont que de vulgaires spectres.",
+    "worldscolliding.dialogue.chapter3_set.7" : "Dangereux, certes, mais pas différents des autres bosses que tu as déjà vaincus.",
+    "worldscolliding.dialogue.chapter3_set.8" : "Ta prochaine cible est l'une des manifestations les plus puissantes du Fléau : le Dragon de l'Ender.",
+    "worldscolliding.dialogue.chapter3_set.9" : "Pour y accéder, tu auras besoin des douze Yeux.",
+    "worldscolliding.dialogue.chapter3_set.10" : "Il t'a facilité la tâche en invoquant ses Péchés Capitaux, chacun d'eux devrait porter un fragment.",
+    "worldscolliding.dialogue.chapter3_set.11" : "Il te faudra aussi explorer la Lune, où se cachent des morts-vivants qui fuient la lumière du soleil.",
+    "worldscolliding.dialogue.chapter3_set.12" : "Descendre au plus profond des grottes, dans l'Otherside, pour y affronter des créatures obscures et terrifiantes.",
+    "worldscolliding.dialogue.chapter3_set.13" : "Et vaincre un Gardien du Gaïa, il te prouvera, et te prouveras à toi-même, que tu es devenu assez fort",
+
+    "worldscolliding.dialogue.chapter3_ask.text" : "Es-tu prêt à le sceller à nouveau ?",
+
+    "worldscolliding.dialogue.chapter3_yes_set.1": "Tout ce chemin... pour améliorer ce que tu possèdes déjà.",
+    "worldscolliding.dialogue.chapter3_yes_set.2": "Forge les éléments que tu as rassemblés en quelque chose de véritablement ultime.",
+
+    "worldscolliding.dialogue.chapter3_no_set.1": "Ne tarde pas trop. Ses sbires t'attendent.",
+
+    "worldscolliding.dialogue.chapter4_set.1": "Tu as vaincu le Dragon de l'Ender. Tu as libéré tout le poids de cette dimension.",
+    "worldscolliding.dialogue.chapter4_set.2": "C'est l'une des premières à être enfin libre. Malheureusement, elle a été ravagée, vidée de toute vie.",
+    "worldscolliding.dialogue.chapter4_set.3": "Arrête. S'il te plaît. Tu ne comprends pas ce que tu fais. Ça ne va pas bien se terminer.",
+    "worldscolliding.dialogue.chapter4_set.4": "Elle te ment. Elle ne cherche qu'à voler ta puissance, et la mienne.",
+    "worldscolliding.dialogue.chapter4_set.5": "Elle te fait forger une arme pour mieux te la dérober quand elle sera à son apogée.",
+    "worldscolliding.dialogue.chapter4_set.6": "La plupart des êtres que tu as tués ne sont même pas mes émissaires. Ce sont des gardiens de reliques ancestrales.",
+    "worldscolliding.dialogue.chapter4_set.7": "En les éliminant, tu attires sur toi la colère des dieux. Je t'en supplie,",
+    "worldscolliding.dialogue.chapter4_set.8": "Assez",
+
+    "worldscolliding.dialogue.chapter4_ask.text" : "Scelle-le maintenant, ou je te jure que tu regretteras d'avoir hésité.",
+
+    "worldscolliding.dialogue.chapter4_yes_set.1" : "Maintenant, écoute bien. Pour les deux prochains sceaux, il te faudra deux armes légendaires.",
+    "worldscolliding.dialogue.chapter4_yes_set.2" : "La première : l'Épée de Légende. La trouver ne suffira pas, la rendre véritablement légendaire sera une autre affaire.",
+    "worldscolliding.dialogue.chapter4_yes_set.3" : "Il te faudra parcourir l'espace, explorer les différentes planètes du système solaire et traverser des donjons obscurs.",
+    "worldscolliding.dialogue.chapter4_yes_set.4" : "La seconde : la Grande Épée de Gael. C'est le véritable test de ta force.",
+    "worldscolliding.dialogue.chapter4_yes_set.5" : "Cette épée est l'accumulation d'une douzaine de lames, chacune plus puissante que la précédente.",
+    "worldscolliding.dialogue.chapter4_yes_set.6" : "Tu devras pénétrer la dimension Astrale, contrôlée par le Titan du Vide, pour y localiser d'autres serviteurs.",
+    "worldscolliding.dialogue.chapter4_yes_set.7" : "Ces deux épées peuvent être forgées dans l'ordre que tu veux. Mais les deux sont nécessaires.",
+
+    "worldscolliding.dialogue.chapter4_no_set.1" : "Hésiter est une preuve de faiblesse que tu ne peux pas te permettre.",
+
+    "worldscolliding.dialogue.chapter_5_6_past_set.1" : "J'ai beaucoup réfléchi. Il y a quelque chose que je voudrais te montrer. Mon passé.",
+    "worldscolliding.dialogue.chapter_5_6_past_set.2" : "Tu peux refuser... mais si tu acceptes, tu comprendras enfin.",
+
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" : "[Dans le noir] Il fut un temps où j'étais parmi eux. Les divinités.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.2" : "Je gérais les monstres, les créatures sauvages, dangereuses, celles que personne d'autre ne voulait approcher.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.3" : "On me moquait pour ça. On me méprisait.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.4" : "Un jour, l'un de mes monstres a tué un humain. Sans que je l'aie ordonné, sans que je le sache.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.5" : "Et elle... elle en a profité. Elle a organisé un tribunal. Elle m'a lynché devant les autres dieux.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.6" : "Mais ce que tu ne sais pas, c'est pourquoi elle me détestait vraiment.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.7" : "Il y avait une femme, une femme qu'elle aimait. Et moi, sans le vouloir, je l'avais transformée en monstre.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.8" : "Quand ELLE l'a appris... elle a tué la femme qu'elle aimait de sa propre main. Et elle m'en a voulu pour ça.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.9" : "Ils m'ont banni. Scellé. Envoyé le plus loin possible, au sommet du monde, là où rien ne m'atteignait.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.10" : "Et c'est là... que j'ai entendu une voix. Un jeune homme. Il m'a dit que mes semblables n'étaient que des imposteurs.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.11" : "Pour une fois, il a dit la vérité. Il a bien été banni. C'est vrai.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.12" : "Mais ne te laisse pas attendrir. Il n'a jamais été une divinité, c'est un menteur.",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_set.1" : "Tu as tout ce qu'il te fallait. Je suis... impressionnée.",
+    "worldscolliding.dialogue.chapter_5_6_seal_set.2" : "Scelle-le. Il ne reste plus qu'un sceau après celui-ci, et on pourra enfin en finir.",
+    "worldscolliding.dialogue.chapter_5_6_seal_set.3" : "Son emprise sur les différents mondes s'effrite. Il ne lui reste presque plus aucun subalterne. C'est presque terminé.",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_ask.text" : "Es-tu prêt ?",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_no_set.1" : "Prépare-toi bien. La fin approche.",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" : "Attends. Ce vestige ne suffira pas. Il te faudra quelque chose de bien plus puissant.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" : "Sa puissance ne cesse de croître. Plus ses variantes meurent, plus la puissance se concentre en un seul être : lui.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" : "Je vais te donner une Essence de Lumière. Avec elle, tu pourras fusionner l'Épée de Légende et la Grande Épée de Gael.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" : "Tu forgeras Excalibur, l'Épée de Lumière. Puis tu pourras créer l'Épée Royale, l'arme la plus puissante qui soit.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" : "Quand elle sera forgée... reviens. Je libèrerai le Fléau, car tant qu'il est scellé, il est intouchable.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" : "Une très bonne idée. Vraiment. Mais j'en ai une meilleure.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.7" : "Prends ça. Avec cette essence, tu pourras forger l'Épée du Roi des Démons.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.8" : "Elle te permettra de créer l'Épée des Cauchemars, qui pourra briser les liens de mon sceau et me libérer.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.9" : "Si tu me libères, je te promets de calmer mes monstres. Je retournerai parmi les dieux pour les gérer.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.10" : "Ne l'écoute pas. Il ne veut qu'une chose : être libre pour te tuer aussitôt après.",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" : "Stupide. Vraiment stupide. Peu importe, quand je serai libre, ce monde sera à moi de toute façon.",
+    "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" : "C'est une très mauvaise idée. Mais... je respecte ton choix. Je m'en remets au destin.",
+
+    "worldscolliding.dialogue.chapter_7_prologue_set.1" : "Tu es là. Après tout ce chemin... tu es vraiment là.",
+    "worldscolliding.dialogue.chapter_7_prologue_set.2" : "J'ai construit cette aventure pour toi, minutieusement. J'espère que tu t'es bien amusé.",
+    "worldscolliding.dialogue.chapter_7_prologue_set.3" : "Le moment est venu de terminer tout ça, et de libérer ces pauvres âmes coincées dans un conflit perpétuel.",
+    "worldscolliding.dialogue.chapter_7_prologue_set.4" : "Peu importe le chemin que tu as choisi, sache que tu pourras toujours revenir pour expérimenter l'autre.",
+    "worldscolliding.dialogue.chapter_7_prologue_set.5" : "Bonne chance.",
+
+    "worldscolliding.dialogue.chapter_7_light_set.1" : "[Elle voit l'épée] C'est... une merveille. Grâce à elle, nous allons enfin être libres de ce tourment.",
+    "worldscolliding.dialogue.chapter_7_light_set.2" : "Je dois t'avouer quelque chose. Ce qu'il t'a dit... n'était pas entièrement faux.",
+    "worldscolliding.dialogue.chapter_7_light_set.3" : "Il a bien transformé la femme que j'aimais en monstre. Mais je ne pense pas qu'il ait jamais compris ce qu'il faisait.",
+    "worldscolliding.dialogue.chapter_7_light_set.4" : "Il ne ressent rien. Ni colère, ni joie, ni haine. Il ne ment pas quand il dit qu'il cherche à faire le bien.",
+    "worldscolliding.dialogue.chapter_7_light_set.5" : "Il ne perçoit simplement pas le mal qu'il cause. C'est ce qui le rend si dangereux.",
+    "worldscolliding.dialogue.chapter_7_light_set.6" : "Il est temps. Bonne chance. Je suis fière de toi.",
+    "worldscolliding.dialogue.chapter_7_light_set.7" : "Tu as duré longtemps. Vraiment longtemps. Et tu as bien joué, grâce à toi, j'ai récupéré toute cette puissance.",
+    "worldscolliding.dialogue.chapter_7_light_set.8" : "Même si elle ne me sert pas à grand-chose, au fond.",
+    "worldscolliding.dialogue.chapter_7_light_set.9" : "Mais c'est comme ça que ça finit, toujours. Je joue avec vous... et je vous jette.",
+    "worldscolliding.dialogue.chapter_7_light_set.10" : "[Riant] L'homme là-haut fera en sorte que je revienne. Chaque fois que quelqu'un aura besoin de divertissement...",
+    "worldscolliding.dialogue.chapter_7_light_set.11" : "Je serai là. Même pour mourir, tant que je peux vivre, tant que je peux expérimenter...",
+
+
+    "worldscolliding.dialogue.chapter_7_dark_set.1" : "Ce que tu t'apprêtes à faire est une erreur. Tu vas causer plus de mal que nécessaire. Mais c'est ton destin.",
+    "worldscolliding.dialogue.chapter_7_dark_set.2" : "Enfin. Voilà quelqu'un qui m'écoute.",
+    "worldscolliding.dialogue.chapter_7_dark_set.3" : "Pour me libérer, il faut vaincre ma dernière incarnation. Je t'y emmène, je te demande sincèrement de me vaincre là-bas.",
+    "worldscolliding.dialogue.chapter_7_dark_set.4" : "Tu as tenu ta parole... Et moi, je tiendrai la mienne.",
+    "worldscolliding.dialogue.chapter_7_dark_set.5" : "Je sais que tu t'es laissé manipuler. Mais c'est fini. Je ne m'occuperai plus de rien, ici.",
+    "worldscolliding.dialogue.chapter_7_dark_set.6" : "Je vais essayer de m'élever... de rejoindre la voix qui m'a guidé. Je crois que c'est mon Dieu.",
+    "worldscolliding.dialogue.chapter_7_dark_set.7" : "Tu as réussi. D'une façon que je n'avais pas prévue... mais tu l'as banni.",
+    "worldscolliding.dialogue.chapter_7_dark_set.8" : "C'était ma mission dans ce monde : le bannir, et te guider jusqu'à la fin.",
+    "worldscolliding.dialogue.chapter_7_dark_set.9" : "Cette mission est accomplie. Je n'ai plus de raison d'être ici.",
+    "worldscolliding.dialogue.chapter_7_dark_set.10" : "Je vais rejoindre un autre monde. C'est une boucle infinie, les péchés que j'ai commis font que je suis condamnée à y revenir.",
+    "worldscolliding.dialogue.chapter_7_dark_set.11" : "Merci. Vraiment. Pour tout ce que tu as accompli.",
+
+    "feur" : "feur"
 }

@@ -6,6 +6,12 @@
     "worldscolliding.dialogue.choice.yes" : "Yes",
     "worldscolliding.dialogue.choice.no" : "No",
 
+    "worldscolliding.dialogue.choice.accept" : "Accept",
+    "worldscolliding.dialogue.choice.refuse" : "Refuse",
+
+    "worldscolliding.dialogue.choice.seal_light" : "Light Essence",
+    "worldscolliding.dialogue.choice.seal_dark" : "Dark Essence",
+
     "worldscolliding.dialogue.chapter0_set.1": "Come...",
     "worldscolliding.dialogue.chapter0_set.2": "Come closer...",
     "worldscolliding.dialogue.chapter0_set.3": "Good... A little bit closer...",
@@ -38,6 +44,136 @@
     "worldscolliding.dialogue.chapter1_yes_set.6" : "",
     "worldscolliding.dialogue.chapter1_yes_set.7" : "",
 
-    "worldscolliding.dialogue.chapter1_no_set.1" : ""
+    "worldscolliding.dialogue.chapter1_no_set.1" : "",
+
+    "worldscolliding.dialogue.chapter2_set.1": "",
+    "worldscolliding.dialogue.chapter2_set.2": "",
+    "worldscolliding.dialogue.chapter2_set.3": "",
+    "worldscolliding.dialogue.chapter2_set.4": "",
+    "worldscolliding.dialogue.chapter2_set.5": "",
+
+    "worldscolliding.dialogue.chapter_2_ask.text": "",
+
+    "worldscolliding.dialogue.chapter2_yes_set.1": "",
+    "worldscolliding.dialogue.chapter2_yes_set.2": "",
+    "worldscolliding.dialogue.chapter2_yes_set.3": "",
+    "worldscolliding.dialogue.chapter2_yes_set.4": "",
+    "worldscolliding.dialogue.chapter2_yes_set.5": "",
+    "worldscolliding.dialogue.chapter2_yes_set.6": "",
+
+    "worldscolliding.dialogue.chapter2_no_set.1": "",
+
+    "worldscolliding.dialogue.chapter3_set.1" : "",
+    "worldscolliding.dialogue.chapter3_set.2" : "",
+    "worldscolliding.dialogue.chapter3_set.3" : "",
+    "worldscolliding.dialogue.chapter3_set.4" : "",
+    "worldscolliding.dialogue.chapter3_set.5" : "",
+    "worldscolliding.dialogue.chapter3_set.6" : "",
+    "worldscolliding.dialogue.chapter3_set.7" : "",
+    "worldscolliding.dialogue.chapter3_set.8" : "",
+    "worldscolliding.dialogue.chapter3_set.9" : "",
+    "worldscolliding.dialogue.chapter3_set.10" : "",
+    "worldscolliding.dialogue.chapter3_set.11" : "",
+    "worldscolliding.dialogue.chapter3_set.12" : "",
+    "worldscolliding.dialogue.chapter3_set.13" : "",
+
+    "worldscolliding.dialogue.chapter3_ask.text" : "",
+
+    "worldscolliding.dialogue.chapter3_yes_set.1": "",
+    "worldscolliding.dialogue.chapter3_yes_set.2": "",
+
+    "worldscolliding.dialogue.chapter3_no_set.1": "",
+
+    "worldscolliding.dialogue.chapter4_set.1": "",
+    "worldscolliding.dialogue.chapter4_set.2": "",
+    "worldscolliding.dialogue.chapter4_set.3": "",
+    "worldscolliding.dialogue.chapter4_set.4": "",
+    "worldscolliding.dialogue.chapter4_set.5": "",
+    "worldscolliding.dialogue.chapter4_set.6": "",
+    "worldscolliding.dialogue.chapter4_set.7": "",
+    "worldscolliding.dialogue.chapter4_set.8": "",
+
+    "worldscolliding.dialogue.chapter4_ask.text" : "",
+
+    "worldscolliding.dialogue.chapter4_yes_set.1" : "",
+    "worldscolliding.dialogue.chapter4_yes_set.2" : "",
+    "worldscolliding.dialogue.chapter4_yes_set.3" : "",
+    "worldscolliding.dialogue.chapter4_yes_set.4" : "",
+    "worldscolliding.dialogue.chapter4_yes_set.5" : "",
+    "worldscolliding.dialogue.chapter4_yes_set.6" : "",
+    "worldscolliding.dialogue.chapter4_yes_set.7" : "",
+
+    "worldscolliding.dialogue.chapter4_no_set.1" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_past_set.1" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_set.2" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.2" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.3" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.4" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.5" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.6" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.7" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.8" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.9" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.10" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.11" : "",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.12" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_set.1" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_set.2" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_set.3" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_ask.text" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_no_set.1" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.7" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.8" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.9" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.10" : "",
+
+    "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" : "",
+    "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" : "",
+
+    "worldscolliding.dialogue.chapter_7_prologue_set.1" : "",
+    "worldscolliding.dialogue.chapter_7_prologue_set.2" : "",
+    "worldscolliding.dialogue.chapter_7_prologue_set.3" : "",
+    "worldscolliding.dialogue.chapter_7_prologue_set.4" : "",
+    "worldscolliding.dialogue.chapter_7_prologue_set.5" : "",
+
+    "worldscolliding.dialogue.chapter_7_light_set.1" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.2" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.3" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.4" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.5" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.6" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.7" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.8" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.9" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.10" : "",
+    "worldscolliding.dialogue.chapter_7_light_set.11" : "",
+
+
+    "worldscolliding.dialogue.chapter_7_dark_set.1" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.2" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.3" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.4" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.5" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.6" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.7" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.8" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.9" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.10" : "",
+    "worldscolliding.dialogue.chapter_7_dark_set.11" : "",
+
+    "feur" : "feur"
 }
 
