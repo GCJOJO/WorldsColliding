@@ -83,6 +83,8 @@ public class DialogueMessage extends DialogueAction
         String speakerTranslated = Component.translatable(speaker).getString();
         graphics.drawString(font, speakerTranslated, boxX + 10, boxY + 5, DialogueUtils.getSpeakerColor(speaker), false);
 
+
+
         if (dialogueLine != null) {
             String displayedText = dialogueLine.substring(0, charIndex);
             graphics.drawWordWrap(font, Component.literal(displayedText), boxX + 10, boxY + 20, boxWidth - 20, 0xFFFFFF);

@@ -2,10 +2,7 @@ package fr.gcjojo.worldscolliding.client.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import fr.gcjojo.worldscolliding.dialogues.DialogueAction;
-import fr.gcjojo.worldscolliding.dialogues.DialogueChoice;
-import fr.gcjojo.worldscolliding.dialogues.DialogueFading;
-import fr.gcjojo.worldscolliding.dialogues.DialogueMessage;
+import fr.gcjojo.worldscolliding.dialogues.*;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -59,7 +56,11 @@ public class DialogueScreen extends Screen {
             return;
         }
 
-        List<DialogueAction> newActions = loadSet(nextSet);
+        changeSet(nextSet);
+    }
+
+    public void changeSet(String setName) {
+        List<DialogueAction> newActions = loadSet(setName);
         if(newActions == null) {
             this.onClose();
             return;
@@ -89,6 +90,7 @@ public class DialogueScreen extends Screen {
                                 obj.get("option2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString(), obj.get("action2").getAsString()
                             ));
                             case "fading" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
+                            case "change_set" -> actions.add(new DialogueNext(obj.get("set").getAsString()));
                             default -> actions.add(new DialogueMessage(speaker, Component.translatable(obj.get("text").getAsString()).getString(), obj.has("background_color") ? obj.get("background_color").getAsString() : "00000000"));
                         }
                     });
@@ -167,7 +169,6 @@ public class DialogueScreen extends Screen {
             return;
         }
         DialogueAction currentAction = actions.get(actionIndex);
-
         currentAction.setup(this);
 
         /*if (!hasOptions()) {
