@@ -96,7 +96,7 @@
     "worldscolliding.dialogue.chapter4_ask.text" : "Seal him now. I swear I will make you regret having hesitated even one second.",
 
     "worldscolliding.dialogue.chapter4_yes_set.1" : "Now heed my words. For the next two seals, you'll need two mythical swords.",
-    "worldscolliding.dialogue.chapter4_yes_set.2" : "The first one is the Sword of Legend. Finding it is the easy part, the hard part is making it truly legendary.",
+    "worldscolliding.dialogue.chapter4_yes_set.2" : "The first one is the Master Sword. Finding it is the easy part, the hard part is making it truly legendary.",
     "worldscolliding.dialogue.chapter4_yes_set.3" : "You will need to roam into space, explore the different planets of the Solar System and triumph of the many dark and twisted dungeons.",
     "worldscolliding.dialogue.chapter4_yes_set.4" : "The second one is the Great Sword of Gael. This will be your true test of strength.",
     "worldscolliding.dialogue.chapter4_yes_set.5" : "This sword is the cumulation of twelve others, each more powerful than the other.",
@@ -131,7 +131,7 @@
 
     "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" : "Wait, this will not be enough, you will need something more powerful.",
     "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" : "His power are getting stronger by the minute. The more of his forms you kill, the more his power gather into a single being : him",
-    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" : "I will grant you the Sword of Light, with it, fuse the Sword of Legend and the Great Sword of Gael.",
+    "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" : "I will grant you the Sword of Light, with it, fuse the Master Sword and the Great Sword of Gael.",
     "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" : "By doing that, you will forge Excalibur, Sword of Light. Then craft the Royal Sword, the most powerful weapon to exist in the world.",
     "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" : "When done, come back... I will free him, as long as he is sealed, he is invulnerable to any of our attacks.",
     "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" : "A magnificent idea... Really... Yet, I have an even better one.",
@@ -174,4 +174,3 @@
     "worldscolliding.dialogue.chapter_7_dark_set.10" : "I will leave for another world. Because of my sins, I am stuck in an endless cycle.",
     "worldscolliding.dialogue.chapter_7_dark_set.11" : "Thank you, for everything you have done... I mean it."
 }
-
