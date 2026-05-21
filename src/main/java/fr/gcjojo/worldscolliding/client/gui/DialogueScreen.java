@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import fr.gcjojo.worldscolliding.dialogues.DialogueAction;
 import fr.gcjojo.worldscolliding.dialogues.DialogueChoice;
+import fr.gcjojo.worldscolliding.dialogues.DialogueFading;
 import fr.gcjojo.worldscolliding.dialogues.DialogueMessage;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import net.minecraft.client.Minecraft;
@@ -87,8 +88,8 @@ public class DialogueScreen extends Screen {
                                 obj.get("option1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(), obj.get("action1").getAsString(),
                                 obj.get("option2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString(), obj.get("action2").getAsString()
                             ));
-                            case "fading" -> actions.add(new DialogueMessage(speaker, ""));
-                            default -> actions.add(new DialogueMessage(speaker, Component.translatable(obj.get("text").getAsString()).getString()));
+                            case "fading" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
+                            default -> actions.add(new DialogueMessage(speaker, Component.translatable(obj.get("text").getAsString()).getString(), obj.has("background_color") ? obj.get("background_color").getAsString() : "00000000"));
                         }
                     });
                     return actions;
