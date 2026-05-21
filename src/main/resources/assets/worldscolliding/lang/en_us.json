@@ -29,7 +29,7 @@
     "worldscolliding.dialogue.chapter_1_ask.text" : "Are you ready for your first sealing ?",
 
     "worldscolliding.dialogue.chapter1_set.1": "You're back... I do hope, it's not to do anything stupid.",
-    "worldscolliding.dialogue.chapter1.set.2": "You know, I never intended to do any harm.",
+    "worldscolliding.dialogue.chapter1_set.2": "You know, I never intended to do any harm.",
     "worldscolliding.dialogue.chapter1_set.3": "I just tried to save many worlds in the best way I know. If you listen to me, you'll realise that-",
     "worldscolliding.dialogue.chapter1_set.4": "You're here, and you've succeeded. Good.",
     "worldscolliding.dialogue.chapter1_set.5": "In this world, the sword we create are all enchanted with an ancient magic.",
@@ -108,7 +108,7 @@
     "worldscolliding.dialogue.chapter_5_6_past_set.1" : "I have been pondering a lot lately. There is something I want to show you : my past",
     "worldscolliding.dialogue.chapter_5_6_past_set.2" : "You can decline... but if you decide to hear it, you will finally understand...",
 
-    "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" : "[The room becomes dark] There was a time when I was one of them. A God.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" : "There was a time when I was one of them. A God.",
     "worldscolliding.dialogue.chapter_5_6_past_accept_set.2" : "I was the leader of the monsters, the wild creatures, the dangerous ones, the ones no one dared to approach.",
     "worldscolliding.dialogue.chapter_5_6_past_accept_set.3" : "They were mocking me, loathing me.",
     "worldscolliding.dialogue.chapter_5_6_past_accept_set.4" : "One day a monster killed a human, without my permission.",

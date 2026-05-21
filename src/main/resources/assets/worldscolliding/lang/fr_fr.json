@@ -29,7 +29,7 @@
     "worldscolliding.dialogue.chapter_1_ask.text": "Es-tu prêt à accomplir ce premier scellement ?",
 
     "worldscolliding.dialogue.chapter1_set.1": "Tu es revenu... Je l'espère sincèrement, pas pour faire quelque chose de stupide.",
-    "worldscolliding.dialogue.chapter1.set.2": "Tu sais, je ne veux de mal à personne.",
+    "worldscolliding.dialogue.chapter1_set.2": "Tu sais, je ne veux de mal à personne.",
     "worldscolliding.dialogue.chapter1_set.3": "J'essaie juste de sauver les différents mondes à ma façon. Si tu m'écoutes un instant, tu comprendras que,",
     "worldscolliding.dialogue.chapter1_set.4": "Tu es là. Et tu as réussi. Bien.",
     "worldscolliding.dialogue.chapter1_set.5": "Sache que dans ce monde, les épées que l'on parvient à fabriquer sont imprégnées d'une magie ancienne.",
@@ -108,7 +108,7 @@
     "worldscolliding.dialogue.chapter_5_6_past_set.1" : "J'ai beaucoup réfléchi. Il y a quelque chose que je voudrais te montrer. Mon passé.",
     "worldscolliding.dialogue.chapter_5_6_past_set.2" : "Tu peux refuser... mais si tu acceptes, tu comprendras enfin.",
 
-    "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" : "[Dans le noir] Il fut un temps où j'étais parmi eux. Les divinités.",
+    "worldscolliding.dialogue.chapter_5_6_past_accept_set.1" : "Il fut un temps où j'étais parmi eux. Les divinités.",
     "worldscolliding.dialogue.chapter_5_6_past_accept_set.2" : "Je gérais les monstres, les créatures sauvages, dangereuses, celles que personne d'autre ne voulait approcher.",
     "worldscolliding.dialogue.chapter_5_6_past_accept_set.3" : "On me moquait pour ça. On me méprisait.",
     "worldscolliding.dialogue.chapter_5_6_past_accept_set.4" : "Un jour, l'un de mes monstres a tué un humain. Sans que je l'aie ordonné, sans que je le sache.",

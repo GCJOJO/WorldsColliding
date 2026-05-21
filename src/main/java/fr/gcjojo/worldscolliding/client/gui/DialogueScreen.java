@@ -2,75 +2,53 @@ package fr.gcjojo.worldscolliding.client.gui;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import fr.gcjojo.worldscolliding.dialogues.*;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.resources.ResourceLocation;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class DialogueScreen extends Screen {
 
-    public record DialogueLine(String speaker, String text, String option1, String action1, String next1, String save1, String option2, String action2, String next2, String save2) {
+    /*public record DialogueLine(String speaker, String text, String option1, String action1, String next1, String save1, String option2, String action2, String next2, String save2) {
         public DialogueLine(String speaker, String text) {
             this(speaker, text, null, null, null, null, null, null, null, null);
         }
-    }
+    }*/
 
-    private boolean hasOptions() {
+    /*private boolean hasOptions() {
         if (dialogues.isEmpty()) return false;
         DialogueLine lastLine = dialogues.get(dialogues.size() - 1);
         return lastLine.option1() != null && !lastLine.option1().isEmpty();
-    }
+    }*/
 
-    private final List<DialogueLine> dialogues;
-    private int currentIndex = 0;
-    private int charIndex = 0;
-    private int tickCount = 0;
-    private int pauseTimer = 0;
-    private final Random random = new Random();
+    private List<DialogueAction> actions;
+    private int actionIndex = -1;
 
-    public DialogueScreen(List<DialogueLine> dialogues) {
+    public DialogueScreen(List<DialogueAction> actions) {
         super(Component.literal("Dialogue"));
-        this.dialogues = dialogues;
+        this.actions = actions;
     }
 
     @Override
     protected void init() {
         super.init();
-        setupChoiceWidgets();
+        advanceDialogue();
     }
 
-    private void setupChoiceWidgets() {
-        this.clearWidgets();
-        if (currentIndex >= dialogues.size()) return;
-        DialogueLine currentLine = dialogues.get(currentIndex);
-
-        if ("choix".equals(currentLine.speaker())) {
-            int btnWidth = 140;
-            int btnHeight = 20;
-            int yPos = this.height / 2 + 50;
-
-            this.addRenderableWidget(Button.builder(Component.translatable(currentLine.option1()), b -> {
-                handleChoiceSelection(currentLine.next1(), currentLine.save1(), currentLine.action1());
-            }).bounds(this.width / 4 - btnWidth / 2, yPos, btnWidth, btnHeight).build());
-
-            this.addRenderableWidget(Button.builder(Component.translatable(currentLine.option2()), b -> {
-                handleChoiceSelection(currentLine.next2(), currentLine.save2(), currentLine.action2());
-            }).bounds(3 * this.width / 4 - btnWidth / 2, yPos, btnWidth, btnHeight).build());
-        }
+    public void drawButton(Button button)
+    {
+        this.addRenderableWidget(button);
     }
 
-    private void handleChoiceSelection(String nextSet, String saveSet, String action) {
+    public void handleChoiceSelection(String nextSet, String saveSet, String action) {
         ModNetwork.sendToServer(new ModNetwork.ChoiceSelectedPacket(nextSet, saveSet, action));
 
         if (action != null && action.startsWith("seal_")) {
@@ -78,142 +56,105 @@ public class DialogueScreen extends Screen {
             return;
         }
 
-        try {
-            ResourceLocation res = new ResourceLocation("worldscolliding", "dialogues.json");
-            var resourceOpt = Minecraft.getInstance().getResourceManager().getResource(res);
-            if (resourceOpt.isPresent()) {
-                JsonObject root = new Gson().fromJson(new InputStreamReader(resourceOpt.get().open()), JsonObject.class);
-                if (root.has(nextSet)) {
-                    this.dialogues.clear();
-                    root.getAsJsonArray(nextSet).forEach(element -> {
-                        JsonObject obj = element.getAsJsonObject();
-                        String speaker = obj.get("speaker").getAsString();
-                        if ("choix".equals(speaker)) {
-                            this.dialogues.add(new DialogueLine(
-                                    speaker, null,
-                                    obj.get("option1").getAsString(), obj.get("action1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(),
-                                    obj.get("option2").getAsString(), obj.get("action2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString()
-                            ));
-                        } else {
-                            this.dialogues.add(new DialogueLine(speaker, Component.translatable(obj.get("text").getAsString()).getString()));
-                        }
-                    });
-                    this.currentIndex = 0;
-                    this.charIndex = 0;
-                    this.tickCount = 0;
-                    this.pauseTimer = 0;
-                    setupChoiceWidgets();
-                    return;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.onClose();
+        changeSet(nextSet);
     }
 
-    public static void openForSet(String setName) {
+    public void changeSet(String setName) {
+        List<DialogueAction> newActions = loadSet(setName);
+        if(newActions == null) {
+            this.onClose();
+            return;
+        }
+
+        actionIndex = -1;
+        actions = newActions;
+        advanceDialogue();
+    }
+
+    public static List<DialogueAction> loadSet(String setName) {
         try {
             ResourceLocation res = new ResourceLocation("worldscolliding", "dialogues.json");
             var resourceOpt = Minecraft.getInstance().getResourceManager().getResource(res);
             if (resourceOpt.isPresent()) {
                 JsonObject root = new Gson().fromJson(new InputStreamReader(resourceOpt.get().open()), JsonObject.class);
                 if (root.has(setName)) {
-                    List<DialogueLine> lines = new ArrayList<>();
+                    List<DialogueAction> actions = new ArrayList<>();
                     root.getAsJsonArray(setName).forEach(element -> {
                         JsonObject obj = element.getAsJsonObject();
                         String speaker = obj.get("speaker").getAsString();
-                        if ("choix".equals(speaker)) {
-                            lines.add(new DialogueLine(
-                                    speaker, null,
-                                    obj.get("option1").getAsString(), obj.get("action1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(),
-                                    obj.get("option2").getAsString(), obj.get("action2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString()
+
+                        switch(speaker)
+                        {
+                            case "choix" -> actions.add(new DialogueChoice(
+                                obj.get("option1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(), obj.get("action1").getAsString(),
+                                obj.get("option2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString(), obj.get("action2").getAsString()
                             ));
-                        } else {
-                            lines.add(new DialogueLine(speaker, Component.translatable(obj.get("text").getAsString()).getString()));
+                            case "fading" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
+                            case "change_set" -> actions.add(new DialogueNext(obj.get("set").getAsString()));
+                            default -> actions.add(new DialogueMessage(speaker, Component.translatable(obj.get("text").getAsString()).getString(), obj.has("background_color") ? obj.get("background_color").getAsString() : "00000000"));
                         }
                     });
-                    Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(lines)));
+                    return actions;
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
+        return null;
+    }
+
+    public static void openForSet(String setName) {
+        List<DialogueAction> actions = loadSet(setName);
+        if(actions != null)
+            Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(actions)));
     }
 
     @Override
     public void tick() {
-        tickCount++;
-
-        if (pauseTimer > 0) {
-            pauseTimer--;
+        if(actionIndex >= actions.size())
             return;
-        }
 
-        if (currentIndex >= dialogues.size()) return;
-        DialogueLine currentLine = dialogues.get(currentIndex);
-        if ("choix".equals(currentLine.speaker())) return;
+        DialogueAction currentAction = actions.get(actionIndex);
+        if(currentAction == null)
+            return;
 
-        if (charIndex < currentLine.text().length()) {
-            charIndex++;
-            playSoundForSpeaker(currentLine.speaker());
-
-            char currentChar = currentLine.text().charAt(charIndex - 1);
-            if (currentChar == '.' || currentChar == '!' || currentChar == '?') {
-                pauseTimer = 8;
-            }
-        }
+        currentAction.step();
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(graphics);
 
-        if (currentIndex >= dialogues.size()) return;
-        DialogueLine currentLine = dialogues.get(currentIndex);
+        if(actionIndex >= actions.size())
+            return;
 
-        if ("choix".equals(currentLine.speaker())) {
-            String opt1 = Component.translatable(currentLine.option1()).getString();
-            //graphics.drawCenteredString(this.font, opt1, this.width / 4, this.height / 2, 0xFFFFFF);
+        DialogueAction currentAction = actions.get(actionIndex);
+        if(currentAction == null)
+            return;
 
-            String opt2 = Component.translatable(currentLine.option2()).getString();
-            //graphics.drawCenteredString(this.font, opt2, 3 * this.width / 4, this.height / 2, 0xFFFFFF);
-        } else {
-            int boxWidth = 300;
-            int boxHeight = 80;
-            int boxX = (this.width - boxWidth) / 2;
-            int boxY = this.height - boxHeight - 20;
-
-            graphics.fill(boxX, boxY, boxX + boxWidth, boxY + boxHeight, 0x80000000);
-            String speakerTranslated = Component.translatable(currentLine.speaker()).getString();
-            graphics.drawString(this.font, speakerTranslated, boxX + 10, boxY + 5, getSpeakerColor(currentLine.speaker()), false);
-
-            if (currentLine.text() != null) {
-                String displayedText = currentLine.text().substring(0, charIndex);
-                graphics.drawWordWrap(this.font, Component.literal(displayedText), boxX + 10, boxY + 20, boxWidth - 20, 0xFFFFFF);
-
-                if (charIndex >= currentLine.text().length() && (tickCount % 20 < 10)) {
-                    graphics.drawString(this.font, "▼", boxX + boxWidth - 15, boxY + boxHeight - 15, 0xFFFFFF, false);
-                }
-            }
-        }
+        currentAction.draw(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if (currentIndex < dialogues.size() && "choix".equals(dialogues.get(currentIndex).speaker())) {
-            return super.mouseClicked(mouseX, mouseY, button);
+        if(actionIndex < actions.size()) {
+            DialogueAction currentAction = actions.get(actionIndex);
+            if(currentAction != null)
+                currentAction.mouseClicked(mouseX, mouseY, button);
         }
-        advanceDialogue();
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if (currentIndex < dialogues.size() && "choix".equals(dialogues.get(currentIndex).speaker())) {
-            return super.keyPressed(keyCode, scanCode, modifiers);
+        if(actionIndex < actions.size()) {
+            DialogueAction currentAction = actions.get(actionIndex);
+            if(currentAction != null)
+                currentAction.mouseClicked(keyCode, scanCode, modifiers);
         }
+
         if (keyCode == 257 || keyCode == 32) {
             advanceDialogue();
             return true;
@@ -221,50 +162,23 @@ public class DialogueScreen extends Screen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
-    private void advanceDialogue() {
-        if (dialogues.isEmpty() || currentIndex >= dialogues.size()) return;
-        DialogueLine currentLine = dialogues.get(currentIndex);
+    public void advanceDialogue() {
+        actionIndex++;
+        if (actions.isEmpty() || actionIndex >= actions.size()) {
+            this.onClose();
+            return;
+        }
+        DialogueAction currentAction = actions.get(actionIndex);
+        currentAction.setup(this);
 
-        if (charIndex < currentLine.text().length()) {
-            charIndex = currentLine.text().length();
-        } else {
-            if (currentIndex >= dialogues.size() - 1) {
-                if (!hasOptions()) {
-                    String currentSet = Minecraft.getInstance().player.getPersistentData().getString("CurrentChapter");
-                    if (currentSet.endsWith("_set") && !currentSet.contains("_ask")) {
-                        String askSet = currentSet.replace("_set", "_ask");
-                        ModNetwork.CHANNEL.sendToServer(new ModNetwork.ChoiceSelectedPacket(askSet, askSet, null));
-                        this.onClose();
-                        return;
-                    }
-                }
+        /*if (!hasOptions()) {
+            String currentSet = Minecraft.getInstance().player.getPersistentData().getString("CurrentChapter");
+            if (currentSet.endsWith("_set") && !currentSet.contains("_ask")) {
+                String askSet = currentSet.replace("_set", "_ask");
+                ModNetwork.CHANNEL.sendToServer(new ModNetwork.ChoiceSelectedPacket(askSet, askSet, null));
                 this.onClose();
-            } else {
-                currentIndex++;
-                charIndex = 0;
-                setupChoiceWidgets();
+                return;
             }
-        }
-    }
-
-    private int getSpeakerColor(String speaker) {
-        return switch (speaker) {
-            case "worldscolliding.speaker.the_one" -> 0xFFD700;
-            case "worldscolliding.speaker.scourge" -> 0x555555;
-            case "worldscolliding.speaker.the_voice" -> 0xFF0000;
-            default -> 0xFFFFFF;
-        };
-    }
-
-    private void playSoundForSpeaker(String speaker) {
-        SoundEvent[] sounds = switch (speaker) {
-            case "The One" -> new SoundEvent[]{SoundEvents.NOTE_BLOCK_BELL.value(), SoundEvents.NOTE_BLOCK_CHIME.value()};
-            case "The Scourge" -> new SoundEvent[]{SoundEvents.NOTE_BLOCK_BASS.value()};
-            case "The Voice" -> new SoundEvent[]{SoundEvents.NOTE_BLOCK_BIT.value()};
-            default -> new SoundEvent[]{SoundEvents.NOTE_BLOCK_HARP.value()};
-        };
-        if (sounds.length > 0) {
-            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sounds[random.nextInt(sounds.length)], 1.0F));
-        }
+        }*/
     }
 }
