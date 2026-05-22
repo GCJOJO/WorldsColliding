@@ -40,7 +40,7 @@ public class DialogueMessage extends DialogueAction
                 int alpha = Integer.parseInt(backgroundColor.substring(0, 2), 16);
                 int red = Integer.parseInt(backgroundColor.substring(2, 4), 16);
                 int green = Integer.parseInt(backgroundColor.substring(4, 6), 16);
-                int blue = Integer.parseInt(backgroundColor.substring(6, 7), 16);
+                int blue = Integer.parseInt(backgroundColor.substring(6, 8), 16);
                 this.backgroundColor = FastColor.ARGB32.color(alpha, red, green, blue);
             }
         } catch (Exception e) {

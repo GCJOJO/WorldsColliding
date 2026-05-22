@@ -21,14 +21,14 @@ public class DialogueFading extends DialogueAction
                 int alpha = Integer.parseInt(from.substring(0, 2), 16);
                 int red = Integer.parseInt(from.substring(2, 4), 16);
                 int green = Integer.parseInt(from.substring(4, 6), 16);
-                int blue = Integer.parseInt(from.substring(6, 7), 16);
+                int blue = Integer.parseInt(from.substring(6, 8), 16);
                 this.fromColor = FastColor.ARGB32.color(alpha, red, green, blue);
             }
             if(to.length() == 8) {
                 int alpha = Integer.parseInt(to.substring(0, 2), 16);
                 int red = Integer.parseInt(to.substring(2, 4), 16);
                 int green = Integer.parseInt(to.substring(4, 6), 16);
-                int blue = Integer.parseInt(to.substring(6, 7), 16);
+                int blue = Integer.parseInt(to.substring(6, 8), 16);
                 this.toColor = FastColor.ARGB32.color(alpha, red, green, blue);
             }
         } catch (Exception e) {
