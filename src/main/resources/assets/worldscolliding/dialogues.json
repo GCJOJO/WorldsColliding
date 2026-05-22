@@ -197,13 +197,13 @@
   ],
 
   "chapter_7_prologue_set": [
-    { "speaker": "fading", "to" :  "00000000", "from":  "FFFFFFFF", "time": 20 },
+    { "speaker": "fading", "from":  "FFFFFFFF", "to" : "00000000", "time": 20 },
     { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.1", "background_color": "FFFFFFFF" },
     { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.2", "background_color": "FFFFFFFF" },
     { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.3", "background_color": "FFFFFFFF" },
     { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.4", "background_color": "FFFFFFFF" },
     { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.5", "background_color": "FFFFFFFF" },
-    { "speaker": "fading", "to" :  "FFFFFFFF", "from":  "00000000", "time": 20 }
+    { "speaker": "fading", "from": "00000000", "to" : "FFFFFFFF", "time": 20 }
   ],
 
   "chapter_7_light_set": [
