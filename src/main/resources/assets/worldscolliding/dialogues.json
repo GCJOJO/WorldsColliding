@@ -13,6 +13,28 @@
     { "action": "clear" }
   ],
 
+  "credits" : [
+    { "action": "fade", "from": "00000000", "to": "FF000000", "time": 40 },
+    { "action": "wait", "time": 50 },
+
+    { "action": "credit", "text": "World's Colliding", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 20, "x" : 50, "y": 25, "scale": 3, "color": "FF0000" },
+    { "action": "wait", "time": 20 },
+    { "action": "credit", "text": "Modpack made by", "fade_in_time": 20, "hold_time": 60, "fade_out_time": 20, "x" : 50, "y": 35, "scale": 1.5, "color": "C1C1C1" },
+    { "action": "wait", "time": 20 },
+    { "action": "credit", "text": "Linkas", "fade_in_time": 20, "hold_time": 40, "fade_out_time": 20, "x" : 50, "y": 45, "scale": 1.5, "color": "FFFFFF" },
+    { "action": "wait", "time": 150 },
+    { "action": "clear", "cleared_actions": "credit" },
+
+    { "action": "credit", "text": "Mod Development", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x" : 25, "y": 30, "scale": 3, "color": "D5D5D5" },
+    { "action": "credit", "text": "Linkas", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x" : 25, "y": 40, "scale": 1.5, "color": "FFFFFF" },
+    { "action": "credit", "text": "GCJOJO", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x" : 25, "y": 50, "scale": 1.5, "color": "FFFFFF" },
+    { "action": "wait", "time": 110 },
+
+    { "action": "clear" },
+    { "action": "fade", "from": "FF000000", "to": "00000000", "time": 40 },
+    { "action": "wait", "time": 40 }
+  ],
+
   "chapter_0_set": [
     { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.1"  },
     { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.2"  },

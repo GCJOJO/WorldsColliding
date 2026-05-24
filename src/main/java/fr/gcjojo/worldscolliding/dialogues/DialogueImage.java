@@ -1,8 +1,7 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
-import fr.gcjojo.worldscolliding.ModEntry;
-import net.minecraft.client.gui.GuiGraphics;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
 
@@ -30,6 +29,7 @@ public class DialogueImage extends DialogueAction {
     @Override
     public void draw(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         PoseStack pose = graphics.pose();
+        pose.pushPose();
         pose.translate(screen.width / 2f,screen.height / 2f, 0);
 
         double imageHeight = ((double) screen.height * 0.5d) / initialHeight;

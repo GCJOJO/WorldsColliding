@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.client.gui;
 
+import fr.gcjojo.worldscolliding.ModEntry;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import fr.gcjojo.worldscolliding.dialogues.*;
@@ -77,9 +78,17 @@ public class DialogueScreen extends Screen {
         advanceDialogue();
     }
 
-    public static List<DialogueAction> loadSet(String setName) {
+    public static List<DialogueAction> loadSet(String setPath) {
         try {
-            ResourceLocation res = new ResourceLocation("worldscolliding", "dialogues.json");
+            String namespace = ModEntry.MODID;
+            String setName = setPath;
+            if(setPath.contains(":"))
+            {
+                namespace = setPath.split(":")[0];
+                setName = setPath.split(":")[1];
+            }
+
+            ResourceLocation res = ResourceLocation.fromNamespaceAndPath(namespace, "dialogues.json");
             var resourceOpt = Minecraft.getInstance().getResourceManager().getResource(res);
             if (resourceOpt.isPresent()) {
                 JsonObject root = new Gson().fromJson(new InputStreamReader(resourceOpt.get().open()), JsonObject.class);
@@ -90,7 +99,7 @@ public class DialogueScreen extends Screen {
                         String action = obj.get("action").getAsString();
                         switch(action)
                         {
-                            case "clear" -> actions.add(new DialogueClear());
+                            case "clear" -> actions.add(new DialogueClear(obj.has("cleared_actions") ? obj.get("cleared_actions").getAsString() : "none"));
                             case "wait" -> actions.add(new DialogueWait(obj.get("time").getAsFloat()));
                             case "choice" -> actions.add(new DialogueChoice(
                                 obj.get("option1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(), obj.get("action1").getAsString(),
@@ -100,6 +109,7 @@ public class DialogueScreen extends Screen {
                             case "fade" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
                             case "message" -> actions.add(new DialogueMessage(obj.get("speaker").getAsString(), Component.translatable(obj.get("text").getAsString()).getString()));
                             case "image" -> actions.add(new DialogueImage(obj.get("id").getAsInt(), obj.get("image").getAsString(), obj.get("width").getAsInt(), obj.get("height").getAsInt()));
+                            case "credit" -> actions.add(new DialogueCredit(obj.get("text").getAsString(), obj.get("fade_in_time").getAsFloat(), obj.get("hold_time").getAsFloat(), obj.get("fade_out_time").getAsFloat(), obj.get("x").getAsFloat(), obj.get("y").getAsFloat(), obj.get("scale").getAsFloat(), obj.get("color").getAsString()));
                         }
 
                     });
@@ -169,25 +179,40 @@ public class DialogueScreen extends Screen {
     public void queueAdvanceDialogue() { this.advanceDialogueAtTickEnd = true; }
 
     public void advanceDialogue() {
+        actionIndex++;
         if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size() - 1) {
+            clearActions();
             this.onClose();
             ModNetwork.sendToServer(new ModNetwork.DialogueCompletedPacket(currentSet));
             return;
         }
+
         currentActions.removeIf(DialogueAction::isBlocking);
 
         for(int i = actionIndex; i <= dialogueActions.size() - 1; i++)
         {
-            actionIndex++;
-            DialogueAction currentAction = dialogueActions.get(actionIndex);
+            DialogueAction currentAction = dialogueActions.get(i);
             currentActions.add(currentAction);
             currentAction.setup(this);
             if(currentAction.isBlocking())
+            {
+                actionIndex = i;
                 break;
+            }
         }
     }
 
-    public void clearActions() {
-        currentActions.clear();
+    public void clearActions() { currentActions.clear(); }
+
+    public void clearActions(String clearedClass){
+        Class<? extends DialogueAction> classToRemove = null;
+
+        switch (clearedClass)
+        {
+            case "message" -> classToRemove = DialogueMessage.class;
+            case "credit" -> classToRemove = DialogueCredit.class;
+        }
+        if(classToRemove != null)
+            currentActions.removeIf(classToRemove::isInstance);
     }
 }

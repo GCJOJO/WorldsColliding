@@ -1,11 +1,7 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.Screen;
-
-import java.util.function.Consumer;
 
 public abstract class DialogueAction
 {

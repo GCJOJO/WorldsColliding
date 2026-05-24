@@ -5,10 +5,23 @@ import net.minecraft.client.gui.GuiGraphics;
 
 public class DialogueClear extends DialogueAction {
 
+    String clearedClass;
+
+    public DialogueClear(){
+        this.clearedClass = "none";
+    }
+
+    public DialogueClear(String clearedClass){
+        this.clearedClass = clearedClass;
+    }
+
     @Override
     public void setup(DialogueScreen screen) {
         super.setup(screen);
-        screen.clearActions();
+        if(clearedClass.equals("none"))
+            screen.clearActions();
+        else
+            screen.clearActions(this.clearedClass);
         screen.advanceDialogue();
     }
 
