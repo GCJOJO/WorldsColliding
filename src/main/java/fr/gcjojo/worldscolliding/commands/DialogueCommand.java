@@ -20,7 +20,7 @@ public class DialogueCommand {
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        List<String> chapters = Arrays.asList("chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_7_prologue_set");
+        List<String> chapters = Arrays.asList("test_image", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_7_prologue_set");
 
         event.getDispatcher().register(Commands.literal("dialogue")
                 .then(Commands.literal("play")

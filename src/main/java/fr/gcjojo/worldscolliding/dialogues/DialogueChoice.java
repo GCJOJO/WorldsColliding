@@ -66,4 +66,7 @@ public class DialogueChoice extends DialogueAction {
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
 
     }
+
+    @Override
+    public boolean isBlocking() { return true; }
 }

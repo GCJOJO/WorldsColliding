@@ -1,236 +1,250 @@
 {
+  "test_image" : [
+    { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915 },
+    { "action": "wait", "time": 10 },
+    { "action": "message", "speaker": "Le chien", "text": "woof" },
+    { "action": "clear_image", "id": 0, "fade_out_time": 10 }
+  ],
+
   "chapter_0_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.1" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.2" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.6" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.7" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.8" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.9" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.10" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.11" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.12" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.13" }
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.7" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.8" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.9" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.10" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter0_set.11" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.12" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter0_set.13" }
   ],
 
   "chapter_1_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter1_set.1" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter1_set.2" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter1_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.6" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.7" },
-    { "speaker": "change_set", "set": "chapter_1_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter1_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter1_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter1_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_set.7" },
+    { "action": "change_set", "set": "chapter_1_ask" }
   ],
 
   "chapter_1_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_1_ask.text" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_1", "next1": "chapter_1_yes_set", "save1": "chapter_2_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_1_no_set", "save2": "chapter_1_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_1_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_1", "next1": "chapter_1_yes_set", "save1": "chapter_2_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_1_no_set", "save2": "chapter_1_ask" }
   ],
 
   "chapter_1_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.2" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.6" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.7" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_yes_set.7" }
   ],
 
   "chapter_1_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_no_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter1_no_set.1" }
   ],
 
   "chapter_2_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_set.1" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.2" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.3" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.4" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.5" },
-    { "speaker": "change_set", "set": "chapter_2_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_set.5" },
+    { "action": "change_set", "set": "chapter_2_ask" }
   ],
 
   "chapter_2_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_2_ask.text" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_2", "next1": "chapter_2_yes_set", "save1": "chapter_3_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_2_no_set", "save2": "chapter_2_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_2_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_2", "next1": "chapter_2_yes_set", "save1": "chapter_3_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_2_no_set", "save2": "chapter_2_ask" }
   ],
 
   "chapter_2_yes_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_yes_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.2" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.6" }
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter2_yes_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_yes_set.6" }
   ],
 
   "chapter_2_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_no_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter2_no_set.1" }
   ],
 
   "chapter_3_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.1" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.2" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.3" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.4" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.6" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.7" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.8" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.9" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.10" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.11" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.12" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.13" },
-    { "speaker": "change_set", "set": "chapter_3_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter3_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.7" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.8" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.9" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.10" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.11" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.12" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_set.13" },
+    { "action": "change_set", "set": "chapter_3_ask" }
   ],
 
   "chapter_3_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_ask.text" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_3", "next1": "chapter_3_yes_set", "save1": "chapter_4_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_3_no_set", "save2": "chapter_3_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_3", "next1": "chapter_3_yes_set", "save1": "chapter_4_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_3_no_set", "save2": "chapter_3_ask" }
   ],
 
   "chapter_3_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_yes_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_yes_set.2" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_yes_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_yes_set.2" }
   ],
 
   "chapter_3_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_no_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter3_no_set.1" }
   ],
 
   "chapter_4_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.2" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.3" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.4" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.5" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.6" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.7" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.8" },
-    { "speaker": "change_set", "set": "chapter_4_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter4_set.7" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_set.8" },
+    { "action": "change_set", "set": "chapter_4_ask" }
   ],
 
   "chapter_4_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_ask.text" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_4", "next1": "chapter_4_yes_set", "save1": "chapter_5_6_past_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_4_no_set", "save2": "chapter_4_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_4", "next1": "chapter_4_yes_set", "save1": "chapter_5_6_past_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_4_no_set", "save2": "chapter_4_ask" }
   ],
 
   "chapter_4_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.2" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.6" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.7" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_yes_set.7" }
   ],
 
   "chapter_4_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_no_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter4_no_set.1" }
   ],
 
   "chapter_5_6_past_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_set.1" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_set.2" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.accept", "action1": "none", "next1": "chapter_5_6_past_accept_set", "save1": "chapter_5_6_seal_set", "option2": "worldscolliding.dialogue.choice.refuse", "action2": "none", "next2": "chapter_5_6_seal_set", "save2": "chapter_5_6_seal_set" }
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_set.2" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.accept", "action1": "none", "next1": "chapter_5_6_past_accept_set", "save1": "chapter_5_6_seal_set", "option2": "worldscolliding.dialogue.choice.refuse", "action2": "none", "next2": "chapter_5_6_seal_set", "save2": "chapter_5_6_seal_set" }
   ],
 
   "chapter_5_6_past_accept_set": [
-    { "speaker": "fading", "from": "00000000", "to": "FF000000", "time": 10},
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.1",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.2",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.3",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.4",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.5",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.6",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.7",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.8",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.9",  "background_color": "FF000000" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.10", "background_color": "FF000000" },
-    { "speaker": "fading", "from": "FF000000", "to": "00000000", "time": 10},
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.11" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.12" },
-    { "speaker": "change_set", "set": "chapter_5_6_seal_set" }
+    { "action": "fade", "from": "00000000", "to": "FF000000", "time": 10},
+    { "action": "wait", "time":  20 },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.1"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.2"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.3"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.4"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.5"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.6"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.7"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.8"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.9"  },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.10" },
+    { "action": "clear" },
+    { "action": "fade", "from": "FF000000", "to": "00000000", "time": 10},
+    { "action": "wait", "time":  10},
+    { "action": "clear" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.11" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.12" },
+    { "action": "change_set", "set": "chapter_5_6_seal_set" }
   ],
 
   "chapter_5_6_seal_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.2" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.3" },
-    { "speaker": "change_set", "set": "chapter_5_6_seal_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_set.3" },
+    { "action": "change_set", "set": "chapter_5_6_seal_ask" }
   ],
 
   "chapter_5_6_seal_ask": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_ask.text" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_5", "next1": "chapter_5_6_seal_yes_set", "save1": "chapter_7_prologue_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_5_6_seal_no_set", "save2": "chapter_5_6_seal_ask" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_5", "next1": "chapter_5_6_seal_yes_set", "save1": "chapter_7_prologue_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_5_6_seal_no_set", "save2": "chapter_5_6_seal_ask" }
   ],
 
   "chapter_5_6_seal_no_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_no_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_no_set.1" }
   ],
 
   "chapter_5_6_seal_yes_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.7" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.8" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.9" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.10" },
-    { "speaker": "choix", "option1": "worldscolliding.dialogue.choice.seal_light", "action1": "none", "next1": "chapter_5_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "worldscolliding.dialogue.choice.seal_dark", "action2": "none", "next2": "chapter_5_6_seal_dark_set", "save2": "chapter_7_dark_set" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.7" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.8" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.9" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.10" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.seal_light", "action1": "none", "next1": "chapter_5_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "worldscolliding.dialogue.choice.seal_dark", "action2": "none", "next2": "chapter_5_6_seal_dark_set", "save2": "chapter_7_dark_set" }
   ],
 
   "chapter_5_6_seal_light_set": [
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" }
   ],
 
   "chapter_5_6_seal_dark_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" }
   ],
 
   "chapter_7_prologue_set": [
-    { "speaker": "fading", "from":  "FFFFFFFF", "to" : "00000000", "time": 20 },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.1", "background_color": "FFFFFFFF" },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.2", "background_color": "FFFFFFFF" },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.3", "background_color": "FFFFFFFF" },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.4", "background_color": "FFFFFFFF" },
-    { "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.5", "background_color": "FFFFFFFF" },
-    { "speaker": "fading", "from": "00000000", "to" : "FFFFFFFF", "time": 20 }
+    { "action": "fade", "from":  "00000000", "to" : "FFFFFFFF", "time": 20 },
+    { "action": "wait", "time":  20},
+    { "action": "message", "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_voice", "text": "worldscolliding.dialogue.chapter_7_prologue_set.5" },
+    { "action": "clear" },
+    { "action": "fade", "from": "FFFFFFFF", "to" : "00000000", "time": 20 },
+    { "action": "wait", "time":  20}
   ],
 
   "chapter_7_light_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.1" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.2" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.3" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.4" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.5" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.6" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.7" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.8" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.9" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.10" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.11" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_light_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.7" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.8" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.9" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.10" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_light_set.11" }
   ],
 
   "chapter_7_dark_set": [
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.1" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.2" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.3" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.4" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.5" },
-    { "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.6" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.7" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.8" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.9" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.10" },
-    { "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.11" }
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.1" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.2" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.3" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.4" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.5" },
+    { "action": "message", "speaker": "worldscolliding.speaker.scourge", "text": "worldscolliding.dialogue.chapter_7_dark_set.6" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.7" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.8" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.9" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.10" },
+    { "action": "message", "speaker": "worldscolliding.speaker.the_one", "text": "worldscolliding.dialogue.chapter_7_dark_set.11" }
   ]
 }

@@ -21,4 +21,6 @@ public abstract class DialogueAction
 
     public abstract void mouseClicked(double mouseX, double mouseY, int button);
     public abstract void keyPressed(int keyCode, int scanCode, int modifiers);
+
+    public abstract boolean isBlocking();
 }

@@ -17,7 +17,6 @@ public class DialogueMessage extends DialogueAction
 {
     private String speaker;
     private String dialogueLine;
-    private int backgroundColor;
 
     private int charIndex = 0;
     private int tickCount = 0;
@@ -28,24 +27,6 @@ public class DialogueMessage extends DialogueAction
     public DialogueMessage(String speaker, String dialogueLine) {
         this.speaker = speaker;
         this.dialogueLine = dialogueLine;
-        this.backgroundColor = FastColor.ARGB32.color(0, 0, 0, 0); // transparent
-    }
-
-    public DialogueMessage(String speaker, String dialogueLine, String backgroundColor) {
-        this.speaker = speaker;
-        this.dialogueLine = dialogueLine;
-        this.backgroundColor = FastColor.ARGB32.color(0, 0, 0, 0);
-        try{
-            if(backgroundColor.length() == 8) {
-                int alpha = Integer.parseInt(backgroundColor.substring(0, 2), 16);
-                int red = Integer.parseInt(backgroundColor.substring(2, 4), 16);
-                int green = Integer.parseInt(backgroundColor.substring(4, 6), 16);
-                int blue = Integer.parseInt(backgroundColor.substring(6, 8), 16);
-                this.backgroundColor = FastColor.ARGB32.color(alpha, red, green, blue);
-            }
-        } catch (Exception e) {
-            ModEntry.getLogger().error(e.getMessage());
-        }
     }
 
     @Override
@@ -76,14 +57,9 @@ public class DialogueMessage extends DialogueAction
         int boxX = (screen.width - boxWidth) / 2;
         int boxY = screen.height - boxHeight - 20;
 
-        if(backgroundColor != 0x00000000)
-            graphics.fill(0, 0, screen.width, screen.height, backgroundColor);
-
         graphics.fill(boxX, boxY, boxX + boxWidth, boxY + boxHeight, 0x80000000);
         String speakerTranslated = Component.translatable(speaker).getString();
         graphics.drawString(font, speakerTranslated, boxX + 10, boxY + 5, DialogueUtils.getSpeakerColor(speaker), false);
-
-
 
         if (dialogueLine != null) {
             String displayedText = dialogueLine.substring(0, charIndex);
@@ -98,7 +74,7 @@ public class DialogueMessage extends DialogueAction
     @Override
     public void mouseClicked(double mouseX, double mouseY, int button) {
         if(charIndex >= dialogueLine.length())
-            screen.advanceDialogue();
+            screen.queueAdvanceDialogue();
         else
             charIndex = dialogueLine.length();
     }
@@ -106,8 +82,11 @@ public class DialogueMessage extends DialogueAction
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
         if(charIndex >= dialogueLine.length())
-            screen.advanceDialogue();
+            screen.queueAdvanceDialogue();
         else
             charIndex = dialogueLine.length();
     }
+
+    @Override
+    public boolean isBlocking() { return true; }
 }

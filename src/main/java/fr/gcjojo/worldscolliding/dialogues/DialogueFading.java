@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
+import com.eliotlash.mclib.utils.MathUtils;
 import fr.gcjojo.worldscolliding.ModEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.FastColor;
@@ -46,14 +47,12 @@ public class DialogueFading extends DialogueAction
     public void draw(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         ModEntry.getLogger().warn(String.valueOf(partialTick));
         partialTicks += partialTick;
-        float percentage = partialTicks / time;
+        float percentage = MathUtils.clamp(partialTicks / time, 0.0f, 1.0f);
+
         ModEntry.getLogger().warn(String.valueOf(percentage));
         int lerpColor = FastColor.ARGB32.lerp(percentage, fromColor, toColor);
 
         graphics.fill(0, 0, screen.width, screen.height, lerpColor);
-
-        if(partialTicks >= time)
-            screen.advanceDialogue();
     }
 
     @Override
@@ -61,4 +60,7 @@ public class DialogueFading extends DialogueAction
 
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) { }
+
+    @Override
+    public boolean isBlocking() { return false; }
 }

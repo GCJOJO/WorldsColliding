@@ -16,25 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DialogueScreen extends Screen {
-
-    /*public record DialogueLine(String speaker, String text, String option1, String action1, String next1, String save1, String option2, String action2, String next2, String save2) {
-        public DialogueLine(String speaker, String text) {
-            this(speaker, text, null, null, null, null, null, null, null, null);
-        }
-    }*/
-
-    /*private boolean hasOptions() {
-        if (dialogues.isEmpty()) return false;
-        DialogueLine lastLine = dialogues.get(dialogues.size() - 1);
-        return lastLine.option1() != null && !lastLine.option1().isEmpty();
-    }*/
-
-    private List<DialogueAction> actions;
+    private List<DialogueAction> dialogueActions;
     private int actionIndex = -1;
+
+    private List<DialogueAction> currentActions = new ArrayList<>();
+
+    private boolean advanceDialogueAtTickEnd = false;
 
     public DialogueScreen(List<DialogueAction> actions) {
         super(Component.literal("Dialogue"));
-        this.actions = actions;
+        this.dialogueActions = actions;
     }
 
     @Override
@@ -67,7 +58,7 @@ public class DialogueScreen extends Screen {
         }
 
         actionIndex = -1;
-        actions = newActions;
+        dialogueActions = newActions;
         advanceDialogue();
     }
 
@@ -81,18 +72,21 @@ public class DialogueScreen extends Screen {
                     List<DialogueAction> actions = new ArrayList<>();
                     root.getAsJsonArray(setName).forEach(element -> {
                         JsonObject obj = element.getAsJsonObject();
-                        String speaker = obj.get("speaker").getAsString();
-
-                        switch(speaker)
+                        String action = obj.get("action").getAsString();
+                        switch(action)
                         {
-                            case "choix" -> actions.add(new DialogueChoice(
+                            case "clear" -> actions.add(new DialogueClear());
+                            case "wait" -> actions.add(new DialogueWait(obj.get("time").getAsFloat()));
+                            case "choice" -> actions.add(new DialogueChoice(
                                 obj.get("option1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(), obj.get("action1").getAsString(),
                                 obj.get("option2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString(), obj.get("action2").getAsString()
                             ));
-                            case "fading" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
                             case "change_set" -> actions.add(new DialogueNext(obj.get("set").getAsString()));
-                            default -> actions.add(new DialogueMessage(speaker, Component.translatable(obj.get("text").getAsString()).getString(), obj.has("background_color") ? obj.get("background_color").getAsString() : "00000000"));
+                            case "fade" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
+                            case "message" -> actions.add(new DialogueMessage(obj.get("speaker").getAsString(), Component.translatable(obj.get("text").getAsString()).getString()));
+                            case "image" -> actions.add(new DialogueImage(obj.get("id").getAsInt(), obj.get("image").getAsString(), obj.get("width").getAsInt(), obj.get("height").getAsInt()));
                         }
+
                     });
                     return actions;
                 }
@@ -112,47 +106,42 @@ public class DialogueScreen extends Screen {
 
     @Override
     public void tick() {
-        if(actionIndex >= actions.size())
+        if(actionIndex >= dialogueActions.size())
             return;
 
-        DialogueAction currentAction = actions.get(actionIndex);
-        if(currentAction == null)
-            return;
+        currentActions.forEach(DialogueAction::step);
 
-        currentAction.step();
+        if(advanceDialogueAtTickEnd) {
+            this.advanceDialogueAtTickEnd = false;
+            this.advanceDialogue();
+        }
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        this.renderBackground(graphics);
+        //draw images : graphics.blit(BACKGROUND_LOCATION, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
+        graphics.fill(0, 0, this.width, this.height, 0x44000000);
 
-        if(actionIndex >= actions.size())
+        if(actionIndex >= dialogueActions.size())
             return;
 
-        DialogueAction currentAction = actions.get(actionIndex);
-        if(currentAction == null)
-            return;
+        currentActions.forEach(action -> action.draw(graphics, mouseX, mouseY, partialTick));
 
-        currentAction.draw(graphics, mouseX, mouseY, partialTick);
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int button) {
-        if(actionIndex < actions.size()) {
-            DialogueAction currentAction = actions.get(actionIndex);
-            if(currentAction != null)
-                currentAction.mouseClicked(mouseX, mouseY, button);
+        if(actionIndex < dialogueActions.size()) {
+            currentActions.forEach(dialogueAction -> dialogueAction.mouseClicked(mouseX, mouseY, button));
         }
         return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if(actionIndex < actions.size()) {
-            DialogueAction currentAction = actions.get(actionIndex);
-            if(currentAction != null)
-                currentAction.mouseClicked(keyCode, scanCode, modifiers);
+        if(actionIndex < dialogueActions.size()) {
+            currentActions.forEach(dialogueAction -> dialogueAction.mouseClicked(keyCode, scanCode, modifiers));
         }
 
         if (keyCode == 257 || keyCode == 32) {
@@ -162,23 +151,27 @@ public class DialogueScreen extends Screen {
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
+    public void queueAdvanceDialogue() { this.advanceDialogueAtTickEnd = true; }
+
     public void advanceDialogue() {
-        actionIndex++;
-        if (actions.isEmpty() || actionIndex >= actions.size()) {
+        if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size() - 1) {
             this.onClose();
             return;
         }
-        DialogueAction currentAction = actions.get(actionIndex);
-        currentAction.setup(this);
+        currentActions.removeIf(DialogueAction::isBlocking);
 
-        /*if (!hasOptions()) {
-            String currentSet = Minecraft.getInstance().player.getPersistentData().getString("CurrentChapter");
-            if (currentSet.endsWith("_set") && !currentSet.contains("_ask")) {
-                String askSet = currentSet.replace("_set", "_ask");
-                ModNetwork.CHANNEL.sendToServer(new ModNetwork.ChoiceSelectedPacket(askSet, askSet, null));
-                this.onClose();
-                return;
-            }
-        }*/
+        for(int i = actionIndex; i <= dialogueActions.size() - 1; i++)
+        {
+            actionIndex++;
+            DialogueAction currentAction = dialogueActions.get(actionIndex);
+            currentActions.add(currentAction);
+            currentAction.setup(this);
+            if(currentAction.isBlocking())
+                break;
+        }
+    }
+
+    public void clearActions() {
+        currentActions.clear();
     }
 }

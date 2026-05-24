@@ -28,4 +28,7 @@ public class DialogueNext extends DialogueAction {
 
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) { }
+
+    @Override
+    public boolean isBlocking() { return true; }
 }
