@@ -2,6 +2,7 @@ package fr.gcjojo.worldscolliding.dialogues;
 
 import fr.gcjojo.worldscolliding.ModEntry;
 import net.minecraft.client.gui.GuiGraphics;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.resources.ResourceLocation;
 
 
@@ -28,18 +29,16 @@ public class DialogueImage extends DialogueAction {
 
     @Override
     public void draw(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        int screenCenterX = screen.width / 2;
-        int screenCenterY = screen.height / 2;
+        PoseStack pose = graphics.pose();
+        pose.translate(screen.width / 2f,screen.height / 2f, 0);
 
-        int height = screen.height;
-        height -= (int)Math.ceil(initialHeight * (screen.height / (double)initialHeight)) / 4;
-        int width = (int)Math.ceil(initialWidth * (height / (double)initialHeight));
-
-        int imageX = screenCenterX - width / 2;
-        int imageY = screenCenterY - height / 2;
+        double imageHeight = ((double) screen.height * 0.5d) / initialHeight;
+        double imageWidth = (double)initialWidth * (imageHeight / (double)initialHeight);
 
         //image, topPos, leftPos, uvX, uvY, width, height
-        graphics.blit(image, imageX, imageY, 0, 0, width, height);
+        pose.scale((float) imageHeight, (float) imageWidth, 1);
+        graphics.blit(image, -initialWidth / 2, -initialHeight / 2, 0, 0, initialWidth, initialHeight, initialWidth, initialHeight);
+        pose.popPose();
     }
 
     @Override

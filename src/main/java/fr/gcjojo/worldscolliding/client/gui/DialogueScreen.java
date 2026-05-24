@@ -140,14 +140,14 @@ public class DialogueScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if(actionIndex < dialogueActions.size()) {
+        /*if(actionIndex < dialogueActions.size()) {
             currentActions.forEach(dialogueAction -> dialogueAction.mouseClicked(keyCode, scanCode, modifiers));
         }
 
         if (keyCode == 257 || keyCode == 32) {
             advanceDialogue();
             return true;
-        }
+        }*/
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 

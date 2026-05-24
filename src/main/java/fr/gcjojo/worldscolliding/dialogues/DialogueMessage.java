@@ -81,6 +81,9 @@ public class DialogueMessage extends DialogueAction
 
     @Override
     public void keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (keyCode != 257 && keyCode != 32)
+            return;
+
         if(charIndex >= dialogueLine.length())
             screen.queueAdvanceDialogue();
         else
