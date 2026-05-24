@@ -29,15 +29,15 @@ public class Config
 
     private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_X = BUILDER
             .comment("The x position of the spawnpoint of players in the structure relatives to the structure's origin")
-            .defineInRange("story_structure_player_spawnpoint_x", 55.5d, -32.0d, 32.0);
+            .defineInRange("story_structure_player_spawnpoint_x", 55.5d, -128.0d, 128.0);
 
     private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Y = BUILDER
             .comment("The y position of the spawnpoint of players in the structure relatives to the structure's origin")
-            .defineInRange("story_structure_player_spawnpoint_y", 6.0d, -32.0d, 32.0d);
+            .defineInRange("story_structure_player_spawnpoint_y", 6.0d, -128.0d, 128.0d);
 
     private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_Z = BUILDER
             .comment("The z position of the spawnpoint of players in the structure relatives to the structure's origin")
-            .defineInRange("story_structure_player_spawnpoint_z", 30.5d, -32.0d, 32.0d);
+            .defineInRange("story_structure_player_spawnpoint_z", 30.5d, -128.0d, 128.0d);
 
     private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_ROTATION = BUILDER
             .comment("The angle of rotation of the player when teleporting to Story Dimension")

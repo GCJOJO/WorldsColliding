@@ -2,6 +2,8 @@ package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
 
+import fr.gcjojo.worldscolliding.network.ModNetwork;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -10,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.phys.AABB;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -20,6 +23,7 @@ import software.bernie.geckolib.util.GeckoLibUtil;
 import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.player.Player;
 
 public class ScourgeEntity extends PathfinderMob implements GeoEntity {
 
@@ -34,6 +38,34 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                 .add(Attributes.MAX_HEALTH, 69.0)
                 .add(Attributes.MOVEMENT_SPEED, 0.0)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0);
+    }
+
+    @Override
+    public void tick() {
+        if(level().isClientSide())
+            return;
+
+        level().getEntities(this, getBoundingBox().inflate(10), entity -> entity instanceof Player).forEach(player -> {
+         if(!(player instanceof Player))
+             return;
+
+         boolean isInDialogue = player.getPersistentData().getBoolean("IsInDialogue");
+         if(isInDialogue)
+             return;
+
+         String currentChapter = player.getPersistentData().getString("CurrentChapter");
+         String lastReadChapter = player.getPersistentData().getString("LastReadChapter");
+         if (currentChapter.isEmpty()) {
+             currentChapter = "chapter_0_set";
+             player.getPersistentData().putString("CurrentChapter", currentChapter);
+         }
+
+         if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
+         {
+            player.getPersistentData().putBoolean("IsInDialogue", true);
+            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), (ServerPlayer) player);
+         }
+        });
     }
 
     @Override

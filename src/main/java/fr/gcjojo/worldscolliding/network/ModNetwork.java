@@ -1,6 +1,8 @@
 package fr.gcjojo.worldscolliding.network;
 
 import fr.gcjojo.worldscolliding.ModEntry;
+import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
+import fr.gcjojo.worldscolliding.StoryDimensionData;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
@@ -39,6 +41,12 @@ public class ModNetwork {
                 .encoder(ChoiceSelectedPacket::encode)
                 .decoder(ChoiceSelectedPacket::new)
                 .consumerMainThread(ChoiceSelectedPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(DialogueCompletedPacket.class, packetId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(DialogueCompletedPacket::encode)
+                .decoder(DialogueCompletedPacket::new)
+                .consumerMainThread(DialogueCompletedPacket::handle)
                 .add();
     }
 
@@ -101,6 +109,8 @@ public class ModNetwork {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
                     player.getPersistentData().putString("CurrentChapter", msg.saveSet);
+                    PlayerStoryDimensionData data = StoryDimensionData.getPlayerData(player);
+                    player.teleportTo(data.storyDimensionSpawnpoint.x, data.storyDimensionSpawnpoint.y, data.storyDimensionSpawnpoint.z);
 
                     if (msg.action != null && msg.action.startsWith("seal_")) {
                         String animName = "sceal" + msg.action.split("_")[1];
@@ -122,6 +132,33 @@ public class ModNetwork {
                         ModNetwork.CHANNEL.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player),
                                 new OpenDialoguePacket(msg.nextSet));
                     }
+                }
+            });
+            ctx.get().setPacketHandled(true);
+        }
+    }
+
+    public static class DialogueCompletedPacket {
+        private final String setName;
+
+        public DialogueCompletedPacket(String setName) {
+            this.setName = setName;
+        }
+
+        public DialogueCompletedPacket(FriendlyByteBuf buf) {
+            this.setName = buf.readUtf();
+        }
+
+        public void encode(FriendlyByteBuf buf) {
+            buf.writeUtf(this.setName);
+        }
+
+        public static void handle(DialogueCompletedPacket msg, Supplier<NetworkEvent.Context> ctx){
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if(player != null) {
+                    player.getPersistentData().putBoolean("IsInDialogue", false);
+                    player.getPersistentData().putString("LastReadChapter", msg.setName);
                 }
             });
             ctx.get().setPacketHandled(true);

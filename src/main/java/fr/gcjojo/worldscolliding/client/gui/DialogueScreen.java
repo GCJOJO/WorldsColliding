@@ -18,13 +18,27 @@ import java.util.List;
 public class DialogueScreen extends Screen {
     private List<DialogueAction> dialogueActions;
     private int actionIndex = -1;
+    private String currentSet;
 
     private List<DialogueAction> currentActions = new ArrayList<>();
 
     private boolean advanceDialogueAtTickEnd = false;
 
-    public DialogueScreen(List<DialogueAction> actions) {
+    public DialogueScreen(String setName) {
         super(Component.literal("Dialogue"));
+        this.currentSet = setName;
+        var actions = loadSet(setName);
+        if(actions == null || actions.isEmpty())
+        {
+            this.onClose();
+            return;
+        }
+        this.dialogueActions = actions;
+    }
+
+    public DialogueScreen(String setName, List<DialogueAction> actions) {
+        super(Component.literal("Dialogue"));
+        this.currentSet = setName;
         this.dialogueActions = actions;
     }
 
@@ -57,6 +71,7 @@ public class DialogueScreen extends Screen {
             return;
         }
 
+        currentSet = setName;
         actionIndex = -1;
         dialogueActions = newActions;
         advanceDialogue();
@@ -100,8 +115,8 @@ public class DialogueScreen extends Screen {
 
     public static void openForSet(String setName) {
         List<DialogueAction> actions = loadSet(setName);
-        if(actions != null)
-            Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(actions)));
+        if(actions != null && !actions.isEmpty())
+            Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(setName, actions)));
     }
 
     @Override
@@ -156,6 +171,7 @@ public class DialogueScreen extends Screen {
     public void advanceDialogue() {
         if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size() - 1) {
             this.onClose();
+            ModNetwork.sendToServer(new ModNetwork.DialogueCompletedPacket(currentSet));
             return;
         }
         currentActions.removeIf(DialogueAction::isBlocking);

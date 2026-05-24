@@ -45,11 +45,9 @@ public class DialogueFading extends DialogueAction
     // partialTicks = deltaTime ?
     @Override
     public void draw(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        ModEntry.getLogger().warn(String.valueOf(partialTick));
         partialTicks += partialTick;
         float percentage = MathUtils.clamp(partialTicks / time, 0.0f, 1.0f);
 
-        ModEntry.getLogger().warn(String.valueOf(percentage));
         int lerpColor = FastColor.ARGB32.lerp(percentage, fromColor, toColor);
 
         graphics.fill(0, 0, screen.width, screen.height, lerpColor);
