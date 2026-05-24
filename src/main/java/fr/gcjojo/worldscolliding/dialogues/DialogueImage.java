@@ -32,6 +32,7 @@ public class DialogueImage extends DialogueAction {
         int screenCenterY = screen.height / 2;
 
         int height = screen.height;
+        height -= (int)Math.ceil(initialHeight * (screen.height / (double)initialHeight)) / 4;
         int width = (int)Math.ceil(initialWidth * (height / (double)initialHeight));
 
         int imageX = screenCenterX - width / 2;

@@ -3,7 +3,14 @@
     { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915 },
     { "action": "wait", "time": 10 },
     { "action": "message", "speaker": "Le chien", "text": "woof" },
-    { "action": "clear_image", "id": 0, "fade_out_time": 10 }
+    { "action": "clear" },
+    { "action": "wait", "time": 10},
+
+    { "action": "fade", "from": "00000000", "to": "FF000000", "time": 10},
+    { "action": "wait", "time":  20 },
+    { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915 },
+    { "action": "message", "speaker": "Le chien", "text": "woof jumpscare !" },
+    { "action": "clear" }
   ],
 
   "chapter_0_set": [
