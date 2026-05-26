@@ -19,6 +19,8 @@ import java.util.List;
 public class DialogueScreen extends Screen {
     private List<DialogueAction> dialogueActions;
     private int actionIndex = -1;
+    private List<DialogueSpeaker> dialogueSpeakers;
+
     private String currentSet;
 
     private List<DialogueAction> currentActions = new ArrayList<>();
@@ -35,12 +37,21 @@ public class DialogueScreen extends Screen {
             return;
         }
         this.dialogueActions = actions;
+
+        var speakers = loadSpeakers(setName);
+        if(speakers == null || speakers.isEmpty())
+        {
+            this.onClose();
+            return;
+        }
+        this.dialogueSpeakers = speakers;
     }
 
-    public DialogueScreen(String setName, List<DialogueAction> actions) {
+    public DialogueScreen(String setName, List<DialogueAction> actions, List<DialogueSpeaker> speakers) {
         super(Component.literal("Dialogue"));
         this.currentSet = setName;
         this.dialogueActions = actions;
+        this.dialogueSpeakers = speakers;
     }
 
     @Override
@@ -71,10 +82,16 @@ public class DialogueScreen extends Screen {
             this.onClose();
             return;
         }
+        List<DialogueSpeaker> newSpeakers = loadSpeakers(setName);
+        if(newSpeakers == null) {
+            this.onClose();
+            return;
+        }
 
         currentSet = setName;
         actionIndex = -1;
         dialogueActions = newActions;
+        dialogueSpeakers = newSpeakers;
         advanceDialogue();
     }
 
@@ -107,7 +124,7 @@ public class DialogueScreen extends Screen {
                             ));
                             case "change_set" -> actions.add(new DialogueNext(obj.get("set").getAsString()));
                             case "fade" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
-                            case "message" -> actions.add(new DialogueMessage(obj.get("speaker").getAsString(), Component.translatable(obj.get("text").getAsString()).getString()));
+                            case "message" -> actions.add(new DialogueMessage(obj.get("speaker").getAsInt(), Component.translatable(obj.get("text").getAsString()).getString()));
                             case "image" -> actions.add(new DialogueImage(obj.get("id").getAsInt(), obj.get("image").getAsString(), obj.get("width").getAsInt(), obj.get("height").getAsInt()));
                             case "credit" -> actions.add(new DialogueCredit(obj.get("text").getAsString(), obj.get("fade_in_time").getAsFloat(), obj.get("hold_time").getAsFloat(), obj.get("fade_out_time").getAsFloat(), obj.get("x").getAsFloat(), obj.get("y").getAsFloat(), obj.get("scale").getAsFloat(), obj.get("color").getAsString()));
                         }
@@ -123,10 +140,42 @@ public class DialogueScreen extends Screen {
         return null;
     }
 
+    public static List<DialogueSpeaker> loadSpeakers(String setPath){
+        try {
+            String namespace = ModEntry.MODID;
+            String setName = setPath;
+            if (setPath.contains(":")) {
+                namespace = setPath.split(":")[0];
+                setName = setPath.split(":")[1];
+            }
+
+            ResourceLocation res = ResourceLocation.fromNamespaceAndPath(namespace, "dialogues.json");
+            var resourceOpt = Minecraft.getInstance().getResourceManager().getResource(res);
+            if (resourceOpt.isPresent()) {
+                JsonObject root = new Gson().fromJson(new InputStreamReader(resourceOpt.get().open()), JsonObject.class);
+                List<DialogueSpeaker> speakers = new ArrayList<>();
+                if(!root.has("speakers"))
+                    return speakers;
+
+                root.getAsJsonArray("speakers").forEach(element -> {
+                    JsonObject obj = element.getAsJsonObject();
+                    speakers.add(new DialogueSpeaker(obj));
+                });
+
+                return speakers;
+            }
+        } catch (Exception e) {
+            ModEntry.getLogger().warn("Oopsie cannot load speakers !");
+        }
+
+        return null;
+    }
+
     public static void openForSet(String setName) {
         List<DialogueAction> actions = loadSet(setName);
-        if(actions != null && !actions.isEmpty())
-            Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(setName, actions)));
+        List<DialogueSpeaker> speakers = loadSpeakers(setName);
+        if(actions != null && !actions.isEmpty() && speakers != null && !speakers.isEmpty())
+            Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(setName, actions, speakers)));
     }
 
     @Override
@@ -200,6 +249,16 @@ public class DialogueScreen extends Screen {
                 break;
             }
         }
+    }
+
+    public List<DialogueSpeaker> getDialogueSpeakers() { return this.dialogueSpeakers; }
+
+    public DialogueSpeaker getDialogueSpeaker(int id){
+        if (dialogueSpeakers.isEmpty())
+            return null;
+        for(var speaker : this.dialogueSpeakers)
+            if(speaker.getId() == id) return speaker;
+        return null;
     }
 
     public void clearActions() { currentActions.clear(); }

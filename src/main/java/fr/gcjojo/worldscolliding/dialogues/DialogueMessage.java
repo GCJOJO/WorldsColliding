@@ -15,8 +15,8 @@ import java.util.Random;
 
 public class DialogueMessage extends DialogueAction
 {
-    private String speaker;
-    private String dialogueLine;
+    private final int speakerId;
+    private final String dialogueLine;
 
     private int charIndex = 0;
     private int tickCount = 0;
@@ -24,8 +24,8 @@ public class DialogueMessage extends DialogueAction
     private final Random random = new Random();
     private static final Font font = Minecraft.getInstance().font;
 
-    public DialogueMessage(String speaker, String dialogueLine) {
-        this.speaker = speaker;
+    public DialogueMessage(int speakerId, String dialogueLine) {
+        this.speakerId = speakerId;
         this.dialogueLine = dialogueLine;
     }
 
@@ -41,8 +41,9 @@ public class DialogueMessage extends DialogueAction
         if (charIndex >= dialogueLine.length()) return;
 
         charIndex++;
-        SoundEvent[] sounds = DialogueUtils.getSoundForSpeaker(speaker);
-        Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sounds[random.nextInt(sounds.length)], 1.0F));
+        SoundEvent[] sounds = screen.getDialogueSpeaker(this.speakerId).getSounds();
+        if(sounds.length >= 1)
+            Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(sounds[random.nextInt(sounds.length)], 1.0F));
 
         char currentChar = dialogueLine.charAt(charIndex - 1);
         if (currentChar == '.' || currentChar == '!' || currentChar == '?') {
@@ -58,8 +59,8 @@ public class DialogueMessage extends DialogueAction
         int boxY = screen.height - boxHeight - 20;
 
         graphics.fill(boxX, boxY, boxX + boxWidth, boxY + boxHeight, 0x80000000);
-        String speakerTranslated = Component.translatable(speaker).getString();
-        graphics.drawString(font, speakerTranslated, boxX + 10, boxY + 5, DialogueUtils.getSpeakerColor(speaker), false);
+        String speakerTranslated = Component.translatable(screen.getDialogueSpeaker(this.speakerId).getName()).getString();
+        graphics.drawString(font, speakerTranslated, boxX + 10, boxY + 5, screen.getDialogueSpeaker(this.speakerId).getColor(), false);
 
         if (dialogueLine != null) {
             String displayedText = dialogueLine.substring(0, charIndex);
