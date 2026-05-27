@@ -28,11 +28,11 @@ Inside dialogues.json define the different speakers that may speak in your dialo
 ```jsonc
 {
   "speakers" : [
-   // The speaker with id 0 is named Speaker 1 and its display color is white, this speaker doesn't play any sound when talking
+    // The speaker with id 0 is named Speaker 1 and its display color is white, this speaker doesn't play any sound when talking
     { "id" : 0, "name": "Speaker 1", "color": "FFFFFFFF", "sounds" : [] },
-   // The speaker with id 1 is named Speaker 2 and its display color is red, this speaker plays the note block banjo sound when talking 
+    // The speaker with id 1 is named Speaker 2 and its display color is red, this speaker plays the note block banjo sound when talking 
     { "id" : 1, "name": "Speaker 2", "color": "FFFF0000", "sounds" : ["block.note_block.banjo"] },
-   // The speaker with id 2 is named Speaker 3 and randomly plays the sounds of the xylophone, the flute, the basedrum and the sound of falling on a mud block
+    // The speaker with id 2 is named Speaker 3 and randomly plays the sounds of the xylophone, the flute, the basedrum and the sound of falling on a mud block
     { "id" : 2, "name": "Speaker 3", "color": "FFFFFFFF", "sounds" : ["block.note_block.xylophone", "block.note_block.flute", "block.note_block.basedrum", "block.mud.fall"] },
     //...
   ]
