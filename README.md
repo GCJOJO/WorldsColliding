@@ -34,7 +34,7 @@ Inside dialogues.json define the different speakers that may speak in your dialo
     { "id" : 1, "name": "Speaker 2", "color": "FFFF0000", "sounds" : ["block.note_block.banjo"] },
    // The speaker with id 2 is named Speaker 3 and randomly plays the sounds of the xylophone, the flute, the basedrum and the sound of falling on a mud block
     { "id" : 2, "name": "Speaker 3", "color": "FFFFFFFF", "sounds" : ["block.note_block.xylophone", "block.note_block.flute", "block.note_block.basedrum", "block.mud.fall"] },
-    ...
+    //...
   ]
 }
 ```
@@ -42,7 +42,9 @@ Inside dialogues.json define the different speakers that may speak in your dialo
 Here is how you define a dialogue, there are multiple actions that can be defined as follows:
 ```jsonc
 {
-  "speakers" : [...],
+  "speakers" : [
+      //...
+  ],
   "dialogue_1" : [
       { "action" :  "message", "speaker" :  0, "text" :  "this action displays a message with speaker id 0"},
    
