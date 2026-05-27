@@ -9,7 +9,7 @@ Worlds Colliding is the core foundation of the modpack of the same name. This mo
 
 <ins>__How to build__</ins>:
 1) Install Java JDK 17
-2) Open command prompt or and IDE and run : 
+2) Open command prompt or any IDE and run : 
  ```./gradlew build```
 3) Enjoy !
 
@@ -45,13 +45,24 @@ Here is how you define a dialogue, there are multiple actions that can be define
   "speakers" : [...],
   "dialogue_1" : [
       { "action" :  "message", "speaker" :  0, "text" :  "this action displays a message with speaker id 0"},
+   
       { "action": "change_set", "set": "dialogue_2" },
+   
       { "action": "choice", "option1": "Choose option 1 !", "action1": "action1_choosen", "save1": "option1", "option2": "Choose option 2 !", "action2": "action2_choosen", "save2": "option2" },
+   
       // this actions displays a fading animation that takes 20 ticks and fades the screen from being visible to a white screen   
       { "action": "fade", "from": "00000000", "to": "FFFFFFFF", "time": 20 },
+   
       { "action": "wait", "time": 20 },
-      { "action": "clear" }, // clears any non blocking actions, 
-      { "action": "clear", "cleared_action": "fade" }, //you may specify which action type to clear
+   
+      // clears any non blocking actions, 
+      { "action": "clear" }, 
+   
+      //you may specify which action type to clear
+      { "action": "clear", "cleared_action": "fade" }, 
+   
+      // displays an image on the screen, the width and height are the original size of the image, the image should be properly resized once shown to the player
+      { "action": "image", "id": 0, "image": "my_resourcepack:textures/gui/my_cool_texture.png", "width": 64, "height": 64},
   ]
 }
 ```
