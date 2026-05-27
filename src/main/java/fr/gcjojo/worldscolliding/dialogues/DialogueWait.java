@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
+import com.google.gson.JsonObject;
 import net.minecraft.client.gui.GuiGraphics;
 
 public class DialogueWait extends DialogueAction {
@@ -9,6 +10,13 @@ public class DialogueWait extends DialogueAction {
 
     public DialogueWait(float waitTime){
         this.waitTime = waitTime;
+    }
+
+    public DialogueWait(JsonObject object){
+        if(object.has("time"))
+            this.waitTime = object.get("time").getAsFloat();
+        else
+            this.waitTime = 0.0f;
     }
 
     @Override

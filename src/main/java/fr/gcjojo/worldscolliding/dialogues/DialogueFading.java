@@ -1,6 +1,7 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
 import com.eliotlash.mclib.utils.MathUtils;
+import com.google.gson.JsonObject;
 import fr.gcjojo.worldscolliding.ModEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.FastColor;
@@ -35,6 +36,36 @@ public class DialogueFading extends DialogueAction
         } catch (Exception e) {
             ModEntry.getLogger().error(e.getMessage());
         }
+    }
+
+    public DialogueFading(JsonObject object){
+        try{
+            if(object.has("from")) {
+                String from = object.get("from").getAsString();
+                if(from.length() == 8) {
+                    int alpha = Integer.parseInt(from.substring(0, 2), 16);
+                    int red = Integer.parseInt(from.substring(2, 4), 16);
+                    int green = Integer.parseInt(from.substring(4, 6), 16);
+                    int blue = Integer.parseInt(from.substring(6, 8), 16);
+                    this.fromColor = FastColor.ARGB32.color(alpha, red, green, blue);
+                }
+            }
+            if(object.has("to")){
+                String to = object.get("to").getAsString();
+                if(to.length() == 8) {
+                    int alpha = Integer.parseInt(to.substring(0, 2), 16);
+                    int red = Integer.parseInt(to.substring(2, 4), 16);
+                    int green = Integer.parseInt(to.substring(4, 6), 16);
+                    int blue = Integer.parseInt(to.substring(6, 8), 16);
+                    this.toColor = FastColor.ARGB32.color(alpha, red, green, blue);
+                }
+            }
+        } catch (Exception e) {
+            ModEntry.getLogger().error(e.getMessage());
+        }
+
+        if(object.has("time"))
+            this.time = object.get("time").getAsFloat();
     }
 
     @Override

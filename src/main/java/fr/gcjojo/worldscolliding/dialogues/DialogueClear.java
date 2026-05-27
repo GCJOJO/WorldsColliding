@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
+import com.google.gson.JsonObject;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import net.minecraft.client.gui.GuiGraphics;
 
@@ -13,6 +14,13 @@ public class DialogueClear extends DialogueAction {
 
     public DialogueClear(String clearedClass){
         this.clearedClass = clearedClass;
+    }
+
+    public DialogueClear(JsonObject object){
+        if(object.has("cleared_actions"))
+            this.clearedClass = object.get("cleared_actions").getAsString();
+        else
+            this.clearedClass = "none";
     }
 
     @Override

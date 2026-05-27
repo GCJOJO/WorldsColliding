@@ -11,11 +11,13 @@ import net.minecraft.util.valueproviders.ConstantInt;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
 import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraft.world.level.dimension.LevelStem;
 import net.minecraft.world.level.levelgen.FlatLevelSource;
 import net.minecraft.world.level.levelgen.NoiseGeneratorSettings;
+import net.minecraft.world.level.levelgen.flat.FlatLayerInfo;
 import net.minecraft.world.level.levelgen.flat.FlatLevelGeneratorSettings;
 
 import java.util.ArrayList;
@@ -25,11 +27,11 @@ import java.util.OptionalLong;
 public class ModDimensions
 {
     public static final ResourceKey<LevelStem> STORY_DIM_KEY = ResourceKey.create(Registries.LEVEL_STEM,
-            new ResourceLocation(ModEntry.MODID, "story"));
+            ResourceLocation.fromNamespaceAndPath(ModEntry.MODID, "story"));
     public static final ResourceKey<Level> STORY_DIM_LEVEL_KEY = ResourceKey.create(Registries.DIMENSION,
-            new ResourceLocation(ModEntry.MODID, "story"));
+            ResourceLocation.fromNamespaceAndPath(ModEntry.MODID, "story"));
     public static final ResourceKey<DimensionType> STORY_DIM_TYPE = ResourceKey.create(Registries.DIMENSION_TYPE,
-            new ResourceLocation(ModEntry.MODID, "story_type"));
+            ResourceLocation.fromNamespaceAndPath(ModEntry.MODID, "story_type"));
 
 
     public static void bootstrapType(BootstapContext<DimensionType> context)
@@ -57,10 +59,11 @@ public class ModDimensions
     {
         HolderGetter<Biome> biomeRegistry = context.lookup(Registries.BIOME);
         HolderGetter<DimensionType> dimTypes = context.lookup(Registries.DIMENSION_TYPE);
-        HolderGetter<NoiseGeneratorSettings> noiseGenSettings = context.lookup(Registries.NOISE_SETTINGS);
 
-        FlatLevelSource chunkGenerator = new FlatLevelSource(
-                new FlatLevelGeneratorSettings(Optional.empty(), biomeRegistry.getOrThrow(Biomes.THE_VOID), new ArrayList<>()));
+        FlatLevelGeneratorSettings flatLevelGenSettings = new FlatLevelGeneratorSettings(Optional.empty(), biomeRegistry.getOrThrow(Biomes.THE_VOID), new ArrayList<>());
+        flatLevelGenSettings.getLayersInfo().add(new FlatLayerInfo(1, Blocks.BEDROCK));
+
+        FlatLevelSource chunkGenerator = new FlatLevelSource(flatLevelGenSettings);
 
         LevelStem stem = new LevelStem(dimTypes.getOrThrow(ModDimensions.STORY_DIM_TYPE), chunkGenerator);
         context.register(STORY_DIM_KEY, stem);

@@ -118,7 +118,7 @@ public class ModEntry
             CompoundTag playerPersistentData = player.getPersistentData();
 
             if(playerPersistentData.contains("StoryDimension")){
-                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("story_dimension"));
+                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
                 if(playerData.scourgeDenPlaced) {
                     playerData.playerDimension = dimension;
                     playerData.playerPos = playerPosition;

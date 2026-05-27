@@ -116,17 +116,14 @@ public class DialogueScreen extends Screen {
                         String action = obj.get("action").getAsString();
                         switch(action)
                         {
-                            case "clear" -> actions.add(new DialogueClear(obj.has("cleared_actions") ? obj.get("cleared_actions").getAsString() : "none"));
-                            case "wait" -> actions.add(new DialogueWait(obj.get("time").getAsFloat()));
-                            case "choice" -> actions.add(new DialogueChoice(
-                                obj.get("option1").getAsString(), obj.get("next1").getAsString(), obj.get("save1").getAsString(), obj.get("action1").getAsString(),
-                                obj.get("option2").getAsString(), obj.get("next2").getAsString(), obj.get("save2").getAsString(), obj.get("action2").getAsString()
-                            ));
+                            case "clear" -> actions.add(new DialogueClear(obj));
+                            case "wait" -> actions.add(new DialogueWait(obj));
+                            case "choice" -> actions.add(new DialogueChoice(obj));
                             case "change_set" -> actions.add(new DialogueNext(obj.get("set").getAsString()));
-                            case "fade" -> actions.add(new DialogueFading(obj.get("from").getAsString(), obj.get("to").getAsString(), obj.get("time").getAsFloat()));
+                            case "fade" -> actions.add(new DialogueFading(obj));
                             case "message" -> actions.add(new DialogueMessage(obj.get("speaker").getAsInt(), Component.translatable(obj.get("text").getAsString()).getString()));
                             case "image" -> actions.add(new DialogueImage(obj.get("id").getAsInt(), obj.get("image").getAsString(), obj.get("width").getAsInt(), obj.get("height").getAsInt()));
-                            case "credit" -> actions.add(new DialogueCredit(obj.get("text").getAsString(), obj.get("fade_in_time").getAsFloat(), obj.get("hold_time").getAsFloat(), obj.get("fade_out_time").getAsFloat(), obj.get("x").getAsFloat(), obj.get("y").getAsFloat(), obj.get("scale").getAsFloat(), obj.get("color").getAsString()));
+                            case "credit" -> actions.add(new DialogueCredit(obj));
                         }
 
                     });
@@ -193,14 +190,12 @@ public class DialogueScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        //draw images : graphics.blit(BACKGROUND_LOCATION, 0, 0, 0, 0.0F, 0.0F, this.width, this.height, 32, 32);
-        graphics.fill(0, 0, this.width, this.height, 0x44000000);
-
         if(actionIndex >= dialogueActions.size())
             return;
+        if(!currentSet.contains("credits"))
+            graphics.fill(0, 0, this.width, this.height, 0x44000000);
 
         currentActions.forEach(action -> action.draw(graphics, mouseX, mouseY, partialTick));
-
         super.render(graphics, mouseX, mouseY, partialTick);
     }
 

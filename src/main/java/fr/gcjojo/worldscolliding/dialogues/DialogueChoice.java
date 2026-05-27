@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
+import com.google.gson.JsonObject;
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,6 +29,17 @@ public class DialogueChoice extends DialogueAction {
         this.nextSet2 = nextSet2;
         this.saveSet2 = saveSet2;
         this.action2 = action2;
+    }
+
+    public DialogueChoice(JsonObject object){
+        this.choice1  = object.get("option1").getAsString();
+        this.nextSet1 = object.get("next1").getAsString();
+        this.saveSet1 = object.get("save1").getAsString();
+        this.action1  = object.get("action1").getAsString();
+        this.choice2  = object.get("option2").getAsString();
+        this.nextSet2 = object.get("next2").getAsString();
+        this.saveSet2 = object.get("save2").getAsString();
+        this.action2  = object.get("action2").getAsString();
     }
 
     @Override
