@@ -2,7 +2,10 @@ package fr.gcjojo.worldscolliding;
 
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.client.ScourgeRenderer;
+import fr.gcjojo.worldscolliding.client.AwakenedScourgeRenderer;
+import fr.gcjojo.worldscolliding.client.AwakenedScourgeModel;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 
 import com.mojang.logging.LogUtils;
@@ -96,6 +99,7 @@ public class ModEntry
 
     private void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.SCOURGE.get(), ScourgeEntity.createAttributes().build());
+        event.put(ModEntities.AWAKENED_SCOURGE.get(), AwakenedScourgeEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -173,6 +177,7 @@ public class ModEntry
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.SCOURGE.get(), ScourgeRenderer::new);
+            event.registerEntityRenderer(ModEntities.AWAKENED_SCOURGE.get(), AwakenedScourgeRenderer::new);
         }
     }
 }
