@@ -3,14 +3,14 @@ package fr.gcjojo.worldscolliding.network;
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
+import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -174,7 +174,7 @@ public class ModNetwork {
             level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
                 Vec3 bossSpawnPos = scourge.getPosition(1.0f);
                 level.explode(scourge, bossSpawnPos.x, bossSpawnPos.y, bossSpawnPos.z, 10.0f, Level.ExplosionInteraction.NONE);
-                Entity boss = new Cow(EntityType.COW, level);
+                Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
                 level.addFreshEntity(boss);
                 boss.setPos(bossSpawnPos);
                 scourge.remove(Entity.RemovalReason.DISCARDED);
