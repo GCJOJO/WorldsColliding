@@ -52,6 +52,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     private static final EntityDataAccessor<Integer> STATE = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> HAS_SWORD = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> SPAWNED = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> IS_DYING = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.BOOLEAN);
+    public static final EntityDataAccessor<Boolean> IS_PLAYING_MUSIC = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.BOOLEAN);
 
     private final ServerBossEvent bossEvent = (ServerBossEvent)(new ServerBossEvent(Component.literal("The Awakened Scourge"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 
@@ -89,6 +91,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         this.entityData.define(STATE, 1);
         this.entityData.define(HAS_SWORD, false);
         this.entityData.define(SPAWNED, false);
+        this.entityData.define(IS_DYING, false);
+        this.entityData.define(IS_PLAYING_MUSIC, false);
     }
 
     @Override
@@ -109,9 +113,15 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
+    private int deathTimer = 0;
+
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, event -> {
+            if (this.entityData.get(IS_DYING)) {
+                return event.setAndContinue(RawAnimation.begin().thenPlay("death"));
+            }
+
             int state = this.entityData.get(STATE);
             boolean hasSword = this.entityData.get(HAS_SWORD);
 
@@ -138,6 +148,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             if (this.level().isClientSide) {
                 if (sound.contains("sword_draw")) {
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWORD_DRAW.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                } else if (sound.contains("victory")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.VICTORY.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
                 } else if (sound.contains("protoss")) {
                     this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.PROTOSS_ELECTRIC.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
                 } else if (sound.contains("master_sword") || sound.contains("zeldamastersword") || sound.contains("zelda_master_sword")) {
@@ -151,6 +163,42 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 }
             }
         }));
+    }
+
+    private void doPillarOfLight() {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            double x = this.getX();
+            double z = this.getZ();
+            for (int y = 0; y < 20; y++) {
+                serverLevel.sendParticles(ParticleTypes.END_ROD, x, this.getY() + y, z, 1, 0.2, 0.5, 0.2, 0.0);
+            }
+        }
+    }
+
+    private void doRedLineParticles() {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            for (int i = 0; i < 2; i++) {
+                double side = (i == 0) ? 2.0 : -2.0;
+                Vec3 pos = this.position().add(side, 1.0, 0);
+                serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER, pos.x, pos.y, pos.z, 5, 0.1, 0.1, 0.1, 0.0);
+            }
+        }
+    }
+
+    private void doExplosionEffects() {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1.0, this.getZ(), 1, 0, 0, 0, 0);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        if (!this.entityData.get(IS_DYING)) {
+            this.entityData.set(IS_DYING, true);
+            this.setHealth(1.0f);
+            this.setInvulnerable(true);
+            this.playSound(ModSounds.VICTORY.get(), 1.0f, 1.0f);
+        }
     }
 
     @Override
@@ -167,6 +215,32 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     @Override
     public void tick() {
         super.tick();
+
+        if (this.entityData.get(IS_DYING)) {
+            this.deathTimer++;
+            if (this.level() instanceof ServerLevel serverLevel) {
+                if (this.deathTimer >= 180 && this.deathTimer < 200) {
+                    double x = this.getX();
+                    double z = this.getZ();
+                    for (int y = 0; y < 15; y++) {
+                        serverLevel.sendParticles(ParticleTypes.END_ROD, x, this.getY() + y, z, 2, 0.2, 0.5, 0.2, 0.0);
+                    }
+                }
+                if (this.deathTimer == 260) {
+                    for (double i = -2; i <= 2; i += 0.5) {
+                        serverLevel.sendParticles(DustParticleOptions.REDSTONE, this.getX() + i, this.getY() + 1, this.getZ() + 2, 1, 0, 0, 0, 0);
+                        serverLevel.sendParticles(DustParticleOptions.REDSTONE, this.getX() + i, this.getY() + 1, this.getZ() - 2, 1, 0, 0, 0, 0);
+                    }
+                }
+                if (this.deathTimer >= 300 && this.deathTimer <= 320) {
+                    serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1, this.getZ(), 1, 0, 0, 0, 0);
+                }
+            }
+            if (this.deathTimer >= 400) {
+                this.discard();
+            }
+            return;
+        }
 
         if (this.level().isClientSide && this.entityData.get(SPAWNED)) {
             double px = this.getX() + (this.random.nextDouble() - 0.5) * 1.5;
@@ -206,6 +280,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     for (ServerPlayer p : players) {
                         p.connection.send(new ClientboundSetTitlesAnimationPacket(10, 60, 20));
                         p.connection.send(new ClientboundSetTitleTextPacket(Component.literal("§4The Scourge")));
+                        this.entityData.set(IS_PLAYING_MUSIC, true);
                     }
                 }
                 if (this.attackTick >= 500) {

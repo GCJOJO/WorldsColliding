@@ -19,6 +19,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> ENTER_GANONDORF = registerSound("enterganondorf");
     public static final RegistryObject<SoundEvent> LAUGH = registerSound("laugh");
     public static final RegistryObject<SoundEvent> SWITCH_CLICK = registerSound("switchclick");
+    public static final RegistryObject<SoundEvent> VICTORY = registerSound("victory");
 
     private static RegistryObject<SoundEvent> registerSound(String name) {
         return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("worldscolliding", name)));

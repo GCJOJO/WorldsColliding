@@ -1,19 +1,16 @@
 package fr.gcjojo.worldscolliding.client;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.sounds.SoundSource;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 
 public class BossMusicPlayer {
-    private static SimpleSoundInstance current;
+    private static BossMusicSound current;
 
-    public static void playBossMusic(SoundEvent sound) {
+    public static void playBossMusic(AwakenedScourgeEntity boss) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc == null || sound == null) return;
+        if (mc == null || boss == null) return;
         stopBossMusic();
-        current = SimpleSoundInstance.forMusic(sound);
+        current = new BossMusicSound(boss);
         mc.getSoundManager().play(current);
     }
 
@@ -24,4 +21,3 @@ public class BossMusicPlayer {
         current = null;
     }
 }
-

@@ -6,8 +6,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
-import fr.gcjojo.worldscolliding.ModSounds;
-import java.util.stream.StreamSupport; // <-- AJOUTE CET IMPORT
+import java.util.stream.StreamSupport;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class ClientEventHandler {
@@ -18,15 +17,18 @@ public class ClientEventHandler {
         if (event.phase != TickEvent.Phase.END) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null || mc.player == null) return;
-        
-        boolean bossFound = StreamSupport.stream(mc.level.entitiesForRendering().spliterator(), false)
-                .filter(e -> e instanceof AwakenedScourgeEntity)
-                .anyMatch(e -> e.distanceTo(mc.player) < 50.0);
 
-        if (bossFound && !isPlaying) {
-            BossMusicPlayer.playBossMusic(ModSounds.THE_SCOURGE_MUSIC.get());
+        AwakenedScourgeEntity activeBoss = StreamSupport.stream(mc.level.entitiesForRendering().spliterator(), false)
+                .filter(e -> e instanceof AwakenedScourgeEntity)
+                .map(e -> (AwakenedScourgeEntity) e)
+                .filter(e -> e.getEntityData().get(AwakenedScourgeEntity.IS_PLAYING_MUSIC))
+                .findFirst()
+                .orElse(null);
+
+        if (activeBoss != null && !isPlaying) {
+            BossMusicPlayer.playBossMusic(activeBoss);
             isPlaying = true;
-        } else if (!bossFound && isPlaying) {
+        } else if (activeBoss == null && isPlaying) {
             BossMusicPlayer.stopBossMusic();
             isPlaying = false;
         }
