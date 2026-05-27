@@ -2,7 +2,6 @@ package fr.gcjojo.worldscolliding.network;
 
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
-import fr.gcjojo.worldscolliding.StoryDimensionData;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
@@ -22,7 +21,7 @@ import java.util.function.Supplier;
 public class ModNetwork {
     private static final String PROTOCOL_VERSION = "1";
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
-            .named(new ResourceLocation(ModEntry.MODID, "main"))
+            .named(ResourceLocation.fromNamespaceAndPath(ModEntry.MODID, "main"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
             .serverAcceptedVersions(PROTOCOL_VERSION::equals)
             .networkProtocolVersion(() -> PROTOCOL_VERSION)
@@ -74,9 +73,7 @@ public class ModNetwork {
         }
 
         public static void handle(OpenDialoguePacket msg, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> {
-                DialogueScreen.openForSet(msg.setName);
-            });
+            ctx.get().enqueueWork(() -> DialogueScreen.openForSet(msg.setName));
             ctx.get().setPacketHandled(true);
         }
     }
@@ -109,7 +106,7 @@ public class ModNetwork {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
                     player.getPersistentData().putString("CurrentChapter", msg.saveSet);
-                    PlayerStoryDimensionData data = StoryDimensionData.getPlayerData(player);
+                    PlayerStoryDimensionData data = PlayerStoryDimensionData.load(player.getPersistentData().getCompound("StoryDimension"));
                     player.teleportTo(data.storyDimensionSpawnpoint.x, data.storyDimensionSpawnpoint.y, data.storyDimensionSpawnpoint.z);
 
                     if (msg.action != null && msg.action.startsWith("seal_")) {

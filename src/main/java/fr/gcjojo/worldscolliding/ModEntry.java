@@ -8,7 +8,9 @@ import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Mirror;
@@ -63,10 +65,15 @@ public class ModEntry
     {
         ResourceLocation structureID = ResourceLocation.tryParse(Config.storyStructure);
         StructureTemplateManager manager = level.getStructureManager();
+        if(structureID == null) {
+            LOGGER.error("Structure ID {} is not a valid structure !", Config.storyStructure);
+            return;
+        }
+
         Optional<StructureTemplate> templateOpt = manager.get(structureID);
 
         if (templateOpt.isEmpty()) {
-            System.out.println("Structure introuvable : " + structureID);
+            LOGGER.error("Unable to find structure : {}", structureID);
             return;
         }
 
@@ -106,33 +113,38 @@ public class ModEntry
         if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
             LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
-            PlayerStoryDimensionData data = StoryDimensionData.getPlayerData(player);
             String dimension = event.getFrom().location().getPath();
-            data.playerDimension = dimension;
+            Vec3 playerPosition = player.getPosition(1.0f);
+            CompoundTag playerPersistentData = player.getPersistentData();
 
-            if(StoryDimensionData.hasPlayer(player) && StoryDimensionData.getPlayerData(player).scourgeDenPlaced)
-            {
-                PlayerStoryDimensionData playerData = StoryDimensionData.getPlayerData(player);
-                player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
-                StoryDimensionData.setPlayerData(player, data);
-                StoryDimensionData.save(player.getServer().overworld());
-                return;
+            if(playerPersistentData.contains("StoryDimension")){
+                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("story_dimension"));
+                if(playerData.scourgeDenPlaced) {
+                    playerData.playerDimension = dimension;
+                    playerData.playerPos = playerPosition;
+                    playerPersistentData.put("StoryDimension", playerData.save());
+                    player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
+                    return;
+                }
             }
 
             Vec3 newPlayerSpot = StoryDimensionData.getNextAvailableSpot();
             Vec3 newPlayerSpawnpoint = StoryDimensionData.getNextAvailableSpawnpoint();
-            data.storyDimensionSpawnpoint = newPlayerSpawnpoint;
-            data.scourgeDenPlaced = true;
+            PlayerStoryDimensionData playerData = new PlayerStoryDimensionData(newPlayerSpawnpoint, dimension, playerPosition);
+            playerData.scourgeDenPlaced = true;
+            playerPersistentData.put("StoryDimension", playerData.save());
 
             BlockPos blockPos = new BlockPos((int)newPlayerSpot.x, (int)newPlayerSpot.y, (int)newPlayerSpot.z);
 
-            placeScourgeDenStructure(player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY), blockPos);
+            MinecraftServer server = player.getServer();
+            assert server != null;
+            ServerLevel storyLevel = server.getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
+            assert storyLevel != null;
+            placeScourgeDenStructure(storyLevel, blockPos);
 
             player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
             StoryDimensionData.setLastSpot(newPlayerSpot);
-
-            StoryDimensionData.setPlayerData(player, data);
-            StoryDimensionData.save(player.getServer().overworld());
+            StoryDimensionData.save(server.overworld());
         }
     }
 

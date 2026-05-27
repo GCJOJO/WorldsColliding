@@ -1,21 +1,18 @@
 package fr.gcjojo.worldscolliding.commands;
 
-import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
-import com.mojang.brigadier.exceptions.CommandExceptionType;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.gcjojo.worldscolliding.Config;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.StoryDimensionData;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 import java.util.Objects;
 import java.util.Set;
@@ -30,11 +27,12 @@ public class StoryCommand {
     {
         Player player = Objects.requireNonNull(context.getSource().getPlayer(), "Command must be executed via player");
 
+        CompoundTag playerPersistentData = player.getPersistentData();
         if(player.level().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
-            if(StoryDimensionData.hasPlayer(player))
+            if(playerPersistentData.contains("StoryDimension"))
             {
-                PlayerStoryDimensionData playerData = StoryDimensionData.getPlayerData(player);
+                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
                 ServerLevel toLevel;
 
                 switch(playerData.playerDimension)
@@ -59,17 +57,17 @@ public class StoryCommand {
         }
 
         Vec3 playerPos = new Vec3(player.getX(), player.getY(), player.getZ());
-        if(StoryDimensionData.hasPlayer(player))
+        if(playerPersistentData.contains("StoryDimension"))
         {
-            var playerData = StoryDimensionData.getPlayerData(player);
+            var playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
             playerData.playerPos = playerPos;
-            StoryDimensionData.setPlayerData(player, playerData);
+            playerPersistentData.put("StoryDimension", playerData.save());
         }
         else
         {
             String dimension = player.level().dimension().location().getPath();
             var playerData = new PlayerStoryDimensionData(Vec3.ZERO, dimension, playerPos);
-            StoryDimensionData.setPlayerData(player, playerData);
+            playerPersistentData.put("StoryDimension", playerData.save());
         }
         StoryDimensionData.save(player.getServer().overworld());
         ServerLevel storyLevel = player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);

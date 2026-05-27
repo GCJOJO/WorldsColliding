@@ -1,6 +1,5 @@
 package fr.gcjojo.worldscolliding;
 
-import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.phys.Vec3;
 
@@ -12,10 +11,7 @@ public class PlayerStoryDimensionData
     public String playerDimension;
     public Vec3 playerPos;
 
-    private PlayerStoryDimensionData()
-    {
-
-    }
+    private PlayerStoryDimensionData() { }
 
     public PlayerStoryDimensionData(/*String uuid,*/ Vec3 storySpawnpoint, String dimension, Vec3 pos)
     {
@@ -47,8 +43,9 @@ public class PlayerStoryDimensionData
         return data;
     }
 
-    public CompoundTag save(CompoundTag nbt)
+    public CompoundTag save()
     {
+        CompoundTag nbt = new CompoundTag();
         //nbt.putString("uuid", this.uuid);
         nbt.putBoolean("ScourgeDenPlaced", this.scourgeDenPlaced);
 
