@@ -1,9 +1,10 @@
 {
-  "sword_draw": { "sounds": [ "worldscolliding:sword_draw" ] },
-  "protoss_electric": { "sounds": [ "worldscolliding:protoss_electric" ] },
-  "master_sword": { "sounds": [ "worldscolliding:zelda_master_sword" ] },
-  "the_scourge_music": { "sounds": [ "worldscolliding:the_scourge" ] },
-  "enterganondorf": { "sounds": [ "worldscolliding:enterganondorf" ] },
-  "laugh": { "sounds": [ "worldscolliding:laught" ] },
-  "switchclick": { "sounds": [ "worldscolliding:switchclick" ] }
+  "sword_draw": { "sounds": [ { "name": "worldscolliding:sword_draw" } ] },
+  "protoss_electric": { "sounds": [ { "name": "worldscolliding:protoss_electric" } ] },
+  "zelda_master_sword": { "sounds": [ { "name": "worldscolliding:zelda_master_sword" } ] },
+  "the_scourge_music": { "sounds": [ { "name": "worldscolliding:the_scourge", "stream": true } ] },
+  "enterganondorf": { "sounds": [ { "name": "worldscolliding:enterganondorf" } ] },
+  "laugh": { "sounds": [ { "name": "worldscolliding:laugh" } ] },
+  "switchclick": { "sounds": [ { "name": "worldscolliding:switchclick" } ] },
+  "victory": { "sounds": [ { "name": "worldscolliding:victory" } ] }
 }

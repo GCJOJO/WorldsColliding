@@ -50,9 +50,8 @@ public class ModEntry
     {
         IEventBus modEventBus = context.getModEventBus();
 
-        // Enregistrement des composants
         ModEntities.register(modEventBus);
-        ModSounds.register(modEventBus); // AJOUTÉ : Enregistrement des sons
+        ModSounds.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
         modEventBus.addListener(this::registerAttributes);

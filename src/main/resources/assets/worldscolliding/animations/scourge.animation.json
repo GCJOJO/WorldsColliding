@@ -950,23 +950,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
-				}
-			},
-			"particle_effects": {
-				"4.0": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
-				},
-				"4.0417": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			}
 		},
@@ -1272,23 +1262,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
-				}
-			},
-			"particle_effects": {
-				"4.0": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
-				},
-				"4.0417": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			}
 		},
@@ -1653,23 +1633,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
-				}
-			},
-			"particle_effects": {
-				"4.0": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
-				},
-				"4.0417": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			}
 		},
@@ -2034,23 +2004,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
-				}
-			},
-			"particle_effects": {
-				"4.0": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
-				},
-				"4.0417": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			}
 		},
@@ -2468,23 +2428,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
-				}
-			},
-			"particle_effects": {
-				"4.0": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
-				},
-				"4.0417": {
-					"effect": "electric_spark",
-					"locator": "cerce1"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			}
 		},
@@ -2902,13 +2852,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -3358,13 +3308,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -3814,13 +3764,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"2.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"7.5": {
-					"effect": "zelda_master_sword"
+					"effect": "worldscolliding:zelda_master_sword"
 				}
 			},
 			"particle_effects": {

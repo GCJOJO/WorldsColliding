@@ -89,12 +89,20 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                 .triggerableAnim("sceal8", RawAnimation.begin().thenPlay("sceal8"))
                 .setSoundKeyframeHandler(event -> {
                     String sound = event.getKeyframeData().getSound();
-                    if (sound.contains("sword_draw")) {
-                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.SWORD_DRAW.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    } else if (sound.contains("protoss")) {
-                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.PROTOSS_ELECTRIC.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
-                    } else if (sound.contains("master_sword") || sound.contains("zeldamastersword")) {
-                        this.level().playSound(null, this.getX(), this.getY(), this.getZ(), ModSounds.MASTER_SWORD.get(), SoundSource.NEUTRAL, 1.0f, 1.0f);
+                    if (this.level().isClientSide) {
+                        if (sound.contains("sword_draw")) {
+                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWORD_DRAW.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                        } else if (sound.contains("protoss")) {
+                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.PROTOSS_ELECTRIC.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                        } else if (sound.contains("master_sword") || sound.contains("zeldamastersword") || sound.contains("zelda_master_sword")) {
+                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.MASTER_SWORD.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                        } else if (sound.contains("enterganondorf")) {
+                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.ENTER_GANONDORF.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                        } else if (sound.contains("laugh")) {
+                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.LAUGH.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                        } else if (sound.contains("switchclick")) {
+                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWITCH_CLICK.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                        }
                     }
                 })
         );
