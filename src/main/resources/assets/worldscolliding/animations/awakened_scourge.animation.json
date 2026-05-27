@@ -324,13 +324,13 @@
 			},
 			"sound_effects": {
 				"2.0": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"8.75": {
-					"effect": "enterganondorf"
+					"effect": "worldscolliding:enterganondorf"
 				},
 				"20.0": {
-					"effect": "laugh"
+					"effect": "worldscolliding:laugh"
 				}
 			}
 		},
@@ -2182,13 +2182,13 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "laugh"
+					"effect": "worldscolliding:laugh"
 				},
 				"3.5": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				},
 				"5.0": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				}
 			}
 		},
@@ -2352,10 +2352,10 @@
 			},
 			"sound_effects": {
 				"4.7083": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				},
 				"5.25": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				}
 			}
 		},
@@ -2534,7 +2534,7 @@
 			},
 			"sound_effects": {
 				"0.5": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				}
 			}
 		},
@@ -2827,10 +2827,10 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "laugh"
+					"effect": "worldscolliding:laugh"
 				},
 				"2.5": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				}
 			}
 		},
@@ -2945,7 +2945,7 @@
 			},
 			"sound_effects": {
 				"0.75": {
-					"effect": "sword_draw"
+					"effect": "worldscolliding:sword_draw"
 				}
 			}
 		},
@@ -3226,7 +3226,7 @@
 			},
 			"sound_effects": {
 				"0.75": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				}
 			}
 		},
@@ -3383,7 +3383,7 @@
 			},
 			"sound_effects": {
 				"0.75": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				}
 			}
 		},
@@ -3683,10 +3683,10 @@
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "laught"
+					"effect": "worldscolliding:laught"
 				},
 				"1.0833": {
-					"effect": "protoss_electric"
+					"effect": "worldscolliding:protoss_electric"
 				}
 			}
 		}

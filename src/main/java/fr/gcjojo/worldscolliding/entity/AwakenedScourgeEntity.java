@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -65,7 +66,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 80.0D)
+                .add(Attributes.MAX_HEALTH, 400.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.7D)
                 .add(Attributes.ATTACK_DAMAGE, 25.0D)
                 .add(Attributes.ARMOR, 10.0D)
@@ -125,7 +126,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 case 8: return event.setAndContinue(RawAnimation.begin().thenPlay("attack_spell"));
                 case 9: return event.setAndContinue(RawAnimation.begin().thenPlay("attack_back"));
                 case 10: return event.setAndContinue(RawAnimation.begin().thenPlay("attack_back_sword"));
-                case 11: return event.setAndContinue(RawAnimation.begin().thenPlay("shield"));
+                case 11: return event.setAndContinue(RawAnimation.begin().thenPlayAndHold("shield"));
                 default:
                     if (event.isMoving()) {
                         return event.setAndContinue(RawAnimation.begin().thenLoop(hasSword ? "iddle_sword" : "iddle"));
@@ -134,18 +135,20 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             }
         }).setSoundKeyframeHandler(event -> {
             String sound = event.getKeyframeData().getSound();
-            if (sound.contains("sword_draw")) {
-                this.playSound(ModSounds.SWORD_DRAW.get(), 1.0f, 1.0f);
-            } else if (sound.contains("protoss")) {
-                this.playSound(ModSounds.PROTOSS_ELECTRIC.get(), 1.0f, 1.0f);
-            } else if (sound.contains("master_sword") || sound.contains("zeldamastersword")) {
-                this.playSound(ModSounds.MASTER_SWORD.get(), 1.0f, 1.0f);
-            } else if (sound.contains("enterganondorf")) {
-                this.playSound(ModSounds.ENTER_GANONDORF.get(), 1.0f, 1.0f);
-            } else if (sound.contains("laugh")) {
-                this.playSound(ModSounds.LAUGH.get(), 1.0f, 1.0f);
-            } else if (sound.contains("switchclick")) {
-                this.playSound(ModSounds.SWITCH_CLICK.get(), 1.0f, 1.0f);
+            if (this.level().isClientSide) {
+                if (sound.contains("sword_draw")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWORD_DRAW.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                } else if (sound.contains("protoss")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.PROTOSS_ELECTRIC.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                } else if (sound.contains("master_sword") || sound.contains("zeldamastersword") || sound.contains("zelda_master_sword")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.MASTER_SWORD.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                } else if (sound.contains("enterganondorf")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.ENTER_GANONDORF.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                } else if (sound.contains("laugh")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.LAUGH.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                } else if (sound.contains("switchclick")) {
+                    this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWITCH_CLICK.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
+                }
             }
         }));
     }
@@ -257,7 +260,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 this.attackTick++;
                 if (this.attackTick >= 100 && this.attackTick <= 160) {
                     Vec3 look = this.getLookAngle();
-                    Vec3 start = this.position().add(0, this.getBbHeight() * 0.5, 0);
+                    look = new Vec3(look.x, 0, look.z).normalize();
+                    Vec3 start = this.position().add(0, 0.5, 0);
                     for (int i = 1; i < 30; i++) {
                         Vec3 pos = start.add(look.scale(i));
                         if (!this.level().getBlockState(new BlockPos((int)pos.x, (int)pos.y, (int)pos.z)).isAir()) {
@@ -295,7 +299,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             if (currentState == 7) {
                 this.attackTick++;
                 if (this.attackTick >= 140 && this.attackTick <= 190) {
-                    AABB hitBox = new AABB(this.getX() - 10, this.getY() - 10, this.getZ() - 10, this.getX() + 10, this.getY() + 10, this.getZ() + 10);
+                    AABB hitBox = new AABB(this.getX() - 20, this.getY() - 10, this.getZ() - 20, this.getX() + 20, this.getY() + 10, this.getZ() + 20);
                     List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, hitBox, e -> e != this);
                     for (LivingEntity target : targets) {
                         target.hurt(this.damageSources().magic(), 20.0f);
@@ -355,6 +359,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 if (this.attackTick >= 40) {
                     if (this.spellChoice == 2) {
                         this.setAttackState(this.entityData.get(HAS_SWORD) ? 6 : 3);
+                    } else if (this.spellChoice == 1) {
+                        this.setAttackState(11);
                     } else {
                         this.setAttackState(0);
                     }
@@ -379,24 +385,29 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
             if (currentState == 11) {
                 this.attackTick++;
-                if (this.attackTick % 10 == 0) {
-                    Vec3 dir = new Vec3(this.random.nextDouble() - 0.5, this.random.nextDouble() - 0.5, this.random.nextDouble() - 0.5).normalize();
-                    Vec3 start = this.position().add(0, this.getBbHeight() * 0.5, 0);
-                    for (int i = 1; i < 20; i++) {
-                        Vec3 pos = start.add(dir.scale(i));
-                        if (!this.level().getBlockState(new BlockPos((int)pos.x, (int)pos.y, (int)pos.z)).isAir()) {
-                            break;
-                        }
-                        ((ServerLevel)this.level()).sendParticles(DustParticleOptions.REDSTONE, pos.x, pos.y, pos.z, 2, 0.1, 0.1, 0.1, 0.0);
-                        AABB hitBox = new AABB(pos.x - 1, pos.y - 1, pos.z - 1, pos.x + 1, pos.y + 1, pos.z + 1);
-                        List<LivingEntity> targets = this.level().getEntitiesOfClass(LivingEntity.class, hitBox, e -> e != this);
-                        for (LivingEntity target : targets) {
-                            target.hurt(this.damageSources().magic(), 10.0f);
+                if (this.attackTick % 3 == 0) {
+                    for (int k = 0; k < 3; k++) {
+                        Vec3 dir = new Vec3(this.random.nextDouble() - 0.5, this.random.nextDouble() - 0.5, this.random.nextDouble() - 0.5).normalize();
+                        Vec3 start = this.position().add(0, 0.2, 0);
+                        for (int i = 1; i < 20; i++) {
+                            Vec3 pos = start.add(dir.scale(i));
+                            if (!this.level().getBlockState(new BlockPos((int)pos.x, (int)pos.y, (int)pos.z)).isAir()) {
+                                break;
+                            }
+                            ((ServerLevel)this.level()).sendParticles(DustParticleOptions.REDSTONE, pos.x, pos.y, pos.z, 2, 0.1, 0.1, 0.1, 0.0);
+                            AABB hitBox = new AABB(pos.x - 1, pos.y - 1, pos.z - 1, pos.x + 1, pos.y + 1, pos.z + 1);
+                            List<Player> targets = this.level().getEntitiesOfClass(Player.class, hitBox);
+                            for (Player target : targets) {
+                                target.hurt(this.damageSources().magic(), 10.0f);
+                            }
                         }
                     }
                 }
-                if (this.attackTick >= 60) {
-                    this.setAttackState(0);
+                if (this.attackTick > 40) {
+                    List<Phantom> allies = this.level().getEntitiesOfClass(Phantom.class, this.getBoundingBox().inflate(30));
+                    if (allies.isEmpty()) {
+                        this.setAttackState(0);
+                    }
                 }
             }
         }
@@ -415,6 +426,11 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         int state = this.entityData.get(STATE);
+
+        if (source.is(net.minecraft.world.damagesource.DamageTypes.MAGIC) || source.is(net.minecraft.world.damagesource.DamageTypes.INDIRECT_MAGIC)) {
+            return false;
+        }
+
         if (state == 1 || state == 5 || state == 11) {
             return false;
         }
@@ -468,12 +484,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             }
 
             int attackId = 0;
-            List<Phantom> allies = this.mob.level().getEntitiesOfClass(Phantom.class, this.mob.getBoundingBox().inflate(15));
 
-            if (!allies.isEmpty() && this.mob.random.nextFloat() < 0.2f) {
-                attackId = 11;
-                this.attackCooldown = 80;
-            } else if (isBehind) {
+            if (isBehind) {
                 attackId = hasSword ? 10 : 9;
                 this.attackCooldown = 40;
             } else if (!hasSword) {
