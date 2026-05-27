@@ -21,7 +21,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> SWITCH_CLICK = registerSound("switchclick");
 
     private static RegistryObject<SoundEvent> registerSound(String name) {
-        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation("worldscolliding", name)));
+        return SOUND_EVENTS.register(name, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath("worldscolliding", name)));
     }
 
     public static void register(IEventBus eventBus) {

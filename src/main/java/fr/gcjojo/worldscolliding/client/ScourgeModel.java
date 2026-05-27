@@ -7,16 +7,16 @@ import software.bernie.geckolib.model.GeoModel;
 public class ScourgeModel extends GeoModel<ScourgeEntity> {
     @Override
     public ResourceLocation getModelResource(ScourgeEntity object) {
-        return new ResourceLocation("worldscolliding", "geo/scourge.geo.json");
+        return ResourceLocation.fromNamespaceAndPath("worldscolliding", "geo/scourge.geo.json");
     }
 
     @Override
     public ResourceLocation getTextureResource(ScourgeEntity object) {
-        return new ResourceLocation("worldscolliding", "textures/entity/scourge.png");
+        return ResourceLocation.fromNamespaceAndPath("worldscolliding", "textures/entity/scourge.png");
     }
 
     @Override
     public ResourceLocation getAnimationResource(ScourgeEntity animatable) {
-        return new ResourceLocation("worldscolliding", "animations/scourge.animation.json");
+        return ResourceLocation.fromNamespaceAndPath("worldscolliding", "animations/scourge.animation.json");
     }
 }

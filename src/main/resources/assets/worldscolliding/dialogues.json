@@ -44,9 +44,9 @@
     { "action": "clear", "cleared_actions": "credit" },
 
     { "action": "credit", "text": "Additional Resources", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 70, "y": 30, "scale": 3, "color": "AA00AA" },
-    { "action": "credit", "text": "Minecraft Wiki - Minecraft Textures", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 60, "y": 40, "scale": 1.5, "color": "FFFFFF", "alignment": "right" },
-    { "action": "credit", "text": "Blockbench - Amazing Modelling and Animation Software", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 60, "y": 45, "scale": 1.5, "color": "FFFFFF", "alignment": "right" },
-    { "action": "credit", "text": "LatvianModder's KubeJS Discord", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 60, "y": 50, "scale": 1.5, "color": "FFFFFF", "alignment": "right" },
+    { "action": "credit", "text": "Minecraft Wiki - Minecraft Textures", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 95, "y": 40, "scale": 1.5, "color": "FFFFFF", "alignment": "right" },
+    { "action": "credit", "text": "Blockbench - Amazing Modelling and Animation Software", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 95, "y": 45, "scale": 1.5, "color": "FFFFFF", "alignment": "right" },
+    { "action": "credit", "text": "LatvianModder's KubeJS Discord", "fade_in_time": 20, "hold_time": 80, "fade_out_time": 10, "x": 95, "y": 50, "scale": 1.5, "color": "FFFFFF", "alignment": "right" },
     { "action": "wait", "time": 110 },
     { "action": "clear", "cleared_actions": "credit" },
 

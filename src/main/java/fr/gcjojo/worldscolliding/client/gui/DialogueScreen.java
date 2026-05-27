@@ -67,7 +67,6 @@ public class DialogueScreen extends Screen {
 
     public void handleChoiceSelection(String nextSet, String saveSet, String action) {
         ModNetwork.sendToServer(new ModNetwork.ChoiceSelectedPacket(nextSet, saveSet, action));
-
         if (action != null && action.startsWith("seal_")) {
             this.onClose();
             return;
@@ -193,7 +192,8 @@ public class DialogueScreen extends Screen {
         if(actionIndex >= dialogueActions.size())
             return;
         if(!currentSet.contains("credits"))
-            graphics.fill(0, 0, this.width, this.height, 0x44000000);
+            //graphics.fill(0, 0, this.width, this.height, 0x44000000);
+            graphics.fillGradient(0, 0, this.width, this.height, 0x11000000, 0xDD000000);
 
         currentActions.forEach(action -> action.draw(graphics, mouseX, mouseY, partialTick));
         super.render(graphics, mouseX, mouseY, partialTick);
@@ -209,15 +209,21 @@ public class DialogueScreen extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        if(actionIndex < dialogueActions.size()) {
-            currentActions.forEach(dialogueAction -> dialogueAction.mouseClicked(keyCode, scanCode, modifiers));
-        }
-
-        if (keyCode == 257 || keyCode == 32) {
-            advanceDialogue();
+        if(keyCode == 256) {
+            endDialogue();
             return true;
         }
-        return super.keyPressed(keyCode, scanCode, modifiers);
+
+        if(actionIndex < dialogueActions.size()) {
+            currentActions.forEach(dialogueAction -> dialogueAction.keyPressed(keyCode, scanCode, modifiers));
+        }
+
+//        if (keyCode == 257 || keyCode == 32) {
+//            advanceDialogue();
+//            return true;
+//        }
+
+        return false;
     }
 
     public void queueAdvanceDialogue() { this.advanceDialogueAtTickEnd = true; }
@@ -225,9 +231,7 @@ public class DialogueScreen extends Screen {
     public void advanceDialogue() {
         actionIndex++;
         if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size()) {
-            clearActions();
-            this.onClose();
-            ModNetwork.sendToServer(new ModNetwork.DialogueCompletedPacket(currentSet));
+            endDialogue();
             return;
         }
 
@@ -269,4 +273,14 @@ public class DialogueScreen extends Screen {
         if(classToRemove != null)
             currentActions.removeIf(classToRemove::isInstance);
     }
+
+    @Override
+    public boolean shouldCloseOnEsc() { return false; }
+
+    public void endDialogue(){
+        clearActions();
+        ModNetwork.sendToServer(new ModNetwork.DialogueCompletedPacket(currentSet));
+        this.onClose();
+    }
+
 }
