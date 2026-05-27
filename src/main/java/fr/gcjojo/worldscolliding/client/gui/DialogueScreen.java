@@ -171,7 +171,7 @@ public class DialogueScreen extends Screen {
     public static void openForSet(String setName) {
         List<DialogueAction> actions = loadSet(setName);
         List<DialogueSpeaker> speakers = loadSpeakers(setName);
-        if(actions != null && !actions.isEmpty() && speakers != null && !speakers.isEmpty())
+        if(actions != null && !actions.isEmpty() && speakers != null)
             Minecraft.getInstance().tell(() -> Minecraft.getInstance().setScreen(new DialogueScreen(setName, actions, speakers)));
     }
 
@@ -224,7 +224,7 @@ public class DialogueScreen extends Screen {
 
     public void advanceDialogue() {
         actionIndex++;
-        if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size() - 1) {
+        if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size()) {
             clearActions();
             this.onClose();
             ModNetwork.sendToServer(new ModNetwork.DialogueCompletedPacket(currentSet));
@@ -233,7 +233,7 @@ public class DialogueScreen extends Screen {
 
         currentActions.removeIf(DialogueAction::isBlocking);
 
-        for(int i = actionIndex; i <= dialogueActions.size() - 1; i++)
+        for(int i = actionIndex; i <= dialogueActions.size(); i++)
         {
             DialogueAction currentAction = dialogueActions.get(i);
             currentActions.add(currentAction);
