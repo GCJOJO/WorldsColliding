@@ -956,7 +956,7 @@
 					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "master_sword"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -1272,13 +1272,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -1653,13 +1653,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -2034,13 +2034,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -2468,13 +2468,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -2902,13 +2902,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -3358,13 +3358,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {
@@ -3814,13 +3814,13 @@
 			},
 			"sound_effects": {
 				"0.5833": {
-					"effect": "8d82b5_tloz_ocarina_of_time_sword_draw_sound_effect.mp3"
+					"effect": "sword_draw"
 				},
 				"2.25": {
-					"effect": "protosselectric.mp3"
+					"effect": "protoss_electric"
 				},
 				"7.5": {
-					"effect": "zeldamastersword.mp3"
+					"effect": "zelda_master_sword"
 				}
 			},
 			"particle_effects": {

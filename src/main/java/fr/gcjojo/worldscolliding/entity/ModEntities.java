@@ -17,6 +17,12 @@ public class ModEntities {
                     .sized(3.0f, 2.0f)
                     .build("scourge"));
 
+    public static final RegistryObject<EntityType<AwakenedScourgeEntity>> AWAKENED_SCOURGE =
+            ENTITY_TYPES.register("awakened_scourge", () -> EntityType.Builder.of(AwakenedScourgeEntity::new, MobCategory.MONSTER)
+                    .sized(2.0f, 5.0f)
+                    .clientTrackingRange(64)
+                    .build("awakened_scourge"));
+
     public static void register(IEventBus eventBus) {
         ENTITY_TYPES.register(eventBus);
     }
