@@ -25,7 +25,7 @@ First create a datapack using this folder structure
 
 Inside dialogues.json define the different speakers that may speak in your dialogues.
 
-```JSON
+```jsonc
 {
   "speakers" : [
    // The speaker with id 0 is named Speaker 1 and its display color is white, this speaker doesn't play any sound when talking
@@ -40,7 +40,7 @@ Inside dialogues.json define the different speakers that may speak in your dialo
 ```
 
 Here is how you define a dialogue, there are multiple actions that can be defined as follows:
-```JSON
+```jsonc
 {
   "speakers" : [...],
   "dialogue_1" : [
