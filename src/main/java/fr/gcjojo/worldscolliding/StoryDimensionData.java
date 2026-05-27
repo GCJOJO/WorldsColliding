@@ -20,7 +20,7 @@ public class StoryDimensionData {
     public static Vec3 getNextAvailableSpot()
     {
         if(lastSpot == null)
-            return Vec3.ZERO;
+            return Vec3.ZERO.add(0, 1, 0);
         return lastSpot.add(Config.storyStructureSize, 0, 0);
     }
 

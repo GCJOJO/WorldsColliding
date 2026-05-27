@@ -2,10 +2,14 @@ package fr.gcjojo.worldscolliding.events;
 
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
+import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
@@ -70,5 +74,26 @@ public class ModEvents {
                 }
             }
         }
+    }
+
+    @SubscribeEvent
+    public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event){
+        if(event.getEntity() instanceof Player && ((Player)event.getEntity()).isCreative())
+            return;
+
+        if(event.getEntity().level().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
+            event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void onBlockBreak(BlockEvent.BreakEvent event){
+        if(event.getPlayer().level().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY && !event.getPlayer().isCreative())
+            event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void onExplosion(ExplosionEvent event){
+        if(event.getLevel().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
+            event.setCanceled(true);
     }
 }
