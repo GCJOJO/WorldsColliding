@@ -11,6 +11,8 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.FastColor;
+import net.minecraft.util.Mth;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class DialogueScreen extends Screen {
     private List<DialogueAction> currentActions = new ArrayList<>();
 
     private boolean advanceDialogueAtTickEnd = false;
+    private float currentFadingTime = -1.0f;
+    private static float endFade = 7.5f;
 
     public DialogueScreen(String setName) {
         super(Component.literal("Dialogue"));
@@ -68,7 +72,7 @@ public class DialogueScreen extends Screen {
     public void handleChoiceSelection(String nextSet, String saveSet, String action) {
         ModNetwork.sendToServer(new ModNetwork.ChoiceSelectedPacket(nextSet, saveSet, action));
         if (action != null && action.startsWith("seal_")) {
-            this.onClose();
+            currentFadingTime = 0.0f;
             return;
         }
 
@@ -190,6 +194,24 @@ public class DialogueScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        if(this.currentFadingTime >= 0.0){
+            if(this.currentFadingTime >= endFade){
+                this.onClose();
+                return;
+            }
+
+            float fadePercentage = currentFadingTime / endFade;
+
+            int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
+            int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
+            int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
+
+            graphics.fillGradient(0, topPoint, this.width, this.height,
+                    FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
+            currentFadingTime += partialTick;
+            return;
+        }
+
         if(actionIndex >= dialogueActions.size())
             return;
         if(!currentSet.contains("credits"))
@@ -218,11 +240,6 @@ public class DialogueScreen extends Screen {
         if(actionIndex < dialogueActions.size()) {
             currentActions.forEach(dialogueAction -> dialogueAction.keyPressed(keyCode, scanCode, modifiers));
         }
-
-//        if (keyCode == 257 || keyCode == 32) {
-//            advanceDialogue();
-//            return true;
-//        }
 
         return false;
     }
@@ -282,7 +299,8 @@ public class DialogueScreen extends Screen {
     public void endDialogue(){
         clearActions();
         ModNetwork.sendToServer(new ModNetwork.DialogueCompletedPacket(currentSet));
-        this.onClose();
+        currentFadingTime = 0.0f;
+        //this.onClose();
     }
 
     public List<DialogueAction> getCurrentActions() {
