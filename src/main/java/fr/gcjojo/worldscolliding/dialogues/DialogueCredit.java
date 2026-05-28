@@ -3,16 +3,15 @@ package fr.gcjojo.worldscolliding.dialogues;
 import com.eliotlash.mclib.utils.MathUtils;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import fr.gcjojo.worldscolliding.ModEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.util.FastColor;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.core.Vec3i;
-import net.minecraftforge.common.util.TextTable;
+import net.minecraft.util.FastColor;
 
 public class DialogueCredit extends DialogueAction {
     enum DisplayState
@@ -203,4 +202,7 @@ public class DialogueCredit extends DialogueAction {
     public boolean isBlocking() {
         return false;
     }
+
+    @Override
+    public boolean isSkippable() { return true; }
 }

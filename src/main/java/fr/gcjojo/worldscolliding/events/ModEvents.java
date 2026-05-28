@@ -3,8 +3,6 @@ package fr.gcjojo.worldscolliding.events;
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
-import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -35,26 +33,11 @@ public class ModEvents {
         }
     }
 
-    private static class PlayerTeleportCredit{
-        public Player player;
-        public int tickDelay;
-
-        PlayerTeleportCredit(Player player, int tickDelay){
-            this.player = player;
-            this.tickDelay = tickDelay;
-        }
-    }
 
     private static final Map<UUID, FreezeData> frozenPlayers = new HashMap<>();
 
-    private static final List<PlayerTeleportCredit> teleportCreditPlayers = new ArrayList<>();
-
     public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, String nextDialogue) {
         frozenPlayers.put(playerId, new FreezeData(position, ticks, prevMode, nextDialogue));
-    }
-
-    public static void teleportPlayerToCredits(Player player, int tickDelay){
-        teleportCreditPlayers.add(new PlayerTeleportCredit(player, tickDelay));
     }
 
     @SubscribeEvent
@@ -87,25 +70,6 @@ public class ModEvents {
                         }
                         iterator.remove();
                     }
-                }
-            }
-
-            if(!teleportCreditPlayers.isEmpty()){
-                Iterator<PlayerTeleportCredit> playerTeleportCreditIterator = teleportCreditPlayers.iterator();
-                while(playerTeleportCreditIterator.hasNext()){
-                    PlayerTeleportCredit playerTeleportCredit = playerTeleportCreditIterator.next();
-                    if(playerTeleportCredit.tickDelay <= 0)
-                    {
-                        ServerPlayer player = (ServerPlayer) playerTeleportCredit.player;
-                        if(player == null) continue;
-
-                        CompoundTag playerPersistentData = player.getPersistentData();
-                        BlockPos pos = player.getRespawnPosition();
-                        player.teleportTo(player.server.getLevel(player.getRespawnDimension()), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0.0f, 0.0f);
-                        playerTeleportCreditIterator.remove();
-                    }
-
-                    playerTeleportCredit.tickDelay--;
                 }
             }
         }

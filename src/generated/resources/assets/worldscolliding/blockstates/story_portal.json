@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "worldscolliding:block/story_portal"
+    }
+  }
+}

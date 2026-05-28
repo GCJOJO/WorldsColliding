@@ -4,7 +4,6 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public class DialogueMoveImage extends DialogueAction{
@@ -95,4 +94,7 @@ public class DialogueMoveImage extends DialogueAction{
 
     @Override
     public boolean isBlocking() { return false; }
+
+    @Override
+    public boolean isSkippable() { return true; }
 }

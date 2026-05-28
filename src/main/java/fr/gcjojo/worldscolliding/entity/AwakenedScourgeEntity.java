@@ -1,6 +1,6 @@
 package fr.gcjojo.worldscolliding.entity;
 
-import fr.gcjojo.worldscolliding.events.ModEvents;
+import fr.gcjojo.worldscolliding.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -10,14 +10,12 @@ import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.TickTask;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.TaskChainer;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -33,7 +31,6 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.DragonFireball;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -44,11 +41,9 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import fr.gcjojo.worldscolliding.ModSounds;
 
 import java.util.EnumSet;
 import java.util.List;
-import java.util.UUID;
 
 public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
@@ -246,17 +241,12 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 }
             }
             if (this.deathTimer >= 400) {
-                if(this.getPersistentData().contains("Scourge"))
-                {
-                    UUID scourgeUUID = this.getPersistentData().getUUID("Scourge");
-                    this.level().getEntities(this, getBoundingBox().inflate(50.0f),
-                            entity -> entity.getUUID() == scourgeUUID)
-                            .forEach(scourge -> scourge.getPersistentData().putBoolean("BossBattle", true));
-                    if(this.getPersistentData().contains("Player")){
-                        Player player = this.level().getPlayerByUUID(this.getPersistentData().getUUID("Player"));
-                        ModEvents.teleportPlayerToCredits(player, 20);
-                    }
+                if(this.getPersistentData().contains("Player")){
+                    Player player = this.level().getPlayerByUUID(this.getPersistentData().getUUID("Player"));
+                    player.getPersistentData().putBoolean("RespawnsScourge", true);
+                    player.getPersistentData().putString("CurrentChapter", "new_game_plus_choice");
                 }
+
 
                 this.discard();
             }

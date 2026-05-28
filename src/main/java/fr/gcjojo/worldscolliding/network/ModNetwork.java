@@ -7,6 +7,7 @@ import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.events.ModEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -163,22 +164,32 @@ public class ModNetwork {
                     player.getPersistentData().putString("LastReadChapter", msg.setName);
 
                     if(msg.setName.equals("chapter_7_light_set") || msg.setName.equals("chapter_7_dark_set"))
-                        spawnBoss(player);
+                        spawnBoss(player, msg.setName.contains("light"));
                 }
             });
             ctx.get().setPacketHandled(true);
         }
 
-        public static void spawnBoss(ServerPlayer player){
+        public static void spawnBoss(ServerPlayer player, boolean isLight){
             Level level = player.level();
             level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
-                Vec3 bossSpawnPos = scourge.getPosition(1.0f);
+                Vec3 bossSpawnPos = scourge.getPosition(1.0f).add(0d, 2.0d, 0d);
+                if(isLight){
+                    scourge.discard();
+
+                    CompoundTag scourgeRespawnPosTag = new CompoundTag();
+                    scourgeRespawnPosTag.putDouble("x", bossSpawnPos.x);
+                    scourgeRespawnPosTag.putDouble("y", bossSpawnPos.y);
+                    scourgeRespawnPosTag.putDouble("z", bossSpawnPos.z);
+
+                    player.getPersistentData().put("ScourgeRespawnPosition", scourgeRespawnPosTag);
+                }
+
                 level.explode(scourge, bossSpawnPos.x, bossSpawnPos.y, bossSpawnPos.z, 10.0f, Level.ExplosionInteraction.NONE);
                 Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
                 level.addFreshEntity(boss);
                 boss.setPos(bossSpawnPos);
-                scourge.getPersistentData().putBoolean("BossBattle", true);
-                boss.getPersistentData().putUUID("Scourge", scourge.getUUID());
+                scourge.getPersistentData().putBoolean("BossBattle", isLight);
                 boss.getPersistentData().putUUID("Player", player.getUUID());
             });
         }

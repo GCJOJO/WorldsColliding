@@ -172,5 +172,10 @@
     "worldscolliding.dialogue.chapter_7_dark_set.8" : "This has been my mission in this world : guide you to the end and banish him.",
     "worldscolliding.dialogue.chapter_7_dark_set.9" : "This mission being accomplished, I no longer have any reason to stay here.",
     "worldscolliding.dialogue.chapter_7_dark_set.10" : "I will leave for another world. Because of my sins, I am stuck in an endless cycle.",
-    "worldscolliding.dialogue.chapter_7_dark_set.11" : "Thank you, for everything you have done... I mean it."
+    "worldscolliding.dialogue.chapter_7_dark_set.11" : "Thank you, for everything you have done... I mean it.",
+
+    "worldscolliding.dialogue.new_game_plus_choice.1" : "Congratulations on finishing this modpack ! You can battle once again the Awakened Scourge !",
+    "worldscolliding.dialogue.new_game_plus_choice.2" : "But you will need to choose once again : Light Essence or Dark Essence ?",
+
+    "block.worldscolliding.story_portal": "Story Portal"
 }

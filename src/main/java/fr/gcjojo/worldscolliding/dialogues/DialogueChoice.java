@@ -1,7 +1,6 @@
 package fr.gcjojo.worldscolliding.dialogues;
 
 import com.google.gson.JsonObject;
-import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
@@ -81,4 +80,7 @@ public class DialogueChoice extends DialogueAction {
 
     @Override
     public boolean isBlocking() { return true; }
+
+    @Override
+    public boolean isSkippable() { return false; }
 }

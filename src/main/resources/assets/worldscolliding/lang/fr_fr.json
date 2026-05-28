@@ -172,5 +172,10 @@
     "worldscolliding.dialogue.chapter_7_dark_set.8" : "C'était ma mission dans ce monde : le bannir, et te guider jusqu'à la fin.",
     "worldscolliding.dialogue.chapter_7_dark_set.9" : "Cette mission est accomplie. Je n'ai plus de raison d'être ici.",
     "worldscolliding.dialogue.chapter_7_dark_set.10" : "Je vais rejoindre un autre monde. C'est une boucle infinie, les péchés que j'ai commis font que je suis condamnée à y revenir.",
-    "worldscolliding.dialogue.chapter_7_dark_set.11" : "Merci. Vraiment. Pour tout ce que tu as accompli."
+    "worldscolliding.dialogue.chapter_7_dark_set.11" : "Merci. Vraiment. Pour tout ce que tu as accompli.",
+
+    "worldscolliding.dialogue.new_game_plus_choice.1" : "Félicitations ! Vous avez fini ce modpack ! Vous pouvez dès à présent refaire le boss final.",
+    "worldscolliding.dialogue.new_game_plus_choice.2" : "Quel fin souhaiteriez-vous faire ? Allez-vous prendre l'essence de lumière ou l'essence des ténèbres ?",
+
+    "block.worldscolliding.story_portal": "Le portail trop cool :D"
 }
