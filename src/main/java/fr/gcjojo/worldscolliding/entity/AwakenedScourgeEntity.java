@@ -45,6 +45,7 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import fr.gcjojo.worldscolliding.ModSounds;
+import fr.gcjojo.worldscolliding.events.ModEvents;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -83,7 +84,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 400.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.7D)
-                .add(Attributes.ATTACK_DAMAGE, 25.0D)
+                .add(Attributes.ATTACK_DAMAGE, 50.0D)
                 .add(Attributes.ARMOR, 10.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
                 .add(Attributes.FLYING_SPEED, 0.7D)
@@ -261,9 +262,14 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     float yRot = this.getYRot() + 180.0F;
 
                     for (ServerPlayer player : players) {
-                        previousGameModes.put(player.getUUID(), player.gameMode.getGameModeForPlayer());
+                        GameType prevMode = player.gameMode.getGameModeForPlayer();
+                        previousGameModes.put(player.getUUID(), prevMode);
                         player.setGameMode(GameType.SPECTATOR);
-                        player.teleportTo(serverLevel, camPos.x, camPos.y, camPos.z, yRot, 0.0F);
+                        ModEvents.freezePlayer(player.getUUID(), camPos, 400, prevMode, "");
+                        player.setYRot(yRot);
+                        player.setXRot(0.0F);
+                        player.yHeadRot = yRot;
+                        player.yBodyRot = yRot;
                     }
                 }
 
@@ -292,20 +298,12 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     Vec3 rotatedRight = new Vec3(-lookDir.z, 0, lookDir.x).normalize();
                     Vec3 rotatedLeft = new Vec3(lookDir.z, 0, -lookDir.x).normalize();
 
-                    spawnRedLine(serverLevel, eyePos.add(0, -1.4, 0), rotatedRight);
-                    spawnRedLine(serverLevel, eyePos.add(0, -1.4, 0), rotatedLeft);
+                    spawnRedLine(serverLevel, eyePos.add(0, -2.0, 0), rotatedRight);
+                    spawnRedLine(serverLevel, eyePos.add(0, -2.0, 0), rotatedLeft);
                 }
 
                 if (this.deathTimer >= 300 && this.deathTimer <= 320) {
                     serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1.0, this.getZ(), 1, 0, 0, 0, 0);
-                }
-
-                if (this.deathTimer == 399) {
-                    List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
-                    for (ServerPlayer player : players) {
-                        GameType prev = previousGameModes.getOrDefault(player.getUUID(), GameType.SURVIVAL);
-                        player.setGameMode(prev);
-                    }
                 }
             }
             if (this.deathTimer >= 400) {
