@@ -8,8 +8,11 @@
 
   "dogcheck" : [
     { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915, "y": 40 },
+    { "action": "image_move", "id": 0, "anim_time": 10, "alpha_start": 0, "alpha_end": 255 },
     { "action": "wait", "time": 10 },
     { "action": "message", "speaker": -1, "text": "woof" },
+    { "action": "image_move", "id": 0, "anim_time": 10, "alpha_start": 255, "alpha_end": 0 },
+    { "action": "wait", "time": 10 },
     { "action": "clear" },
     { "action": "wait", "time": 10},
 

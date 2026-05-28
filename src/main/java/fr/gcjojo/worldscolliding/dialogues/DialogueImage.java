@@ -18,7 +18,7 @@ public class DialogueImage extends DialogueAction {
     private float yPercentage = 50;
     private float scale = 1.0f;
 
-    private float currentFadeTime;
+    private int alpha = 255;
 
     public DialogueImage(int imageId, String imagePath, int initialWidth, int initialHeight) {
         this.imageId = imageId;
@@ -51,6 +51,9 @@ public class DialogueImage extends DialogueAction {
 
     @Override
     public void draw(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        if(alpha <= 8)
+            return;
+
         PoseStack pose = graphics.pose();
         pose.pushPose();
         //pose.translate(screen.width / 2f,screen.height / 2f, 0);
@@ -63,7 +66,14 @@ public class DialogueImage extends DialogueAction {
 
         //image, topPos, leftPos, uvX, uvY, width, height
         pose.scale((float) imageHeight * scale, (float) imageWidth * scale, 1);
+
+        // Merci copislop AKA copiflop >:(
+        RenderSystem.enableBlend();
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, (float) this.alpha / 255);
         graphics.blit(image, -initialWidth / 2, -initialHeight / 2, 0, 0, initialWidth, initialHeight, initialWidth, initialHeight);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+        RenderSystem.disableBlend();
+
         pose.popPose();
     }
 
@@ -86,7 +96,9 @@ public class DialogueImage extends DialogueAction {
     public float getXPercentage()               { return this.xPercentage; }
     public float getYPercentage()               { return this.yPercentage; }
     public float getScale()                     { return this.scale; }
+    public int getAlpha()                       { return this.alpha; }
     public void setXPercentage(float newValue)  { this.xPercentage = newValue; }
     public void setYPercentage(float newValue)  { this.yPercentage = newValue; }
     public void setScale(float newValue)        { this.scale = newValue; }
+    public void setAlpha(int newValue)          { this.alpha = newValue; }
 }

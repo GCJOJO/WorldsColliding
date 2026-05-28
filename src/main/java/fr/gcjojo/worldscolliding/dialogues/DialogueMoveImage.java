@@ -17,10 +17,13 @@ public class DialogueMoveImage extends DialogueAction{
     private Optional<Float> yPercentageEnd = Optional.empty();
     private Optional<Float> scaleStart = Optional.empty();
     private Optional<Float> scaleEnd = Optional.empty();
+    private Optional<Integer> alphaStart = Optional.empty();
+    private Optional<Integer> alphaEnd = Optional.empty();
 
     private boolean animateX = false;
     private boolean animateY = false;
     private boolean animateScale = false;
+    private boolean animateAlpha = false;
 
     private float currentTime;
 
@@ -41,10 +44,15 @@ public class DialogueMoveImage extends DialogueAction{
             this.scaleStart = Optional.of(object.get("scale_start").getAsFloat());
         if(object.has("scale_end"))
             this.scaleEnd = Optional.of(object.get("scale_end").getAsFloat());
+        if(object.has("alpha_start"))
+            this.alphaStart = Optional.of(object.get("alpha_start").getAsInt());
+        if(object.has("alpha_end"))
+            this.alphaEnd = Optional.of(object.get("alpha_end").getAsInt());
 
         this.animateX = this.xPercentageStart.isPresent() && this.xPercentageEnd.isPresent();
         this.animateY = this.yPercentageStart.isPresent() && this.yPercentageEnd.isPresent();
         this.animateScale = this.scaleStart.isPresent() && this.scaleEnd.isPresent();
+        this.animateAlpha = this.alphaStart.isPresent() && this.alphaEnd.isPresent();
     }
 
     @Override
@@ -69,10 +77,12 @@ public class DialogueMoveImage extends DialogueAction{
         float xPercentage = animateX ? Mth.lerp(animPercentage, xPercentageStart.get(), xPercentageEnd.get()) : image.getXPercentage();
         float yPercentage = animateY ? Mth.lerp(animPercentage, yPercentageStart.get(), yPercentageEnd.get()) : image.getYPercentage();
         float scale = animateScale ? Mth.lerp(animPercentage, scaleStart.get(), scaleEnd.get()) : image.getScale();
+        int alpha = animateAlpha ? (int) Mth.lerp(animPercentage, (float) alphaStart.get(), (float) alphaEnd.get()) : image.getAlpha();
 
         image.setXPercentage(xPercentage);
         image.setYPercentage(yPercentage);
         image.setScale(scale);
+        image.setAlpha(alpha);
 
         currentTime += partialTick;
     }
