@@ -7,17 +7,24 @@
   ],
 
   "dogcheck" : [
-    { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915 },
+    { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915, "y": 40, "alpha": 0 },
+    { "action": "image_move", "id": 0, "anim_time": 10, "alpha_start": 0, "alpha_end": 255 },
     { "action": "wait", "time": 10 },
     { "action": "message", "speaker": -1, "text": "woof" },
+    { "action": "image_move", "id": 0, "anim_time": 10, "alpha_start": 255, "alpha_end": 0 },
+    { "action": "wait", "time": 10 },
     { "action": "clear" },
     { "action": "wait", "time": 10},
 
     { "action": "fade", "from": "00000000", "to": "FF000000", "time": 10},
     { "action": "wait", "time":  20 },
-    { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915 },
+    { "action": "image", "id": 0, "image": "worldscolliding:textures/gui/woof.png", "fade_in_time": 10, "width": 1915, "height": 1915, "x": 50, "y": 200 },
+    { "action": "image_move", "id": 0, "anim_time": 5, "y_start": 200, "y_end": 40 },
     { "action": "message", "speaker": -1, "text": "woof jumpscare !" },
-    { "action": "clear" }
+    { "action": "clear", "cleared_actions": "fade" },
+    { "action": "fade", "from": "FF000000", "to": "00000000", "time": 10},
+    { "action": "image_move", "id": 0, "anim_time": 10, "alpha_start": 255, "alpha_end": 0 },
+    { "action": "wait", "time": 15 }
   ],
 
   "credits" : [

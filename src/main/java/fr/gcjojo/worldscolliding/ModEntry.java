@@ -6,6 +6,7 @@ import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.client.ScourgeRenderer;
 import fr.gcjojo.worldscolliding.client.AwakenedScourgeRenderer;
 import fr.gcjojo.worldscolliding.client.AwakenedScourgeModel;
+import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 
 import com.mojang.logging.LogUtils;
@@ -15,6 +16,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -111,11 +113,11 @@ public class ModEntry
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
     {
         Player player = event.getEntity();
-        LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
+        //LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
 
         if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
-            LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
+            //LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
             String dimension = event.getFrom().location().getPath();
             Vec3 playerPosition = player.getPosition(1.0f);
             CompoundTag playerPersistentData = player.getPersistentData();
@@ -149,12 +151,21 @@ public class ModEntry
             StoryDimensionData.setLastSpot(newPlayerSpot);
             StoryDimensionData.save(server.overworld());
         }
+
+        if (event.getFrom() == ModDimensions.STORY_DIM_LEVEL_KEY){
+            if(event.getEntity().level().isClientSide() && !(player instanceof ServerPlayer))
+                return;
+
+            if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
+                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("credits"), (ServerPlayer) player);
+                player.getPersistentData().putBoolean("ShowCredits", false);
+            }
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         event.enqueueWork(fr.gcjojo.worldscolliding.network.ModNetwork::register);
-        LOGGER.info("HELLO FROM COMMON SETUP");
     }
 
     @SubscribeEvent
@@ -167,11 +178,7 @@ public class ModEntry
     public static class ClientModEvents
     {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-        }
+        public static void onClientSetup(FMLClientSetupEvent event) { }
 
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
