@@ -15,6 +15,15 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
 import java.util.*;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.UUID;
 
 @Mod.EventBusSubscriber(modid = ModEntry.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -36,8 +45,14 @@ public class ModEvents {
 
     private static final Map<UUID, FreezeData> frozenPlayers = new HashMap<>();
 
+    public static final List<ItemEntity> sealItems = new ArrayList<>();
+
     public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, String nextDialogue) {
         frozenPlayers.put(playerId, new FreezeData(position, ticks, prevMode, nextDialogue));
+    }
+
+    public static void addSealItem(ItemEntity item) {
+        sealItems.add(item);
     }
 
     @SubscribeEvent
@@ -70,6 +85,51 @@ public class ModEvents {
                         }
                         iterator.remove();
                     }
+                }
+            }
+        }
+
+        if (event.phase == TickEvent.Phase.END && !sealItems.isEmpty()) {
+            Iterator<ItemEntity> itemIterator = sealItems.iterator();
+            while (itemIterator.hasNext()) {
+                ItemEntity item = itemIterator.next();
+
+                if (!item.isAlive() || item.getItem().isEmpty()) {
+                    itemIterator.remove();
+                    continue;
+                }
+
+                int age = item.getPersistentData().getInt("SealAge");
+                item.getPersistentData().putInt("SealAge", age + 1);
+
+                if (age < 60) {
+                    if (item.level() instanceof ServerLevel serverLevel) {
+                        for (int i = 0; i < 15; i++) {
+                            serverLevel.sendParticles(ParticleTypes.END_ROD,
+                                    item.getX(), item.getY() + (i * 0.5), item.getZ(),
+                                    1, 0.05, 0.05, 0.05, 0.0);
+                        }
+                    }
+                    item.setDeltaMovement(0, 0.02, 0);
+                }
+                else if (age < 120) {
+                    Player player = item.level().getNearestPlayer(item, 20.0);
+                    if (player != null) {
+                        Vec3 dir = player.position().add(0, 1, 0).subtract(item.position()).normalize();
+                        item.setDeltaMovement(dir.scale(0.15));
+                    }
+                }
+                else if (age == 120) {
+                    item.setNoGravity(false);
+                }
+
+                if (age > 120 && item.onGround()) {
+                    if (item.level() instanceof ServerLevel serverLevel) {
+                        serverLevel.sendParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                                item.getX(), item.getY(), item.getZ(),
+                                15, 0.2, 0.2, 0.2, 0.05);
+                    }
+                    itemIterator.remove();
                 }
             }
         }

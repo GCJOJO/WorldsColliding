@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -31,9 +32,12 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.DragonFireball;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -41,9 +45,14 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import fr.gcjojo.worldscolliding.ModSounds;
+import fr.gcjojo.worldscolliding.events.ModEvents;
 
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
@@ -59,6 +68,12 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
     public int attackTick = 0;
     private int spellChoice = 0;
+    private int deathTimer = 0;
+
+    private boolean hasSpawnedPhantomsPhase1 = false;
+    private boolean hasSpawnedPhantomsPhase2 = false;
+
+    private final Map<UUID, GameType> previousGameModes = new HashMap<>();
 
     public AwakenedScourgeEntity(EntityType<? extends Monster> type, Level level) {
         super(type, level);
@@ -70,10 +85,11 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 400.0D)
                 .add(Attributes.MOVEMENT_SPEED, 0.7D)
-                .add(Attributes.ATTACK_DAMAGE, 25.0D)
+                .add(Attributes.ATTACK_DAMAGE, 50.0D)
                 .add(Attributes.ARMOR, 10.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0D)
-                .add(Attributes.FLYING_SPEED, 0.7D);
+                .add(Attributes.FLYING_SPEED, 0.7D)
+                .add(Attributes.FOLLOW_RANGE, 100.0D);
     }
 
     @Override
@@ -83,6 +99,20 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         nav.setCanFloat(true);
         nav.setCanPassDoors(true);
         return nav;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    @Override
+    public void checkDespawn() {
+    }
+
+    @Override
+    public boolean hasLineOfSight(Entity entity) {
+        return true;
     }
 
     @Override
@@ -112,8 +142,6 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         super.customServerAiStep();
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
     }
-
-    private int deathTimer = 0;
 
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
@@ -165,29 +193,16 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         }));
     }
 
-    private void doPillarOfLight() {
-        if (this.level() instanceof ServerLevel serverLevel) {
-            double x = this.getX();
-            double z = this.getZ();
-            for (int y = 0; y < 20; y++) {
-                serverLevel.sendParticles(ParticleTypes.END_ROD, x, this.getY() + y, z, 1, 0.2, 0.5, 0.2, 0.0);
-            }
-        }
-    }
+    private void spawnRedLine(ServerLevel level, Vec3 start, Vec3 dir) {
+        Vec3 end = start.add(dir.scale(150.0));
+        ClipContext context = new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this);
+        BlockHitResult result = level.clip(context);
+        Vec3 hitPos = result.getLocation();
 
-    private void doRedLineParticles() {
-        if (this.level() instanceof ServerLevel serverLevel) {
-            for (int i = 0; i < 2; i++) {
-                double side = (i == 0) ? 2.0 : -2.0;
-                Vec3 pos = this.position().add(side, 1.0, 0);
-                serverLevel.sendParticles(ParticleTypes.ANGRY_VILLAGER, pos.x, pos.y, pos.z, 5, 0.1, 0.1, 0.1, 0.0);
-            }
-        }
-    }
-
-    private void doExplosionEffects() {
-        if (this.level() instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1.0, this.getZ(), 1, 0, 0, 0, 0);
+        double distance = start.distanceTo(hitPos);
+        for (double i = 0; i < distance; i += 0.5) {
+            Vec3 pos = start.add(dir.scale(i));
+            level.sendParticles(DustParticleOptions.REDSTONE, pos.x, pos.y, pos.z, 1, 0.0, 0.0, 0.0, 0.0);
         }
     }
 
@@ -220,24 +235,76 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     public void tick() {
         super.tick();
 
+        if (!this.level().isClientSide) {
+            List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
+            for (ServerPlayer player : players) {
+                if (player.isDeadOrDying() && this.getHealth() < this.getMaxHealth()) {
+                    this.setHealth(this.getMaxHealth());
+                    this.entityData.set(HAS_SWORD, false);
+                    this.hasSpawnedPhantomsPhase1 = false;
+                    this.hasSpawnedPhantomsPhase2 = false;
+                    this.setTarget(null);
+                    break;
+                }
+            }
+
+            if (this.entityData.get(STATE) == 11) {
+                this.heal(10.0F);
+            }
+        }
+
         if (this.entityData.get(IS_DYING)) {
             this.deathTimer++;
             if (this.level() instanceof ServerLevel serverLevel) {
-                if (this.deathTimer >= 180 && this.deathTimer < 200) {
-                    double x = this.getX();
-                    double z = this.getZ();
-                    for (int y = 0; y < 15; y++) {
-                        serverLevel.sendParticles(ParticleTypes.END_ROD, x, this.getY() + y, z, 2, 0.2, 0.5, 0.2, 0.0);
+                if (this.deathTimer == 1) {
+                    List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
+                    Vec3 lookDir = this.getLookAngle();
+                    Vec3 camPos = this.position().add(lookDir.scale(5.0)).add(0, 1.0, 0);
+                    float yRot = this.getYRot() + 180.0F;
+
+                    for (ServerPlayer player : players) {
+                        GameType prevMode = player.gameMode.getGameModeForPlayer();
+                        previousGameModes.put(player.getUUID(), prevMode);
+                        player.setGameMode(GameType.SPECTATOR);
+                        ModEvents.freezePlayer(player.getUUID(), camPos, 400, prevMode, "");
+                        player.setYRot(yRot);
+                        player.setXRot(0.0F);
+                        player.yHeadRot = yRot;
+                        player.yBodyRot = yRot;
                     }
                 }
-                if (this.deathTimer == 260) {
-                    for (double i = -2; i <= 2; i += 0.5) {
-                        serverLevel.sendParticles(DustParticleOptions.REDSTONE, this.getX() + i, this.getY() + 1, this.getZ() + 2, 1, 0, 0, 0, 0);
-                        serverLevel.sendParticles(DustParticleOptions.REDSTONE, this.getX() + i, this.getY() + 1, this.getZ() - 2, 1, 0, 0, 0, 0);
+
+                if (this.deathTimer >= 180 && this.deathTimer < 400) {
+                    float progress = (this.deathTimer - 180) / 220.0f;
+                    if (this.random.nextFloat() > progress) {
+                        double x = this.getX();
+                        double z = this.getZ();
+                        for (int y = 0; y < 15; y++) {
+                            serverLevel.sendParticles(ParticleTypes.END_ROD, x, this.getY() + y, z, 2, 0.5, 0.5, 0.5, 0.0);
+                        }
+
+                        double orbitRadius = 6.0;
+                        double time = this.deathTimer * 0.1;
+                        double orbitX = x + Math.cos(time) * orbitRadius;
+                        double orbitZ = z + Math.sin(time) * orbitRadius;
+                        for (int y = 0; y < 15; y++) {
+                            serverLevel.sendParticles(ParticleTypes.END_ROD, orbitX, this.getY() + y, orbitZ, 2, 0.5, 0.5, 0.5, 0.0);
+                        }
                     }
                 }
+
+                if (this.deathTimer >= 260 && this.deathTimer < 280) {
+                    Vec3 eyePos = this.getEyePosition();
+                    Vec3 lookDir = this.getLookAngle();
+                    Vec3 rotatedRight = new Vec3(-lookDir.z, 0, lookDir.x).normalize();
+                    Vec3 rotatedLeft = new Vec3(lookDir.z, 0, -lookDir.x).normalize();
+
+                    spawnRedLine(serverLevel, eyePos.add(0, -2.0, 0), rotatedRight);
+                    spawnRedLine(serverLevel, eyePos.add(0, -2.0, 0), rotatedLeft);
+                }
+
                 if (this.deathTimer >= 300 && this.deathTimer <= 320) {
-                    serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1, this.getZ(), 1, 0, 0, 0, 0);
+                    serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY() + 1.0, this.getZ(), 1, 0, 0, 0, 0);
                 }
             }
             if (this.deathTimer >= 400) {
@@ -261,6 +328,22 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         }
 
         if (!this.level().isClientSide) {
+            int currentState = this.entityData.get(STATE);
+
+            if (currentState == 0 && this.entityData.get(SPAWNED)) {
+                float hpPct = this.getHealth() / this.getMaxHealth();
+                if (!hasSpawnedPhantomsPhase1 && hpPct <= 0.75f && !this.entityData.get(HAS_SWORD)) {
+                    hasSpawnedPhantomsPhase1 = true;
+                    triggerSpell(1);
+                    return;
+                }
+                if (!hasSpawnedPhantomsPhase2 && hpPct <= 0.25f && this.entityData.get(HAS_SWORD)) {
+                    hasSpawnedPhantomsPhase2 = true;
+                    triggerSpell(1);
+                    return;
+                }
+            }
+
             if (this.getTarget() != null) {
                 double targetY = this.getTarget().getY() + 1.5;
                 double dy = targetY - this.getY();
@@ -280,8 +363,6 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     this.setDeltaMovement(this.getDeltaMovement().add(0, -0.02, 0));
                 }
             }
-
-            int currentState = this.entityData.get(STATE);
 
             if (currentState == 1) {
                 this.attackTick++;
@@ -404,9 +485,10 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                         if (this.getTarget() != null) {
                             Vec3 targetPos = this.getTarget().position();
                             Vec3 dir = this.position().subtract(targetPos).normalize();
-                            Vec3 pushVector = dir.scale(-2.0);
+                            Vec3 pushVector = dir.scale(-3.5).add(0, 1.5, 0);
                             this.getTarget().setDeltaMovement(pushVector);
                             this.getTarget().hurtMarked = true;
+                            this.getTarget().hasImpulse = true;
                         }
                     } else if (this.spellChoice == 1) {
                         for (int i = 0; i < 5; i++) {
@@ -436,9 +518,10 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                         if (this.getTarget() != null) {
                             Vec3 targetPos = this.getTarget().position();
                             Vec3 dir = this.position().subtract(targetPos).normalize();
-                            Vec3 pullVector = dir.scale(2.5);
+                            Vec3 pullVector = dir.scale(4.0).add(0, 0.5, 0);
                             this.getTarget().setDeltaMovement(pullVector);
                             this.getTarget().hurtMarked = true;
+                            this.getTarget().hasImpulse = true;
                         }
                     }
                 }
@@ -533,6 +616,9 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     class AwakenedScourgeAttackGoal extends Goal {
         private final AwakenedScourgeEntity mob;
         private int attackCooldown;
+        private int lastAttackId = 0;
+        private int consecutiveAttackCount = 0;
+        private int distantAttackCount = 0;
 
         public AwakenedScourgeAttackGoal(AwakenedScourgeEntity mob) {
             this.mob = mob;
@@ -577,43 +663,77 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             if (isBehind) {
                 attackId = hasSword ? 10 : 9;
                 this.attackCooldown = 40;
-            } else if (!hasSword) {
-                if (distance < 25.0) {
-                    attackId = 3;
-                    this.attackCooldown = 30;
-                } else {
-                    if (this.mob.random.nextFloat() < 0.4f) {
-                        attackId = 4;
-                        this.attackCooldown = 60;
-                    } else if (this.mob.random.nextFloat() < 0.4f) {
+            } else {
+                if (hasSword) {
+                    if (distance < 25.0) {
+                        if (this.lastAttackId == 6 && this.consecutiveAttackCount >= 2) {
+                            attackId = this.mob.random.nextBoolean() ? 8 : 7;
+                            if (attackId == 8) {
+                                this.mob.spellChoice = 0;
+                            }
+                            this.attackCooldown = 20;
+                        } else {
+                            attackId = 6;
+                            this.attackCooldown = 15;
+                        }
+                    } else if (distance >= 25.0 && distance < 484.0) {
                         attackId = 8;
-                        int[] spells = {0, 1, 3};
-                        this.mob.spellChoice = spells[this.mob.random.nextInt(spells.length)];
+                        this.mob.spellChoice = this.mob.random.nextBoolean() ? 0 : 3;
                         this.attackCooldown = 40;
                     } else {
-                        attackId = 2;
+                        attackId = 8;
+                        this.mob.spellChoice = 2;
                         this.attackCooldown = 20;
                     }
-                }
-            } else {
-                if (distance < 25.0) {
-                    if (this.mob.random.nextFloat() < 0.6f) {
-                        attackId = 6;
-                        this.attackCooldown = 15;
-                    } else {
-                        attackId = 8;
-                        int[] spells = {0, 1, 3};
-                        this.mob.spellChoice = spells[this.mob.random.nextInt(spells.length)];
-                        this.attackCooldown = 40;
-                    }
-                } else if (distance >= 25.0 && distance < 100.0) {
-                    attackId = 7;
-                    this.attackCooldown = 100;
                 } else {
-                    attackId = 8;
-                    this.mob.spellChoice = 2;
-                    this.attackCooldown = 20;
+                    if (distance < 36.0) {
+                        if (this.lastAttackId == 3 && this.consecutiveAttackCount >= 2) {
+                            attackId = 8;
+                            this.mob.spellChoice = 0;
+                            this.attackCooldown = 20;
+                        } else {
+                            attackId = 3;
+                            this.attackCooldown = 30;
+                        }
+                    } else {
+                        if (this.distantAttackCount >= 2) {
+                            attackId = 8;
+                            this.mob.spellChoice = this.mob.random.nextBoolean() ? 0 : 3;
+                            this.attackCooldown = 40;
+                        } else {
+                            attackId = this.mob.random.nextBoolean() ? 2 : 4;
+                            this.attackCooldown = (attackId == 2) ? 20 : 60;
+                        }
+                    }
                 }
+            }
+
+            if (this.lastAttackId == 8 && this.mob.spellChoice == 0 && !hasSword) {
+                attackId = this.mob.random.nextBoolean() ? 2 : 4;
+                this.attackCooldown = (attackId == 2) ? 20 : 60;
+            } else if (this.lastAttackId == 8 && this.mob.spellChoice == 3 && !hasSword) {
+                attackId = 3;
+                this.attackCooldown = 30;
+            } else if (this.lastAttackId == 8 && this.mob.spellChoice == 0 && hasSword) {
+                attackId = 8;
+                this.mob.spellChoice = 2;
+                this.attackCooldown = 20;
+            } else if (this.lastAttackId == 8 && this.mob.spellChoice == 3 && hasSword) {
+                attackId = 6;
+                this.attackCooldown = 15;
+            }
+
+            if (attackId == this.lastAttackId) {
+                this.consecutiveAttackCount++;
+            } else {
+                this.consecutiveAttackCount = 1;
+                this.lastAttackId = attackId;
+            }
+
+            if (attackId == 2 || attackId == 4) {
+                this.distantAttackCount++;
+            } else {
+                this.distantAttackCount = 0;
             }
 
             if (attackId != 0) {
