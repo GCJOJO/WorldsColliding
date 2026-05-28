@@ -13,6 +13,7 @@ Join our [discord](https://discord.gg/yMcCq7rWbs) !<br><br>
 Share your ideas or bug discoveries with us !<br>
 https://github.com/GCJOJO/WorldsColliding/issues <br>
 
+## Developping with this mod
 <ins>__How to build__</ins>:
 1) Install Java JDK 17
 2) Open command prompt or any IDE and run : 
