@@ -177,7 +177,9 @@ public class ModNetwork {
                 Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
                 level.addFreshEntity(boss);
                 boss.setPos(bossSpawnPos);
-                scourge.remove(Entity.RemovalReason.DISCARDED);
+                scourge.getPersistentData().putBoolean("BossBattle", true);
+                boss.getPersistentData().putUUID("Scourge", scourge.getUUID());
+                boss.getPersistentData().putUUID("Player", player.getUUID());
             });
         }
     }

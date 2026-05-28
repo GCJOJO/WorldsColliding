@@ -3,6 +3,8 @@ package fr.gcjojo.worldscolliding.events;
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
@@ -14,10 +16,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = ModEntry.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -36,10 +35,26 @@ public class ModEvents {
         }
     }
 
+    private static class PlayerTeleportCredit{
+        public Player player;
+        public int tickDelay;
+
+        PlayerTeleportCredit(Player player, int tickDelay){
+            this.player = player;
+            this.tickDelay = tickDelay;
+        }
+    }
+
     private static final Map<UUID, FreezeData> frozenPlayers = new HashMap<>();
+
+    private static final List<PlayerTeleportCredit> teleportCreditPlayers = new ArrayList<>();
 
     public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, String nextDialogue) {
         frozenPlayers.put(playerId, new FreezeData(position, ticks, prevMode, nextDialogue));
+    }
+
+    public static void teleportPlayerToCredits(Player player, int tickDelay){
+        teleportCreditPlayers.add(new PlayerTeleportCredit(player, tickDelay));
     }
 
     @SubscribeEvent
@@ -55,22 +70,42 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !frozenPlayers.isEmpty()) {
-            Iterator<Map.Entry<UUID, FreezeData>> iterator = frozenPlayers.entrySet().iterator();
+        if (event.phase == TickEvent.Phase.END) {
+            if(!frozenPlayers.isEmpty()){
+                Iterator<Map.Entry<UUID, FreezeData>> iterator = frozenPlayers.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<UUID, FreezeData> entry = iterator.next();
+                    FreezeData data = entry.getValue();
+                    data.ticksLeft--;
 
-            while (iterator.hasNext()) {
-                Map.Entry<UUID, FreezeData> entry = iterator.next();
-                FreezeData data = entry.getValue();
-                data.ticksLeft--;
+                    if (data.ticksLeft <= 0) {
+                        ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
 
-                if (data.ticksLeft <= 0) {
-                    ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
-
-                    if (player != null) {
-                        player.setGameMode(data.previousGameMode);
-                        ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
+                        if (player != null) {
+                            player.setGameMode(data.previousGameMode);
+                            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
+                        }
+                        iterator.remove();
                     }
-                    iterator.remove();
+                }
+            }
+
+            if(!teleportCreditPlayers.isEmpty()){
+                Iterator<PlayerTeleportCredit> playerTeleportCreditIterator = teleportCreditPlayers.iterator();
+                while(playerTeleportCreditIterator.hasNext()){
+                    PlayerTeleportCredit playerTeleportCredit = playerTeleportCreditIterator.next();
+                    if(playerTeleportCredit.tickDelay <= 0)
+                    {
+                        ServerPlayer player = (ServerPlayer) playerTeleportCredit.player;
+                        if(player == null) continue;
+
+                        CompoundTag playerPersistentData = player.getPersistentData();
+                        BlockPos pos = player.getRespawnPosition();
+                        player.teleportTo(player.server.getLevel(player.getRespawnDimension()), pos.getX(), pos.getY(), pos.getZ(), Set.of(), 0.0f, 0.0f);
+                        playerTeleportCreditIterator.remove();
+                    }
+
+                    playerTeleportCredit.tickDelay--;
                 }
             }
         }

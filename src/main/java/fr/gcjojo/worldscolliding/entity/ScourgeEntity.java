@@ -45,26 +45,32 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
         if(level().isClientSide())
             return;
 
+        if(getPersistentData().contains("BossBattle") && getPersistentData().getBoolean("BossBattle")) {
+            this.setInvisible(true);
+            return;
+        }
+        this.setInvisible(false);
+
         level().getEntities(this, getBoundingBox().inflate(10), entity -> entity instanceof Player).forEach(player -> {
-         if(!(player instanceof Player))
-             return;
+            if(!(player instanceof Player))
+                return;
 
-         boolean isInDialogue = player.getPersistentData().getBoolean("IsInDialogue");
-         if(isInDialogue)
-             return;
+            boolean isInDialogue = player.getPersistentData().getBoolean("IsInDialogue");
+            if(isInDialogue)
+                return;
 
-         String currentChapter = player.getPersistentData().getString("CurrentChapter");
-         String lastReadChapter = player.getPersistentData().getString("LastReadChapter");
-         if (currentChapter.isEmpty()) {
-             currentChapter = "chapter_0_set";
-             player.getPersistentData().putString("CurrentChapter", currentChapter);
-         }
+            String currentChapter = player.getPersistentData().getString("CurrentChapter");
+            String lastReadChapter = player.getPersistentData().getString("LastReadChapter");
+            if (currentChapter.isEmpty()) {
+                currentChapter = "chapter_0_set";
+                player.getPersistentData().putString("CurrentChapter", currentChapter);
+            }
 
-         if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
-         {
-            player.getPersistentData().putBoolean("IsInDialogue", true);
-            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), (ServerPlayer) player);
-         }
+            if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
+            {
+                player.getPersistentData().putBoolean("IsInDialogue", true);
+                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), (ServerPlayer) player);
+            }
         });
     }
 
@@ -129,6 +135,8 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
 
     @Override
     public boolean canBeCollidedWith() {
+        if(getPersistentData().contains("BossBattle"))
+            return !getPersistentData().getBoolean("BossBattle");
         return true;
     }
 
@@ -140,7 +148,9 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) {
-            return super.hurt(source, amount);
+            this.remove(RemovalReason.DISCARDED);
+            //return super.hurt(source, amount);
+            return true;
         }
         return false;
     }

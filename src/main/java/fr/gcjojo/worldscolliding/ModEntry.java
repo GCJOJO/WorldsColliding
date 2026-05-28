@@ -41,6 +41,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import org.slf4j.Logger;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Mod(ModEntry.MODID)
 public class ModEntry
