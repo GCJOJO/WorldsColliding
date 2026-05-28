@@ -198,6 +198,10 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             this.setHealth(1.0f);
             this.setInvulnerable(true);
             this.playSound(ModSounds.VICTORY.get(), 1.0f, 1.0f);
+            if(source.getEntity() instanceof Player) {
+                Player player = (Player) source.getEntity();
+                player.getPersistentData().putBoolean("ShowCredits", true);
+            }
         }
     }
 
