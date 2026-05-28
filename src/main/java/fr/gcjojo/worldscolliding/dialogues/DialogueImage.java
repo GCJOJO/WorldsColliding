@@ -42,6 +42,8 @@ public class DialogueImage extends DialogueAction {
             this.yPercentage = object.get("y").getAsFloat();
         if(object.has("scale"))
             this.scale = object.get("scale").getAsFloat();
+        if(object.has("alpha"))
+            this.alpha = object.get("alpha").getAsInt();
     }
 
     @Override
@@ -53,6 +55,8 @@ public class DialogueImage extends DialogueAction {
     public void draw(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if(alpha <= 8)
             return;
+
+        if(this.alpha >= 255) this.alpha = 255;
 
         PoseStack pose = graphics.pose();
         pose.pushPose();

@@ -270,6 +270,7 @@ public class DialogueScreen extends Screen {
         {
             case "message" -> classToRemove = DialogueMessage.class;
             case "credit" -> classToRemove = DialogueCredit.class;
+            case "fade" -> classToRemove = DialogueFading.class;
         }
         if(classToRemove != null)
             currentActions.removeIf(classToRemove::isInstance);
