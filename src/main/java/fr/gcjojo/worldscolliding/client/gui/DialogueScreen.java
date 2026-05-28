@@ -121,8 +121,9 @@ public class DialogueScreen extends Screen {
                             case "change_set" -> actions.add(new DialogueNext(obj.get("set").getAsString()));
                             case "fade" -> actions.add(new DialogueFading(obj));
                             case "message" -> actions.add(new DialogueMessage(obj.get("speaker").getAsInt(), Component.translatable(obj.get("text").getAsString()).getString()));
-                            case "image" -> actions.add(new DialogueImage(obj.get("id").getAsInt(), obj.get("image").getAsString(), obj.get("width").getAsInt(), obj.get("height").getAsInt()));
+                            case "image" -> actions.add(new DialogueImage(obj));
                             case "credit" -> actions.add(new DialogueCredit(obj));
+                            case "image_move" -> actions.add(new DialogueMoveImage(obj));
                         }
 
                     });
@@ -283,4 +284,7 @@ public class DialogueScreen extends Screen {
         this.onClose();
     }
 
+    public List<DialogueAction> getCurrentActions() {
+        return this.currentActions;
+    }
 }
