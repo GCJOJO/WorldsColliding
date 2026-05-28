@@ -7,7 +7,7 @@ Worlds Colliding is the core foundation of the modpack of the same name. This mo
 
 - Narrative Engine: Implements a custom dialogue system with fading and image rendering.
 
-## Comunity
+## Community
 
 Join our [discord](https://discord.gg/yMcCq7rWbs) !<br><br>
 Share your ideas or bug discoveries with us !<br>
