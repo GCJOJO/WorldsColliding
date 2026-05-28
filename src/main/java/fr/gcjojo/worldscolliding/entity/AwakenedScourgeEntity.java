@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.entity;
 
+import fr.gcjojo.worldscolliding.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -307,6 +308,13 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 }
             }
             if (this.deathTimer >= 400) {
+                if(this.getPersistentData().contains("Player")){
+                    Player player = this.level().getPlayerByUUID(this.getPersistentData().getUUID("Player"));
+                    player.getPersistentData().putBoolean("RespawnsScourge", true);
+                    player.getPersistentData().putString("CurrentChapter", "new_game_plus_choice");
+                }
+
+
                 this.discard();
             }
             return;
@@ -625,6 +633,9 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         @Override
         public void tick() {
             LivingEntity target = this.mob.getTarget();
+            if(this.mob.getPersistentData().contains("Player"))
+                target = this.mob.level().getPlayerByUUID(this.mob.getPersistentData().getUUID("Player"));
+
             if (target == null) return;
 
             double distance = this.mob.distanceToSqr(target);

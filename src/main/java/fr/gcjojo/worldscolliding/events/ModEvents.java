@@ -14,6 +14,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
 
+import java.util.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -41,6 +42,7 @@ public class ModEvents {
         }
     }
 
+
     private static final Map<UUID, FreezeData> frozenPlayers = new HashMap<>();
 
     public static final List<ItemEntity> sealItems = new ArrayList<>();
@@ -66,22 +68,23 @@ public class ModEvents {
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END && !frozenPlayers.isEmpty()) {
-            Iterator<Map.Entry<UUID, FreezeData>> iterator = frozenPlayers.entrySet().iterator();
+        if (event.phase == TickEvent.Phase.END) {
+            if(!frozenPlayers.isEmpty()){
+                Iterator<Map.Entry<UUID, FreezeData>> iterator = frozenPlayers.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry<UUID, FreezeData> entry = iterator.next();
+                    FreezeData data = entry.getValue();
+                    data.ticksLeft--;
 
-            while (iterator.hasNext()) {
-                Map.Entry<UUID, FreezeData> entry = iterator.next();
-                FreezeData data = entry.getValue();
-                data.ticksLeft--;
+                    if (data.ticksLeft <= 0) {
+                        ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
 
-                if (data.ticksLeft <= 0) {
-                    ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
-
-                    if (player != null) {
-                        player.setGameMode(data.previousGameMode);
-                        ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
+                        if (player != null) {
+                            player.setGameMode(data.previousGameMode);
+                            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
+                        }
+                        iterator.remove();
                     }
-                    iterator.remove();
                 }
             }
         }

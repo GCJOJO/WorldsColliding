@@ -28,8 +28,12 @@ public class DialogueScreen extends Screen {
     private List<DialogueAction> currentActions = new ArrayList<>();
 
     private boolean advanceDialogueAtTickEnd = false;
+    private String queuedNextSet = null;
+
     private float currentFadingTime = -1.0f;
     private static float endFade = 7.5f;
+
+    private List<Button> buttons = new ArrayList<>();
 
     public DialogueScreen(String setName) {
         super(Component.literal("Dialogue"));
@@ -61,12 +65,16 @@ public class DialogueScreen extends Screen {
     @Override
     protected void init() {
         super.init();
-        advanceDialogue();
+        if(actionIndex == -1)
+            advanceDialogue();
+
+        buttons.forEach(this::addRenderableWidget);
     }
 
     public void drawButton(Button button)
     {
         this.addRenderableWidget(button);
+        buttons.add(button);
     }
 
     public void handleChoiceSelection(String nextSet, String saveSet, String action) {
@@ -190,6 +198,11 @@ public class DialogueScreen extends Screen {
             this.advanceDialogueAtTickEnd = false;
             this.advanceDialogue();
         }
+
+        if(queuedNextSet != null){
+            changeSet(queuedNextSet);
+            queuedNextSet = null;
+        }
     }
 
     @Override
@@ -233,7 +246,7 @@ public class DialogueScreen extends Screen {
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
         if(keyCode == 256) {
-            endDialogue();
+            skipDialogue();
             return true;
         }
 
@@ -246,8 +259,11 @@ public class DialogueScreen extends Screen {
 
     public void queueAdvanceDialogue() { this.advanceDialogueAtTickEnd = true; }
 
+    public void queueChangeSet(String nextSet) { this.queuedNextSet = nextSet; }
+
     public void advanceDialogue() {
         actionIndex++;
+        buttons.clear();
         if (dialogueActions.isEmpty() || actionIndex >= dialogueActions.size()) {
             endDialogue();
             return;
@@ -295,6 +311,11 @@ public class DialogueScreen extends Screen {
 
     @Override
     public boolean shouldCloseOnEsc() { return false; }
+
+    public void skipDialogue(){
+        while(actionIndex < dialogueActions.size() && dialogueActions.get(actionIndex).isSkippable())
+            advanceDialogue();
+    }
 
     public void endDialogue(){
         clearActions();

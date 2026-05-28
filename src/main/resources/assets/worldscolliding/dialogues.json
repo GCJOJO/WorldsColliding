@@ -308,5 +308,12 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.9"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.10" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.11" }
+  ],
+
+  "new_game_plus_choice" : [
+    { "action": "message", "speaker": 2, "text": "worldscolliding.dialogue.new_game_plus_choice.1" },
+    { "action": "message", "speaker": 2, "text": "worldscolliding.dialogue.new_game_plus_choice.2" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.seal_light", "action1": "none", "next1": "chapter_5_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "worldscolliding.dialogue.choice.seal_dark", "action2": "none", "next2": "chapter_5_6_seal_dark_set", "save2": "chapter_7_dark_set" }
   ]
+
 }

@@ -3,7 +3,6 @@ package fr.gcjojo.worldscolliding.dialogues;
 import com.google.gson.JsonObject;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import fr.gcjojo.worldscolliding.ModEntry;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 
@@ -95,6 +94,9 @@ public class DialogueImage extends DialogueAction {
     public boolean isBlocking() {
         return false;
     }
+
+    @Override
+    public boolean isSkippable() { return true; }
 
     public int getImageId()                     { return this.imageId; }
     public float getXPercentage()               { return this.xPercentage; }

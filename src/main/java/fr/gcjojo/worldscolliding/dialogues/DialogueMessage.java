@@ -89,4 +89,7 @@ public class DialogueMessage extends DialogueAction
 
     @Override
     public boolean isBlocking() { return true; }
+
+    @Override
+    public boolean isSkippable() { return true; }
 }

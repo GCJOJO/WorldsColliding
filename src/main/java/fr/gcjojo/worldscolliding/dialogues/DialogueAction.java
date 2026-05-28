@@ -19,4 +19,5 @@ public abstract class DialogueAction
     public abstract void keyPressed(int keyCode, int scanCode, int modifiers);
 
     public abstract boolean isBlocking();
+    public abstract boolean isSkippable();
 }
