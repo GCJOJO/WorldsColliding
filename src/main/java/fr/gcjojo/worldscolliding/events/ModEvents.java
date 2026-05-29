@@ -13,8 +13,6 @@ import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.ServerLifecycleHooks;
-
-import java.util.*;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -30,25 +28,33 @@ public class ModEvents {
 
     private static class FreezeData {
         Vec3 position;
+        float yaw;
+        float pitch;
+        boolean setLook;
         int ticksLeft;
         GameType previousGameMode;
         String nextDialogue;
 
-        FreezeData(Vec3 position, int ticksLeft, GameType previousGameMode, String nextDialogue) {
+        FreezeData(Vec3 position, float yaw, float pitch, boolean setLook, int ticksLeft, GameType previousGameMode, String nextDialogue) {
             this.position = position;
+            this.yaw = yaw;
+            this.pitch = pitch;
+            this.setLook = setLook;
             this.ticksLeft = ticksLeft;
             this.previousGameMode = previousGameMode;
             this.nextDialogue = nextDialogue;
         }
     }
 
-
     private static final Map<UUID, FreezeData> frozenPlayers = new HashMap<>();
-
     public static final List<ItemEntity> sealItems = new ArrayList<>();
 
+    public static void freezePlayer(UUID playerId, Vec3 position, float yaw, float pitch, int ticks, GameType prevMode, String nextDialogue) {
+        frozenPlayers.put(playerId, new FreezeData(position, yaw, pitch, true, ticks, prevMode, nextDialogue));
+    }
+
     public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, String nextDialogue) {
-        frozenPlayers.put(playerId, new FreezeData(position, ticks, prevMode, nextDialogue));
+        frozenPlayers.put(playerId, new FreezeData(position, 0, 0, false, ticks, prevMode, nextDialogue));
     }
 
     public static void addSealItem(ItemEntity item) {
@@ -60,31 +66,36 @@ public class ModEvents {
         if (event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer serverPlayer) {
             FreezeData data = frozenPlayers.get(serverPlayer.getUUID());
             if (data != null) {
+                if (data.setLook) {
+                    serverPlayer.absMoveTo(data.position.x, data.position.y, data.position.z, data.yaw, data.pitch);
+                } else {
+                    serverPlayer.absMoveTo(data.position.x, data.position.y, data.position.z, serverPlayer.getYRot(), serverPlayer.getXRot());
+                }
                 serverPlayer.setDeltaMovement(0, 0, 0);
-                serverPlayer.teleportTo(data.position.x, data.position.y, data.position.z);
             }
         }
     }
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) {
-            if(!frozenPlayers.isEmpty()){
-                Iterator<Map.Entry<UUID, FreezeData>> iterator = frozenPlayers.entrySet().iterator();
-                while (iterator.hasNext()) {
-                    Map.Entry<UUID, FreezeData> entry = iterator.next();
-                    FreezeData data = entry.getValue();
-                    data.ticksLeft--;
+        if (event.phase == TickEvent.Phase.END && !frozenPlayers.isEmpty()) {
+            Iterator<Map.Entry<UUID, FreezeData>> iterator = frozenPlayers.entrySet().iterator();
 
-                    if (data.ticksLeft <= 0) {
-                        ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
+            while (iterator.hasNext()) {
+                Map.Entry<UUID, FreezeData> entry = iterator.next();
+                FreezeData data = entry.getValue();
+                data.ticksLeft--;
 
-                        if (player != null) {
-                            player.setGameMode(data.previousGameMode);
+                if (data.ticksLeft <= 0) {
+                    ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
+
+                    if (player != null) {
+                        player.setGameMode(data.previousGameMode);
+                        if (!data.nextDialogue.isEmpty()) {
                             ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
                         }
-                        iterator.remove();
                     }
+                    iterator.remove();
                 }
             }
         }

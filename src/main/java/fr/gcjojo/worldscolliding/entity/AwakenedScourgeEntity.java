@@ -1,10 +1,8 @@
 package fr.gcjojo.worldscolliding.entity;
 
-import fr.gcjojo.worldscolliding.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -48,6 +46,10 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.events.ModEvents;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -213,6 +215,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             this.entityData.set(IS_DYING, true);
             this.setHealth(1.0f);
             this.setInvulnerable(true);
+            this.setDeltaMovement(0, 0, 0);
+            this.getNavigation().stop();
             this.playSound(ModSounds.VICTORY.get(), 1.0f, 1.0f);
             if(source.getEntity() instanceof Player) {
                 Player player = (Player) source.getEntity();
@@ -236,42 +240,35 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide) {
-            List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
-            for (ServerPlayer player : players) {
-                if (player.isDeadOrDying() && this.getHealth() < this.getMaxHealth()) {
-                    this.setHealth(this.getMaxHealth());
-                    this.entityData.set(HAS_SWORD, false);
-                    this.hasSpawnedPhantomsPhase1 = false;
-                    this.hasSpawnedPhantomsPhase2 = false;
-                    this.setTarget(null);
-                    break;
-                }
-            }
-
-            if (this.entityData.get(STATE) == 11) {
-                this.heal(10.0F);
-            }
-        }
-
         if (this.entityData.get(IS_DYING)) {
+            this.setDeltaMovement(0, 0, 0);
             this.deathTimer++;
             if (this.level() instanceof ServerLevel serverLevel) {
                 if (this.deathTimer == 1) {
                     List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
-                    Vec3 lookDir = this.getLookAngle();
-                    Vec3 camPos = this.position().add(lookDir.scale(5.0)).add(0, 1.0, 0);
-                    float yRot = this.getYRot() + 180.0F;
+
+                    Vec3 camPos = this.position().add(13.0, 3.0, 0.0);
+                    double dx = this.getX() - camPos.x;
+                    double dy = (this.getY() + this.getEyeHeight()) - camPos.y;
+                    double dz = this.getZ() - camPos.z;
+                    float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+                    float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
 
                     for (ServerPlayer player : players) {
                         GameType prevMode = player.gameMode.getGameModeForPlayer();
                         previousGameModes.put(player.getUUID(), prevMode);
                         player.setGameMode(GameType.SPECTATOR);
-                        ModEvents.freezePlayer(player.getUUID(), camPos, 400, prevMode, "");
-                        player.setYRot(yRot);
-                        player.setXRot(0.0F);
-                        player.yHeadRot = yRot;
-                        player.yBodyRot = yRot;
+                        ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, prevMode, "");
+                    }
+
+                    Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("terramity:chthonian_void"));
+                    if (chthonianVoid != null && chthonianVoid != Blocks.AIR) {
+                        BlockPos center = this.blockPosition();
+                        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-30, -10, -30), center.offset(30, 20, 30))) {
+                            if (serverLevel.getBlockState(pos).is(chthonianVoid)) {
+                                serverLevel.setBlockAndUpdate(pos, Blocks.STONE.defaultBlockState());
+                            }
+                        }
                     }
                 }
 
@@ -309,19 +306,27 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 }
             }
             if (this.deathTimer >= 400) {
-                if(this.getPersistentData().contains("Player")){
-                    Player player = this.level().getPlayerByUUID(this.getPersistentData().getUUID("Player"));
-                    CompoundTag playerData = player.getPersistentData();
-
-                    boolean isLight = playerData.getBoolean("LightEssence");
-                    playerData.remove("LightEssence");
-                    playerData.putBoolean("RespawnsScourge", isLight);
-                    playerData.putString("CurrentChapter", isLight ? "end_game_light_route" : "end_game_dark_route");
-                }
-
                 this.discard();
             }
             return;
+        }
+
+        if (!this.level().isClientSide) {
+            List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
+            for (ServerPlayer player : players) {
+                if (player.isDeadOrDying() && this.getHealth() < this.getMaxHealth()) {
+                    this.setHealth(this.getMaxHealth());
+                    this.entityData.set(HAS_SWORD, false);
+                    this.hasSpawnedPhantomsPhase1 = false;
+                    this.hasSpawnedPhantomsPhase2 = false;
+                    this.setTarget(null);
+                    break;
+                }
+            }
+
+            if (this.entityData.get(STATE) == 11) {
+                this.heal(10.0F);
+            }
         }
 
         if (this.level().isClientSide && this.entityData.get(SPAWNED)) {
@@ -377,6 +382,18 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                         p.connection.send(new ClientboundSetTitlesAnimationPacket(10, 60, 20));
                         p.connection.send(new ClientboundSetTitleTextPacket(Component.literal("§4The Scourge")));
                         this.entityData.set(IS_PLAYING_MUSIC, true);
+                    }
+
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("terramity:chthonian_void"));
+                        if (chthonianVoid != null && chthonianVoid != Blocks.AIR) {
+                            BlockPos center = this.blockPosition();
+                            for (BlockPos pos : BlockPos.betweenClosed(center.offset(-30, -10, -30), center.offset(30, 20, 30))) {
+                                if (serverLevel.getBlockState(pos).is(Blocks.STONE)) {
+                                    serverLevel.setBlockAndUpdate(pos, chthonianVoid.defaultBlockState());
+                                }
+                            }
+                        }
                     }
                 }
                 if (this.attackTick >= 500) {
@@ -637,9 +654,6 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         @Override
         public void tick() {
             LivingEntity target = this.mob.getTarget();
-            if(this.mob.getPersistentData().contains("Player"))
-                target = this.mob.level().getPlayerByUUID(this.mob.getPersistentData().getUUID("Player"));
-
             if (target == null) return;
 
             double distance = this.mob.distanceToSqr(target);

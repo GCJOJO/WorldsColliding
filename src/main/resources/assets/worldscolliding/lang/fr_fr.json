@@ -155,24 +155,39 @@
     "worldscolliding.dialogue.chapter_7_light_set.4" : "Il ne ressent rien. Ni colère, ni joie, ni haine. Il ne ment pas quand il dit qu'il cherche à faire le bien.",
     "worldscolliding.dialogue.chapter_7_light_set.5" : "Il ne perçoit simplement pas le mal qu'il cause. C'est ce qui le rend si dangereux.",
     "worldscolliding.dialogue.chapter_7_light_set.6" : "Il est temps. Bonne chance. Je suis fière de toi.",
+
+    // anim selement, ban the one
+
     "worldscolliding.dialogue.chapter_7_light_set.7" : "Tu as duré longtemps. Vraiment longtemps. Et tu as bien joué, grâce à toi, j'ai récupéré toute cette puissance.",
     "worldscolliding.dialogue.chapter_7_light_set.8" : "Même si elle ne me sert pas à grand-chose, au fond.",
     "worldscolliding.dialogue.chapter_7_light_set.9" : "Mais c'est comme ça que ça finit, toujours. Je joue avec vous... et je vous jette.",
+
+    // debut combat
+
     "worldscolliding.dialogue.chapter_7_light_set.10" : "[Riant] L'homme là-haut fera en sorte que je revienne. Chaque fois que quelqu'un aura besoin de divertissement...",
     "worldscolliding.dialogue.chapter_7_light_set.11" : "Je serai là. Même pour mourir, tant que je peux vivre, tant que je peux expérimenter...",
 
+    // fin
 
     "worldscolliding.dialogue.chapter_7_dark_set.1" : "Ce que tu t'apprêtes à faire est une erreur. Tu vas causer plus de mal que nécessaire. Mais c'est ton destin.",
     "worldscolliding.dialogue.chapter_7_dark_set.2" : "Enfin. Voilà quelqu'un qui m'écoute.",
     "worldscolliding.dialogue.chapter_7_dark_set.3" : "Pour me libérer, il faut vaincre ma dernière incarnation. Je t'y emmène, je te demande sincèrement de me vaincre là-bas.",
+
+    // anim selement, debut combat
+
     "worldscolliding.dialogue.chapter_7_dark_set.4" : "Tu as tenu ta parole... Et moi, je tiendrai la mienne.",
     "worldscolliding.dialogue.chapter_7_dark_set.5" : "Je sais que tu t'es laissé manipuler. Mais c'est fini. Je ne m'occuperai plus de rien, ici.",
     "worldscolliding.dialogue.chapter_7_dark_set.6" : "Je vais essayer de m'élever... de rejoindre la voix qui m'a guidé. Je crois que c'est mon Dieu.",
+
+    // anim scourge senvol, puis il est ban
+
     "worldscolliding.dialogue.chapter_7_dark_set.7" : "Tu as réussi. D'une façon que je n'avais pas prévue... mais tu l'as banni.",
     "worldscolliding.dialogue.chapter_7_dark_set.8" : "C'était ma mission dans ce monde : le bannir, et te guider jusqu'à la fin.",
     "worldscolliding.dialogue.chapter_7_dark_set.9" : "Cette mission est accomplie. Je n'ai plus de raison d'être ici.",
     "worldscolliding.dialogue.chapter_7_dark_set.10" : "Je vais rejoindre un autre monde. C'est une boucle infinie, les péchés que j'ai commis font que je suis condamnée à y revenir.",
     "worldscolliding.dialogue.chapter_7_dark_set.11" : "Merci. Vraiment. Pour tout ce que tu as accompli.",
+
+    // the one left the game, fin
 
     "worldscolliding.dialogue.new_game_plus_choice.1" : "Félicitations ! Vous avez fini ce modpack ! Vous pouvez dès à présent refaire le boss final.",
     "worldscolliding.dialogue.new_game_plus_choice.2" : "Quel fin souhaiteriez-vous faire ? Allez-vous prendre l'essence de lumière ou l'essence des ténèbres ?",

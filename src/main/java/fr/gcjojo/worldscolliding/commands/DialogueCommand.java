@@ -1,18 +1,27 @@
 package fr.gcjojo.worldscolliding.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.events.ModEvents;
+import fr.gcjojo.worldscolliding.ModSounds;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
@@ -24,6 +33,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.animatable.GeoEntity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,8 +48,10 @@ public class DialogueCommand {
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        // Load chapters dynamically
-        List<String> chapters = Arrays.asList("dogcheck", "credits", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_5_6_seal_set", "chapter_5_6_seal_ask", "chapter_7_prologue_set", "chapter_7_light_set", "chapter_7_dark_set");
+        List<String> chapters = Arrays.asList("test_image", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_7_prologue_set");
+        List<String> animations = Arrays.asList("sceal1", "sceal2", "sceal3", "sceal4", "sceal5", "sceal6", "sceal7", "sceal8", "ascend");
+        List<String> cinematics = Arrays.asList("laugh", "tp_effect");
+        List<String> sealTypes = Arrays.asList("remnant", "dark", "light");
 
         event.getDispatcher().register(Commands.literal("dialogue")
                 .then(Commands.literal("play")
@@ -66,18 +78,59 @@ public class DialogueCommand {
         );
 
         event.getDispatcher().register(Commands.literal("scourge")
+                .then(Commands.literal("cinematic")
+                        .then(Commands.argument("action", StringArgumentType.string())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(cinematics, builder))
+                                .executes(context -> {
+                                    ServerPlayer player = context.getSource().getPlayerOrException();
+                                    String action = StringArgumentType.getString(context, "action");
+                                    ServerLevel level = player.serverLevel();
+
+                                    switch (action) {
+                                        case "laugh":
+                                            level.playSound(null, player.blockPosition(), ModSounds.LAUGH.get(), SoundSource.HOSTILE, 1.0f, 1.0f);
+                                            break;
+                                        case "tp_effect":
+                                            level.sendParticles(ParticleTypes.REVERSE_PORTAL, player.getX(), player.getY() + 1, player.getZ(), 100, 1.0, 2.0, 1.0, 0.05);
+                                            level.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.HOSTILE, 1.0f, 1.0f);
+                                            break;
+                                    }
+                                    return 1;
+                                })))
                 .then(Commands.literal("animate")
                         .then(Commands.argument("animName", StringArgumentType.string())
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(animations, builder))
                                 .executes(context -> {
                                     ServerPlayer player = context.getSource().getPlayerOrException();
                                     String animName = StringArgumentType.getString(context, "animName");
 
                                     AABB searchBox = player.getBoundingBox().inflate(50.0);
-                                    List<ScourgeEntity> scourges = player.level().getEntitiesOfClass(ScourgeEntity.class, searchBox);
+                                    List<LivingEntity> scourges = player.level().getEntitiesOfClass(LivingEntity.class, searchBox, e -> e instanceof ScourgeEntity || e instanceof AwakenedScourgeEntity);
 
                                     if (!scourges.isEmpty()) {
-                                        scourges.get(0).triggerAnim("seal_controller", animName);
-                                        context.getSource().sendSuccess(() -> Component.literal("Animation jouée : " + animName), true);
+                                        LivingEntity boss = scourges.get(0);
+
+                                        if (animName.equals("ascend") && boss instanceof ScourgeEntity) {
+                                            boss.getEntityData().set(ScourgeEntity.ASCENDING, true);
+                                            context.getSource().sendSuccess(() -> Component.literal("Animation d'ascension lancée."), true);
+                                        } else {
+                                            if (animName.startsWith("sceal")) {
+                                                Vec3 camPos = boss.position().add(13.0, 3.0, 0.0);
+                                                double dx = boss.getX() - camPos.x;
+                                                double dy = (boss.getY() + boss.getEyeHeight()) - camPos.y;
+                                                double dz = boss.getZ() - camPos.z;
+                                                float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+                                                float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
+
+                                                ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 100, player.gameMode.getGameModeForPlayer(), "");
+                                                player.setGameMode(GameType.SPECTATOR);
+                                            }
+
+                                            if (boss instanceof GeoEntity geoBoss) {
+                                                geoBoss.triggerAnim("seal_controller", animName);
+                                                context.getSource().sendSuccess(() -> Component.literal("Animation jouée : " + animName), true);
+                                            }
+                                        }
                                     } else {
                                         context.getSource().sendFailure(Component.literal("Aucun Scourge trouvé à proximité."));
                                     }
@@ -85,16 +138,16 @@ public class DialogueCommand {
                                 })))
                 .then(Commands.literal("sealeffect")
                         .then(Commands.argument("itemType", StringArgumentType.string())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(Arrays.asList("remnant", "dark", "light"), builder))
+                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(sealTypes, builder))
                                 .executes(context -> {
                                     ServerPlayer player = context.getSource().getPlayerOrException();
                                     String itemType = StringArgumentType.getString(context, "itemType");
 
                                     AABB searchBox = player.getBoundingBox().inflate(50.0);
-                                    List<ScourgeEntity> scourges = player.level().getEntitiesOfClass(ScourgeEntity.class, searchBox);
+                                    List<LivingEntity> scourges = player.level().getEntitiesOfClass(LivingEntity.class, searchBox, e -> e instanceof ScourgeEntity || e instanceof AwakenedScourgeEntity);
 
                                     if (!scourges.isEmpty()) {
-                                        ScourgeEntity scourge = scourges.get(0);
+                                        LivingEntity scourge = scourges.get(0);
                                         Level level = scourge.level();
                                         BlockPos center = scourge.blockPosition();
 
@@ -108,7 +161,7 @@ public class DialogueCommand {
                                                 for (int i = 0; i < prefixes.length - 1; i++) {
                                                     if (path.startsWith(prefixes[i] + "_quartz")) {
                                                         String newPath = path.replace(prefixes[i] + "_quartz", prefixes[i+1] + "_quartz");
-                                                        Block newBlock = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("botania", newPath));
+                                                        Block newBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("botania:" + newPath));
 
                                                         if (newBlock != null && newBlock != Blocks.AIR) {
                                                             BlockState newState = newBlock.defaultBlockState();
@@ -128,13 +181,13 @@ public class DialogueCommand {
                                         ResourceLocation itemLoc;
                                         Item fallbackItem;
                                         if (itemType.equals("dark")) {
-                                            itemLoc = ResourceLocation.fromNamespaceAndPath("kubejs", "dark_essence");
+                                            itemLoc = new ResourceLocation("kubejs:dark_essence");
                                             fallbackItem = Items.BLACK_DYE;
                                         } else if (itemType.equals("light")) {
-                                            itemLoc = ResourceLocation.fromNamespaceAndPath("kubejs", "light_essence");
+                                            itemLoc = new ResourceLocation("kubejs:light_essence");
                                             fallbackItem = Items.WHITE_DYE;
                                         } else {
-                                            itemLoc = ResourceLocation.fromNamespaceAndPath("kubejs", "seal_remnant");
+                                            itemLoc = new ResourceLocation("kubejs:seal_remnant");
                                             fallbackItem = Items.BLUE_DYE;
                                         }
 

@@ -1,16 +1,22 @@
 package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
-import fr.gcjojo.worldscolliding.network.ModNetwork;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -18,10 +24,14 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
+import net.minecraft.world.entity.EntityDimensions;
+import net.minecraft.world.entity.Pose;
 
 public class ScourgeEntity extends PathfinderMob implements GeoEntity {
 
     private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+    public static final EntityDataAccessor<Boolean> ASCENDING = SynchedEntityData.defineId(ScourgeEntity.class, EntityDataSerializers.BOOLEAN);
+    public int ascendTimer = 0;
 
     public ScourgeEntity(EntityType<? extends PathfinderMob> type, Level level) {
         super(type, level);
@@ -35,36 +45,46 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public void tick() {
-        if(level().isClientSide())
-            return;
-
-        level().getEntities(this, getBoundingBox().inflate(5), entity -> entity instanceof Player).forEach(player -> {
-            if(!(player instanceof Player))
-                return;
-
-            boolean isInDialogue = player.getPersistentData().getBoolean("IsInDialogue");
-            if(isInDialogue)
-                return;
-
-            String currentChapter = player.getPersistentData().getString("CurrentChapter");
-            String lastReadChapter = player.getPersistentData().getString("LastReadChapter");
-            if (currentChapter.isEmpty()) {
-                currentChapter = "chapter_0_set";
-                player.getPersistentData().putString("CurrentChapter", currentChapter);
-            }
-
-            if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
-            {
-                player.getPersistentData().putBoolean("IsInDialogue", true);
-                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), (ServerPlayer) player);
-            }
-        });
+    public EntityDimensions getDimensions(Pose pose) {
+        return EntityDimensions.scalable(3.0f, 2.0f);
     }
 
     @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.scalable(3.0f, 2.0f);
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        this.entityData.define(ASCENDING, false);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.entityData.get(ASCENDING)) {
+            this.ascendTimer++;
+            this.setDeltaMovement(0, 0.05, 0);
+
+            if (this.level() instanceof ServerLevel serverLevel) {
+                serverLevel.sendParticles(ParticleTypes.SQUID_INK, this.getX(), this.getY() + this.random.nextDouble() * 2, this.getZ(), 10, 0.3, 0.5, 0.3, 0.0);
+
+                double orbitRadius = 2.5;
+                double time = this.ascendTimer * 0.3;
+                double orbitX = this.getX() + Math.cos(time) * orbitRadius;
+                double orbitZ = this.getZ() + Math.sin(time) * orbitRadius;
+
+                serverLevel.sendParticles(ParticleTypes.SQUID_INK, orbitX, this.getY() + this.random.nextDouble() * 2, orbitZ, 5, 0.2, 0.5, 0.2, 0.0);
+
+                if (this.ascendTimer == 200) {
+                    this.playSound(ModSounds.LAUGH.get(), 1.0f, 1.0f);
+                }
+
+                if (this.ascendTimer >= 300) {
+                    this.playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
+                    serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 0, 0, 0, 0);
+                    serverLevel.getServer().getPlayerList().broadcastSystemMessage(Component.translatable("commands.ban.success", Component.literal("The Scourge")).withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC), false);
+                    this.discard();
+                }
+            }
+        }
     }
 
     @Override
@@ -86,16 +106,10 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                     if (this.level().isClientSide) {
                         if (sound.contains("sword_draw")) {
                             this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWORD_DRAW.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
-                        } else if (sound.contains("protoss")) {
+                        } else if (sound.contains("protoss_electric")) {
                             this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.PROTOSS_ELECTRIC.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
-                        } else if (sound.contains("master_sword") || sound.contains("zeldamastersword") || sound.contains("zelda_master_sword")) {
+                        } else if (sound.contains("zelda_master_sword") ) {
                             this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.MASTER_SWORD.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
-                        } else if (sound.contains("enterganondorf")) {
-                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.ENTER_GANONDORF.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
-                        } else if (sound.contains("laugh")) {
-                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.LAUGH.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
-                        } else if (sound.contains("switchclick")) {
-                            this.level().playLocalSound(this.getX(), this.getY(), this.getZ(), ModSounds.SWITCH_CLICK.get(), SoundSource.HOSTILE, 1.0f, 1.0f, false);
                         }
                     }
                 })
@@ -122,6 +136,11 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
+    public boolean canBeCollidedWith() {
+        return true;
+    }
+
+    @Override
     public boolean isPickable() {
         return true;
     }
@@ -129,9 +148,7 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     @Override
     public boolean hurt(DamageSource source, float amount) {
         if (source.is(net.minecraft.world.damagesource.DamageTypes.FELL_OUT_OF_WORLD)) {
-            this.remove(RemovalReason.DISCARDED);
-            //return super.hurt(source, amount);
-            return true;
+            return super.hurt(source, amount);
         }
         return false;
     }
