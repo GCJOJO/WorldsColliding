@@ -59,5 +59,5 @@ public class DialogueClear extends DialogueAction {
     }
 
     @Override
-    public boolean isSkippable() { return false; }
+    public boolean isSkippable() { return true; }
 }

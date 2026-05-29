@@ -39,7 +39,7 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
         if(level().isClientSide())
             return;
 
-        level().getEntities(this, getBoundingBox().inflate(10), entity -> entity instanceof Player).forEach(player -> {
+        level().getEntities(this, getBoundingBox().inflate(5), entity -> entity instanceof Player).forEach(player -> {
             if(!(player instanceof Player))
                 return;
 

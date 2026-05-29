@@ -24,7 +24,9 @@
     { "action": "clear", "cleared_actions": "fade" },
     { "action": "fade", "from": "FF000000", "to": "00000000", "time": 10},
     { "action": "image_move", "id": 0, "anim_time": 10, "alpha_start": 255, "alpha_end": 0 },
-    { "action": "wait", "time": 15 }
+    { "action": "wait", "time": 15 },
+    { "action": "command", "command": "title @s title \"DOGCHECK\"" },
+    { "action": "command", "command": "tp @s ~ ~10 ~" }
   ],
 
   "credits" : [

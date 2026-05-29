@@ -124,6 +124,9 @@ public class DialogueScreen extends Screen {
                     List<DialogueAction> actions = new ArrayList<>();
                     root.getAsJsonArray(setName).forEach(element -> {
                         JsonObject obj = element.getAsJsonObject();
+                        if(!obj.has("action"))
+                            return;
+
                         String action = obj.get("action").getAsString();
                         switch(action)
                         {
@@ -136,6 +139,7 @@ public class DialogueScreen extends Screen {
                             case "image" -> actions.add(new DialogueImage(obj));
                             case "credit" -> actions.add(new DialogueCredit(obj));
                             case "image_move" -> actions.add(new DialogueMoveImage(obj));
+                            case "command" -> actions.add(new DialogueExecuteCommand(obj));
                         }
 
                     });

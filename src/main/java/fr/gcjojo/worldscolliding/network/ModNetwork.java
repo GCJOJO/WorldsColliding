@@ -1,5 +1,7 @@
 package fr.gcjojo.worldscolliding.network;
 
+import com.mojang.brigadier.ParseResults;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
@@ -10,6 +12,8 @@ import fr.gcjojo.worldscolliding.events.ModEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.GameType;
@@ -52,6 +56,12 @@ public class ModNetwork {
                 .encoder(DialogueCompletedPacket::encode)
                 .decoder(DialogueCompletedPacket::new)
                 .consumerMainThread(DialogueCompletedPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(DialogueCommandPacket.class, packetId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(DialogueCommandPacket::encode)
+                .decoder(DialogueCommandPacket::new)
+                .consumerMainThread(DialogueCommandPacket::handle)
                 .add();
     }
 
@@ -192,6 +202,40 @@ public class ModNetwork {
                 scourge.getPersistentData().putBoolean("BossBattle", isLight);
                 boss.getPersistentData().putUUID("Player", player.getUUID());
             });
+        }
+    }
+
+    public static class DialogueCommandPacket {
+        private String command;
+
+        public DialogueCommandPacket(String command) {
+            this.command = command;
+        }
+
+        public DialogueCommandPacket(FriendlyByteBuf buf) {
+            this.command = buf.readUtf();
+        }
+
+        public void encode(FriendlyByteBuf buf) {
+            buf.writeUtf(this.command);
+        }
+
+        public static void handle(DialogueCommandPacket msg, Supplier<NetworkEvent.Context> ctx){
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if(player == null) return;
+                MinecraftServer server = player.getServer();
+                if(server == null) return;
+
+                String formattedCommand = "execute positioned as %s run %s".formatted(player.getName().getString(), msg.command);
+                try {
+                    int success = server.getCommands().getDispatcher().execute(formattedCommand, server.createCommandSourceStack().withEntity(player).withLevel((ServerLevel) player.level()));
+                    ModEntry.getLogger().warn(String.valueOf(success));
+                } catch (CommandSyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            ctx.get().setPacketHandled(true);
         }
     }
 }
