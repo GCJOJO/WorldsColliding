@@ -264,11 +264,13 @@
   ],
 
   "chapter_5_6_seal_light_set": [
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" }
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" },
+    { "action": "command", "command": "scourge sealeffect light" }
   ],
 
   "chapter_5_6_seal_dark_set": [
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" },
+    { "action": "command", "command": "scourge sealeffect dark" }
   ],
 
   "chapter_7_prologue_set": [
@@ -310,6 +312,14 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.9"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.10" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.11" }
+  ],
+
+  "end_game_light_route" : [
+    { "action": "fade", "from": "00000000", "to": "FFFFFFFF", "time": 40 }
+  ],
+
+  "end_game_dark_route" : [
+    { "action": "command", "command": "scourge animate scourge_fly" }
   ],
 
   "new_game_plus_choice" : [

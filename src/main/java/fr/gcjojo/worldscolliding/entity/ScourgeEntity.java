@@ -122,13 +122,6 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
-    public boolean canBeCollidedWith() {
-        if(getPersistentData().contains("BossBattle"))
-            return !getPersistentData().getBoolean("BossBattle");
-        return true;
-    }
-
-    @Override
     public boolean isPickable() {
         return true;
     }

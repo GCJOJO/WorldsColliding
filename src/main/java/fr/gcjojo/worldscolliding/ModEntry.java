@@ -146,6 +146,7 @@ public class ModEntry
                         player.level().addFreshEntity(newScourge);
                         playerPersistentData.remove("ScourgeRespawnPosition");
                         playerPersistentData.remove("RespawnsScourge");
+                        playerPersistentData.putString("CurrentChapter", "new_game_plus_choice");
                     }
                     return;
                 }

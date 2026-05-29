@@ -182,6 +182,9 @@ public class ModNetwork {
 
         public static void spawnBoss(ServerPlayer player, boolean isLight){
             Level level = player.level();
+
+            player.getPersistentData().putBoolean("LightEssence", isLight);
+
             level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
                 Vec3 bossSpawnPos = scourge.getPosition(1.0f).add(0d, 2.0d, 0d);
                 if(isLight){

@@ -4,6 +4,7 @@ import fr.gcjojo.worldscolliding.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
@@ -310,10 +311,13 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             if (this.deathTimer >= 400) {
                 if(this.getPersistentData().contains("Player")){
                     Player player = this.level().getPlayerByUUID(this.getPersistentData().getUUID("Player"));
-                    player.getPersistentData().putBoolean("RespawnsScourge", true);
-                    player.getPersistentData().putString("CurrentChapter", "new_game_plus_choice");
-                }
+                    CompoundTag playerData = player.getPersistentData();
 
+                    boolean isLight = playerData.getBoolean("LightEssence");
+                    playerData.remove("LightEssence");
+                    playerData.putBoolean("RespawnsScourge", isLight);
+                    playerData.putString("CurrentChapter", isLight ? "end_game_light_route" : "end_game_dark_route");
+                }
 
                 this.discard();
             }
