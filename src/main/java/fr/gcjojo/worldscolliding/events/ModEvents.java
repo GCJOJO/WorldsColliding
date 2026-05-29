@@ -27,7 +27,8 @@ import java.util.UUID;
 public class ModEvents {
 
     private static class FreezeData {
-        Vec3 position;
+        Vec3 originalPosition;
+        Vec3 cameraPosition;
         float yaw;
         float pitch;
         boolean setLook;
@@ -35,8 +36,9 @@ public class ModEvents {
         GameType previousGameMode;
         String nextDialogue;
 
-        FreezeData(Vec3 position, float yaw, float pitch, boolean setLook, int ticksLeft, GameType previousGameMode, String nextDialogue) {
-            this.position = position;
+        FreezeData(Vec3 originalPosition, Vec3 cameraPosition, float yaw, float pitch, boolean setLook, int ticksLeft, GameType previousGameMode, String nextDialogue) {
+            this.originalPosition = originalPosition;
+            this.cameraPosition = cameraPosition;
             this.yaw = yaw;
             this.pitch = pitch;
             this.setLook = setLook;
@@ -50,11 +52,21 @@ public class ModEvents {
     public static final List<ItemEntity> sealItems = new ArrayList<>();
 
     public static void freezePlayer(UUID playerId, Vec3 position, float yaw, float pitch, int ticks, GameType prevMode, String nextDialogue) {
-        frozenPlayers.put(playerId, new FreezeData(position, yaw, pitch, true, ticks, prevMode, nextDialogue));
+        ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerId);
+        if (player != null) {
+            Vec3 orig = player.position();
+            frozenPlayers.put(playerId, new FreezeData(orig, position, yaw, pitch, true, ticks, prevMode, nextDialogue));
+            player.connection.teleport(position.x, position.y, position.z, yaw, pitch);
+        }
     }
 
     public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, String nextDialogue) {
-        frozenPlayers.put(playerId, new FreezeData(position, 0, 0, false, ticks, prevMode, nextDialogue));
+        ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerId);
+        if (player != null) {
+            Vec3 orig = player.position();
+            frozenPlayers.put(playerId, new FreezeData(orig, position, 0, 0, false, ticks, prevMode, nextDialogue));
+            player.connection.teleport(position.x, position.y, position.z, player.getYRot(), player.getXRot());
+        }
     }
 
     public static void addSealItem(ItemEntity item) {
@@ -66,12 +78,12 @@ public class ModEvents {
         if (event.phase == TickEvent.Phase.END && event.player instanceof ServerPlayer serverPlayer) {
             FreezeData data = frozenPlayers.get(serverPlayer.getUUID());
             if (data != null) {
-                if (data.setLook) {
-                    serverPlayer.absMoveTo(data.position.x, data.position.y, data.position.z, data.yaw, data.pitch);
-                } else {
-                    serverPlayer.absMoveTo(data.position.x, data.position.y, data.position.z, serverPlayer.getYRot(), serverPlayer.getXRot());
-                }
                 serverPlayer.setDeltaMovement(0, 0, 0);
+                if (data.setLook) {
+                    serverPlayer.connection.teleport(data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z, data.yaw, data.pitch);
+                } else {
+                    serverPlayer.connection.teleport(data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z, serverPlayer.getYRot(), serverPlayer.getXRot());
+                }
             }
         }
     }
@@ -90,6 +102,7 @@ public class ModEvents {
                     ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(entry.getKey());
 
                     if (player != null) {
+                        player.connection.teleport(data.originalPosition.x, data.originalPosition.y, data.originalPosition.z, player.getYRot(), player.getXRot());
                         player.setGameMode(data.previousGameMode);
                         if (!data.nextDialogue.isEmpty()) {
                             ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);

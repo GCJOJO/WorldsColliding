@@ -115,14 +115,16 @@ public class DialogueCommand {
                                             context.getSource().sendSuccess(() -> Component.literal("Animation d'ascension lancée."), true);
                                         } else {
                                             if (animName.startsWith("sceal")) {
-                                                Vec3 camPos = boss.position().add(13.0, 3.0, 0.0);
+                                                Vec3 camPos = new Vec3(boss.getX() + 13.0, boss.getY() + 3.0, boss.getZ());
                                                 double dx = boss.getX() - camPos.x;
                                                 double dy = (boss.getY() + boss.getEyeHeight()) - camPos.y;
                                                 double dz = boss.getZ() - camPos.z;
                                                 float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
                                                 float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
 
-                                                ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 100, player.gameMode.getGameModeForPlayer(), "");
+                                                player.sendSystemMessage(Component.literal("[DEBUG] Téléportation de la caméra en : X=" + camPos.x + " Y=" + camPos.y + " Z=" + camPos.z));
+
+                                                ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), "");
                                                 player.setGameMode(GameType.SPECTATOR);
                                             }
 
@@ -161,7 +163,7 @@ public class DialogueCommand {
                                                 for (int i = 0; i < prefixes.length - 1; i++) {
                                                     if (path.startsWith(prefixes[i] + "_quartz")) {
                                                         String newPath = path.replace(prefixes[i] + "_quartz", prefixes[i+1] + "_quartz");
-                                                        Block newBlock = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("botania:" + newPath));
+                                                        Block newBlock = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("botania", newPath));
 
                                                         if (newBlock != null && newBlock != Blocks.AIR) {
                                                             BlockState newState = newBlock.defaultBlockState();
@@ -181,13 +183,13 @@ public class DialogueCommand {
                                         ResourceLocation itemLoc;
                                         Item fallbackItem;
                                         if (itemType.equals("dark")) {
-                                            itemLoc = new ResourceLocation("kubejs:dark_essence");
+                                            itemLoc = ResourceLocation.fromNamespaceAndPath("kubejs", "dark_essence");
                                             fallbackItem = Items.BLACK_DYE;
                                         } else if (itemType.equals("light")) {
-                                            itemLoc = new ResourceLocation("kubejs:light_essence");
+                                            itemLoc = ResourceLocation.fromNamespaceAndPath("kubejs", "light_essence");
                                             fallbackItem = Items.WHITE_DYE;
                                         } else {
-                                            itemLoc = new ResourceLocation("kubejs:seal_remnant");
+                                            itemLoc = ResourceLocation.fromNamespaceAndPath("kubejs", "seal_remnant");
                                             fallbackItem = Items.BLUE_DYE;
                                         }
 
@@ -203,7 +205,6 @@ public class DialogueCommand {
                                         level.addFreshEntity(itemEntity);
                                         ModEvents.addSealItem(itemEntity);
 
-                                        context.getSource().sendSuccess(() -> Component.literal("Effet de sceau joué : Blocs modifiés et item apparu !"), true);
                                     } else {
                                         context.getSource().sendFailure(Component.literal("Aucun Scourge trouvé à proximité pour jouer l'effet."));
                                     }

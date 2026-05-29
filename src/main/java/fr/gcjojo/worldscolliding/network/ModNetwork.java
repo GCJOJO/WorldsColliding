@@ -11,11 +11,13 @@ import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -122,26 +124,39 @@ public class ModNetwork {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
                     player.getPersistentData().putString("CurrentChapter", msg.saveSet);
-                    PlayerStoryDimensionData data = PlayerStoryDimensionData.load(player.getPersistentData().getCompound("StoryDimension"));
-                    player.teleportTo(data.storyDimensionSpawnpoint.x, data.storyDimensionSpawnpoint.y, data.storyDimensionSpawnpoint.z);
 
                     if (msg.action != null && msg.action.startsWith("seal_")) {
-                        String animName = "sceal" + msg.action.split("_")[1];
+                        String animNum = msg.action.replace("seal_", "");
+                        String animName = "sceal" + animNum;
 
+                        ServerLevel level = (ServerLevel) player.level();
                         AABB searchBox = player.getBoundingBox().inflate(50.0);
-                        List<ScourgeEntity> scourges = player.level().getEntitiesOfClass(ScourgeEntity.class, searchBox);
+                        List<LivingEntity> scourges = level.getEntitiesOfClass(LivingEntity.class, searchBox, e -> e instanceof ScourgeEntity || e instanceof AwakenedScourgeEntity);
 
                         if (!scourges.isEmpty()) {
-                            ScourgeEntity nearestScourge = scourges.get(0);
-                            nearestScourge.triggerAnim("seal_controller", animName);
+                            LivingEntity boss = scourges.get(0);
+                            Vec3 camPos = new Vec3(boss.getX() + 13.0, boss.getY() + 3.0, boss.getZ());
+                            double dx = boss.getX() - camPos.x;
+                            double dy = (boss.getY() + boss.getEyeHeight()) - camPos.y;
+                            double dz = boss.getZ() - camPos.z;
+                            float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+                            float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
+
+                            player.sendSystemMessage(Component.literal("[DEBUG] Téléportation cinématique : X=" + camPos.x + " Y=" + camPos.y + " Z=" + camPos.z));
+
+                            ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), msg.nextSet);
+                            player.setGameMode(GameType.SPECTATOR);
+
+                            if (boss instanceof software.bernie.geckolib.animatable.GeoEntity geoBoss) {
+                                geoBoss.triggerAnim("seal_controller", animName);
+                            }
+                            return;
+                        } else {
+                            player.sendSystemMessage(Component.literal("[DEBUG] Scourge introuvable pour l'animation de scellement."));
                         }
-
-                        GameType previousGameMode = player.gameMode.getGameModeForPlayer();
-                        player.setGameMode(GameType.SPECTATOR);
-
-                        ModEvents.freezePlayer(player.getUUID(), player.position(), 400, previousGameMode, msg.nextSet);
                     }
-                    else if (msg.nextSet != null && !msg.nextSet.isEmpty()) {
+
+                    if (msg.nextSet != null && !msg.nextSet.isEmpty()) {
                         ModNetwork.CHANNEL.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player),
                                 new OpenDialoguePacket(msg.nextSet));
                     }

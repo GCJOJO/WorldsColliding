@@ -109,7 +109,8 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.4" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.5" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.6" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.7" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.7" },
+    { "action": "command", "command": "scourge sealeffect remnant" }
   ],
 
   "chapter_1_no_set": [
@@ -136,7 +137,8 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.3" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.4" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.5" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.6" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.6" },
+    { "action": "command", "command": "scourge sealeffect remnant" }
   ],
 
   "chapter_2_no_set": [
@@ -167,7 +169,8 @@
 
   "chapter_3_yes_set": [
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter3_yes_set.1" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter3_yes_set.2" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter3_yes_set.2" },
+    { "action": "command", "command": "scourge sealeffect remnant" }
   ],
 
   "chapter_3_no_set": [
@@ -198,7 +201,8 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.4" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.5" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.6" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.7" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.7" },
+    { "action": "command", "command": "scourge sealeffect remnant" }
   ],
 
   "chapter_4_no_set": [
@@ -293,7 +297,7 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_light_set.4"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_light_set.5"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_light_set.6"  },
-    { "action": "command", "command": "scourge anim sceal8" },
+    { "action": "command", "command": "scourge animate sceal8" },
     { "action": "command", "command": "tellraw @s {\"translate\":\"worldscolliding.dialogue.the_one_ban_message\", \"color\" : \"yellow\"}" },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_light_set.7"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_light_set.8"  },
@@ -309,22 +313,20 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.1"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.2"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.3"  },
-    { "action": "command", "command": "scourge anim sceal8" }
+    { "action": "command", "command": "scourge animate sceal8" }
   ],
 
   "chapter_7_after_boss_dark_set": [
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.4"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.5"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.6"  },
-    { "action": "command", "command": "scourge animate scourge_fly" },
-    { "action": "command", "command": "tellraw @s {\"translate\":\"worldscolliding.dialogue.scourge_ban_message\", \"color\" : \"yellow\"}" },
-
+    { "action": "command", "command": "scourge animate ascend" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.7"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.8"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.9"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.10" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.11" },
-    { "action": "command", "command": "tellraw @s {\"translate\":\"worldscolliding.dialogue.the_one_ban_message\", \"color\" : \"yellow\"}" }
+    { "action": "command", "command": "scourge cinematic chat_the_one_leave" }
   ],
 
 
