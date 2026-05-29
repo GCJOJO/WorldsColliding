@@ -161,7 +161,6 @@
     "worldscolliding.dialogue.chapter_7_light_set.10" : "[Riant] L'homme là-haut fera en sorte que je revienne. Chaque fois que quelqu'un aura besoin de divertissement...",
     "worldscolliding.dialogue.chapter_7_light_set.11" : "Je serai là. Même pour mourir, tant que je peux vivre, tant que je peux expérimenter...",
 
-
     "worldscolliding.dialogue.chapter_7_dark_set.1" : "Ce que tu t'apprêtes à faire est une erreur. Tu vas causer plus de mal que nécessaire. Mais c'est ton destin.",
     "worldscolliding.dialogue.chapter_7_dark_set.2" : "Enfin. Voilà quelqu'un qui m'écoute.",
     "worldscolliding.dialogue.chapter_7_dark_set.3" : "Pour me libérer, il faut vaincre ma dernière incarnation. Je t'y emmène, je te demande sincèrement de me vaincre là-bas.",
@@ -176,6 +175,9 @@
 
     "worldscolliding.dialogue.new_game_plus_choice.1" : "Félicitations ! Vous avez fini ce modpack ! Vous pouvez dès à présent refaire le boss final.",
     "worldscolliding.dialogue.new_game_plus_choice.2" : "Quel fin souhaiteriez-vous faire ? Allez-vous prendre l'essence de lumière ou l'essence des ténèbres ?",
+
+    "worldscolliding.dialogue.the_one_ban_message" : "ELLE à été bannie.",
+    "worldscolliding.dialogue.scourge_ban_message": "Le Fléau à été banni.",
 
     "block.worldscolliding.story_portal": "Le portail trop cool :D"
 }

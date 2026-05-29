@@ -1,6 +1,8 @@
 package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
+import fr.gcjojo.worldscolliding.events.ModEvents;
+import fr.gcjojo.worldscolliding.network.ModNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -46,14 +48,8 @@ import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import fr.gcjojo.worldscolliding.ModSounds;
-import fr.gcjojo.worldscolliding.events.ModEvents;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
@@ -314,9 +310,13 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     CompoundTag playerData = player.getPersistentData();
 
                     boolean isLight = playerData.getBoolean("LightEssence");
+                    String setToPlay = isLight ? "chapter_7_after_boss_light_set" : "chapter_7_after_boss_dark_set";
+
                     playerData.remove("LightEssence");
                     playerData.putBoolean("RespawnsScourge", isLight);
-                    playerData.putString("CurrentChapter", isLight ? "end_game_light_route" : "end_game_dark_route");
+
+                    playerData.putString("CurrentChapter", setToPlay);
+                    ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(setToPlay), (ServerPlayer) player);
                 }
 
                 this.discard();
