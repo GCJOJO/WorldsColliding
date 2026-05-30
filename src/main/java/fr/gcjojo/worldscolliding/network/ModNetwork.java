@@ -221,7 +221,7 @@ public class ModNetwork {
                 boss.setYRot(yRot);
 
                 boss.teleportTo((ServerLevel) level, bossSpawnPos.x, bossSpawnPos.y + 1.5, bossSpawnPos.z, Set.of(), xRot, yRot);
-                scourge.getPersistentData().putBoolean("BossBattle", isLight);
+                scourge.getPersistentData().putBoolean("BossBattle", isLight); 
                 boss.getPersistentData().putUUID("Player", player.getUUID());
             });
         }

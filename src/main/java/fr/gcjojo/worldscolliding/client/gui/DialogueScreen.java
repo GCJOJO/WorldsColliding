@@ -316,6 +316,9 @@ public class DialogueScreen extends Screen {
     @Override
     public boolean shouldCloseOnEsc() { return false; }
 
+    @Override
+    public boolean isPauseScreen() { return false; }
+
     public void skipDialogue(){
         while(actionIndex < dialogueActions.size() && dialogueActions.get(actionIndex).isSkippable())
             advanceDialogue();

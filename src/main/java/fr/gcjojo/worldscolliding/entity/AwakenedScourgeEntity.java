@@ -3,6 +3,7 @@ package fr.gcjojo.worldscolliding.entity;
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -65,7 +66,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     public static final EntityDataAccessor<Boolean> IS_DYING = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.BOOLEAN);
     public static final EntityDataAccessor<Boolean> IS_PLAYING_MUSIC = SynchedEntityData.defineId(AwakenedScourgeEntity.class, EntityDataSerializers.BOOLEAN);
 
-    private final ServerBossEvent bossEvent = (ServerBossEvent)(new ServerBossEvent(Component.literal("The Awakened Scourge"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
+    private final ServerBossEvent bossEvent = (ServerBossEvent)(new ServerBossEvent(Component.translatable("boss.worldscolliding.awakened_scourge"), BossEvent.BossBarColor.PURPLE, BossEvent.BossBarOverlay.PROGRESS)).setDarkenScreen(true);
 
     public int attackTick = 0;
     private int spellChoice = 0;
@@ -312,7 +313,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     playerData.remove("LightEssence");
                     playerData.putBoolean("RespawnsScourge", isLight);
                     String setName = isLight ? "chapter_7_after_boss_light_set" : "chapter_7_after_boss_dark_set";
-                    playerData.putString("CurrentChapter", setName); 
+                    playerData.putString("CurrentChapter", setName);
                     ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(setName), (ServerPlayer) player);
                 }
 
@@ -390,7 +391,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, aabb);
                     for (ServerPlayer p : players) {
                         p.connection.send(new ClientboundSetTitlesAnimationPacket(10, 60, 20));
-                        p.connection.send(new ClientboundSetTitleTextPacket(Component.literal("§4The Scourge")));
+                        p.connection.send(new ClientboundSetTitleTextPacket(Component.translatable("title.worldscolliding.scourge_title").withStyle(ChatFormatting.DARK_RED)));
                         this.entityData.set(IS_PLAYING_MUSIC, true);
                     }
 

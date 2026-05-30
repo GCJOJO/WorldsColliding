@@ -49,7 +49,7 @@ public class DialogueCommand {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         // Load chapters dynamically
-        List<String> chapters = Arrays.asList("dogcheck", "credits", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_5_6_seal_set", "chapter_5_6_seal_ask", "chapter_7_prologue_set", "chapter_7_light_set", "chapter_7_dark_set");
+        List<String> chapters = Arrays.asList("dogcheck", "credits", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_set", "chapter_5_past_set", "chapter_5_set", "chapter_5_ask", "chapter_6_set", "chapter_6_ask", "chapter_7_prologue_set", "chapter_7_light_set", "chapter_7_dark_set");
         List<String> animations = Arrays.asList("sceal1", "sceal2", "sceal3", "sceal4", "sceal5", "sceal6", "sceal7", "sceal8", "ascend");
         List<String> cinematics = Arrays.asList("laugh", "tp_effect");
         List<String> sealTypes = Arrays.asList("remnant", "dark", "light");
@@ -72,8 +72,23 @@ public class DialogueCommand {
                                 .executes(context -> {
                                     ServerPlayer player = context.getSource().getPlayerOrException();
                                     String chapterName = StringArgumentType.getString(context, "chapterName");
+
+                                    if(chapterName.equalsIgnoreCase("chapter_5_6_set")){
+                                        if(!player.getPersistentData().contains("Chapter5") || !player.getPersistentData().getBoolean("Chapter5"))
+                                        {
+                                            chapterName = "chapter_5_set";
+                                            player.getPersistentData().putBoolean("Chapter5", true);
+                                        }
+                                        else
+                                        {
+                                            chapterName = "chapter_6_set";
+                                            player.getPersistentData().putBoolean("Chapter5", false);
+                                        }
+                                    }
+
                                     player.getPersistentData().putString("CurrentChapter", chapterName);
-                                    context.getSource().sendSuccess(() -> Component.literal("Chapitre mis à jour avec succès : " + chapterName), true);
+                                    String finalChapterName = chapterName;
+                                    context.getSource().sendSuccess(() -> Component.literal("Chapitre mis à jour avec succès : " + finalChapterName), true);
                                     return 1;
                                 })))
         );

@@ -209,71 +209,76 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_no_set.1" }
   ],
 
-  "chapter_5_6_past_set": [
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_set.1" },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_set.2" },
-    { "action": "choice", "option1": "worldscolliding.dialogue.choice.accept", "action1": "none", "next1": "chapter_5_6_past_accept_set", "save1": "chapter_5_6_seal_set", "option2": "worldscolliding.dialogue.choice.refuse", "action2": "none", "next2": "chapter_5_6_seal_set", "save2": "chapter_5_6_seal_set" }
+  "chapter_5_set": [
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_set.1" },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_set.2" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.accept", "action1": "none", "next1": "chapter_5_past_accept_set", "save1": "chapter_5_seal_set", "option2": "worldscolliding.dialogue.choice.refuse", "action2": "none", "next2": "chapter_5_seal_ask", "save2": "chapter_5_seal_ask" }
   ],
 
-  "chapter_5_6_past_accept_set": [
+  "chapter_5_past_accept_set": [
     { "action": "fade", "from": "00000000", "to": "FF000000", "time": 10},
     { "action": "wait", "time":  20 },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.1"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.2"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.3"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.4"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.5"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.6"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.7"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.8"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.9"  },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.10" },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.1"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.2"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.3"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.4"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.5"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.6"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.7"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.8"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.9"  },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.10" },
     { "action": "clear" },
     { "action": "fade", "from": "FF000000", "to": "00000000", "time": 10},
     { "action": "wait", "time":  10},
     { "action": "clear" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.11" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_past_accept_set.12" },
-    { "action": "change_set", "set": "chapter_5_6_seal_set" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.11" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_past_accept_set.12" },
+    { "action": "change_set", "set": "chapter_5_seal_ask" }
   ],
 
-  "chapter_5_6_seal_set": [
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_set.1" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_set.2" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_set.3" },
-    { "action": "change_set", "set": "chapter_5_6_seal_ask" }
+  "chapter_5_seal_ask": [
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_seal_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "none", "next1": "chapter_5_past_accept_set", "save1": "chapter_5_seal_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_5_seal_no_set", "save2": "chapter_5_seal_ask" }
   ],
 
-  "chapter_5_6_seal_ask": [
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_ask.text" },
-    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_5", "next1": "chapter_5_6_seal_yes_set", "save1": "chapter_7_prologue_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_5_6_seal_no_set", "save2": "chapter_5_6_seal_ask" }
+  "chapter_6_set": [
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_set.1" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_set.2" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_set.3" },
+    { "action": "change_set", "set": "chapter_6_seal_ask" }
   ],
 
-  "chapter_5_6_seal_no_set": [
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_no_set.1" }
+  "chapter_6_seal_ask": [
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_ask.text" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_6", "next1": "chapter_6_seal_yes_set", "save1": "chapter_7_prologue_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "chapter_6_seal_no_set", "save2": "chapter_6_seal_ask" }
   ],
 
-  "chapter_5_6_seal_yes_set": [
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.1" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.2" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.3" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.4" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.5" },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.6" },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.7" },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.8" },
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.9" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_yes_set.10" },
-    { "action": "choice", "option1": "worldscolliding.dialogue.choice.seal_light", "action1": "none", "next1": "chapter_5_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "worldscolliding.dialogue.choice.seal_dark", "action2": "none", "next2": "chapter_5_6_seal_dark_set", "save2": "chapter_7_dark_set" }
+  "chapter_6_seal_no_set": [
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_no_set.1" }
   ],
 
-  "chapter_5_6_seal_light_set": [
-    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_5_6_seal_light_set.1" },
+  "chapter_6_seal_yes_set": [
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.1" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.2" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.3" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.4" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.5" },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.6" },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.7" },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.8" },
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.9" },
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_yes_set.10" },
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.seal_light", "action1": "none", "next1": "chapter_6_seal_light_set", "save1": "chapter_7_light_set", "option2": "worldscolliding.dialogue.choice.seal_dark", "action2": "none", "next2": "chapter_6_seal_dark_set", "save2": "chapter_7_dark_set" }
+  ],
+
+  "chapter_6_seal_light_set": [
+    { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_6_seal_light_set.1" },
     { "action": "command", "command": "scourge sealeffect light" }
   ],
 
-  "chapter_5_6_seal_dark_set": [
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_6_seal_dark_set.1" },
+  "chapter_6_seal_dark_set": [
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_6_seal_dark_set.1" },
     { "action": "command", "command": "scourge sealeffect dark" }
   ],
 
