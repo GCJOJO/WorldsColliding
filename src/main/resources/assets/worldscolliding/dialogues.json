@@ -83,7 +83,8 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.10" },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter0_set.11" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.12" },
-    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.13" }
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.13" },
+    { "action": "command", "command": "scourge sealeffect remnant" }
   ],
 
   "chapter_1_set": [
