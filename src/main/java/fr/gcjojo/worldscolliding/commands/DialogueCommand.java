@@ -54,7 +54,7 @@ public class DialogueCommand {
         List<String> cinematics = Arrays.asList("laugh", "tp_effect");
         List<String> sealTypes = Arrays.asList("remnant", "dark", "light");
 
-        event.getDispatcher().register(Commands.literal("dialogue")
+        event.getDispatcher().register(Commands.literal("dialogue").requires(commandSourceStack -> commandSourceStack.hasPermission(4))
                 .then(Commands.literal("play")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();
@@ -93,7 +93,7 @@ public class DialogueCommand {
                                 })))
         );
 
-        event.getDispatcher().register(Commands.literal("scourge")
+        event.getDispatcher().register(Commands.literal("scourge").requires(commandSourceStack -> commandSourceStack.hasPermission(4))
                 .then(Commands.literal("cinematic")
                         .then(Commands.argument("action", StringArgumentType.string())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(cinematics, builder))
