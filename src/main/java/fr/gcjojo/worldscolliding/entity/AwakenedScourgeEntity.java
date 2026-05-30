@@ -1,14 +1,19 @@
 package fr.gcjojo.worldscolliding.entity;
 
+import fr.gcjojo.worldscolliding.ModSounds;
+import fr.gcjojo.worldscolliding.events.ModEvents;
+import fr.gcjojo.worldscolliding.network.ModNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundSetTitleTextPacket;
 import net.minecraft.network.protocol.game.ClientboundSetTitlesAnimationPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -34,28 +39,21 @@ import net.minecraft.world.entity.projectile.DragonFireball;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
 import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import fr.gcjojo.worldscolliding.ModSounds;
-import fr.gcjojo.worldscolliding.events.ModEvents;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
@@ -261,7 +259,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                         ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, prevMode, "");
                     }
 
-                    Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("terramity:chthonian_void"));
+                    Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("terramity:chthonian_void"));
                     if (chthonianVoid != null && chthonianVoid != Blocks.AIR) {
                         BlockPos center = this.blockPosition();
                         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-30, -10, -30), center.offset(30, 20, 30))) {
@@ -306,6 +304,18 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 }
             }
             if (this.deathTimer >= 400) {
+                if(this.getPersistentData().contains("Player")){
+                    Player player = this.level().getPlayerByUUID(this.getPersistentData().getUUID("Player"));
+                    CompoundTag playerData = player.getPersistentData();
+
+                    boolean isLight = playerData.getBoolean("LightEssence");
+                    playerData.remove("LightEssence");
+                    playerData.putBoolean("RespawnsScourge", isLight);
+                    String setName = isLight ? "chapter_7_after_boss_light_set" : "chapter_7_after_boss_dark_set";
+                    playerData.putString("CurrentChapter", setName); 
+                    ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(setName), (ServerPlayer) player);
+                }
+
                 this.discard();
             }
             return;
@@ -384,8 +394,9 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                         this.entityData.set(IS_PLAYING_MUSIC, true);
                     }
 
+
                     if (this.level() instanceof ServerLevel serverLevel) {
-                        Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("terramity:chthonian_void"));
+                        Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("terramity:chthonian_void"));
                         if (chthonianVoid != null && chthonianVoid != Blocks.AIR) {
                             BlockPos center = this.blockPosition();
                             for (BlockPos pos : BlockPos.betweenClosed(center.offset(-30, -10, -30), center.offset(30, 20, 30))) {

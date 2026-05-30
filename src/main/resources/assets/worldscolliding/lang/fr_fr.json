@@ -189,6 +189,10 @@
 
     // the one left the game, fin
 
+    "worldscolliding.dialogue.the_one_ban_message" : "ELLE à été bannie.",
+    "worldscolliding.dialogue.the_one_left_message" : "ELLE a quitté la partie.",
+    "worldscolliding.dialogue.scourge_ban_message": "Le Fléau à été banni.",
+
     "worldscolliding.dialogue.new_game_plus_choice.1" : "Félicitations ! Vous avez fini ce modpack ! Vous pouvez dès à présent refaire le boss final.",
     "worldscolliding.dialogue.new_game_plus_choice.2" : "Quel fin souhaiteriez-vous faire ? Allez-vous prendre l'essence de lumière ou l'essence des ténèbres ?",
 

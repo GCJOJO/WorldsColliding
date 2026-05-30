@@ -48,7 +48,8 @@ public class DialogueCommand {
 
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
-        List<String> chapters = Arrays.asList("test_image", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_7_prologue_set");
+        // Load chapters dynamically
+        List<String> chapters = Arrays.asList("dogcheck", "credits", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_past_set", "chapter_5_6_seal_set", "chapter_5_6_seal_ask", "chapter_7_prologue_set", "chapter_7_light_set", "chapter_7_dark_set");
         List<String> animations = Arrays.asList("sceal1", "sceal2", "sceal3", "sceal4", "sceal5", "sceal6", "sceal7", "sceal8", "ascend");
         List<String> cinematics = Arrays.asList("laugh", "tp_effect");
         List<String> sealTypes = Arrays.asList("remnant", "dark", "light");

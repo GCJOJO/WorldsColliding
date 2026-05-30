@@ -1,9 +1,7 @@
 package fr.gcjojo.worldscolliding.network;
 
-import com.mojang.brigadier.ParseResults;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.gcjojo.worldscolliding.ModEntry;
-import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
@@ -28,6 +26,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class ModNetwork {
@@ -202,21 +201,26 @@ public class ModNetwork {
 
             level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
                 Vec3 bossSpawnPos = scourge.getPosition(1.0f).add(0d, 2.0d, 0d);
-                if(isLight){
+                float xRot = scourge.getXRot();
+                float yRot = scourge.getYRot();
+                if(isLight)
                     scourge.discard();
 
-                    CompoundTag scourgeRespawnPosTag = new CompoundTag();
-                    scourgeRespawnPosTag.putDouble("x", bossSpawnPos.x);
-                    scourgeRespawnPosTag.putDouble("y", bossSpawnPos.y);
-                    scourgeRespawnPosTag.putDouble("z", bossSpawnPos.z);
+                CompoundTag scourgeRespawnPosTag = new CompoundTag();
+                scourgeRespawnPosTag.putDouble("x", bossSpawnPos.x);
+                scourgeRespawnPosTag.putDouble("y", bossSpawnPos.y);
+                scourgeRespawnPosTag.putDouble("z", bossSpawnPos.z);
 
-                    player.getPersistentData().put("ScourgeRespawnPosition", scourgeRespawnPosTag);
-                }
+                player.getPersistentData().put("ScourgeRespawnPosition", scourgeRespawnPosTag);
 
                 level.explode(scourge, bossSpawnPos.x, bossSpawnPos.y, bossSpawnPos.z, 10.0f, Level.ExplosionInteraction.NONE);
                 Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
                 level.addFreshEntity(boss);
                 boss.setPos(bossSpawnPos);
+                boss.setXRot(xRot);
+                boss.setYRot(yRot);
+
+                boss.teleportTo((ServerLevel) level, bossSpawnPos.x, bossSpawnPos.y + 1.5, bossSpawnPos.z, Set.of(), xRot, yRot);
                 scourge.getPersistentData().putBoolean("BossBattle", isLight);
                 boss.getPersistentData().putUUID("Player", player.getUUID());
             });

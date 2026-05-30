@@ -1,22 +1,25 @@
 package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
+import fr.gcjojo.worldscolliding.network.ModNetwork;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -24,8 +27,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
-import net.minecraft.world.entity.EntityDimensions;
-import net.minecraft.world.entity.Pose;
 
 public class ScourgeEntity extends PathfinderMob implements GeoEntity {
 
@@ -59,6 +60,34 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     public void tick() {
         super.tick();
 
+        if(level().isClientSide())
+            return;
+
+        level().getEntities(this, getBoundingBox().inflate(5), entity -> entity instanceof Player).forEach(player -> {
+            if(!(player instanceof Player))
+                return;
+
+            if(!this.getPersistentData().contains("Player"))
+                this.getPersistentData().putUUID("Player", player.getUUID());
+
+            boolean isInDialogue = player.getPersistentData().getBoolean("IsInDialogue");
+            if(isInDialogue)
+                return;
+
+            String currentChapter = player.getPersistentData().getString("CurrentChapter");
+            String lastReadChapter = player.getPersistentData().getString("LastReadChapter");
+            if (currentChapter.isEmpty()) {
+                currentChapter = "chapter_0_set";
+                player.getPersistentData().putString("CurrentChapter", currentChapter);
+            }
+
+            if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
+            {
+                player.getPersistentData().putBoolean("IsInDialogue", true);
+                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), (ServerPlayer) player);
+            }
+        });
+
         if (this.entityData.get(ASCENDING)) {
             this.ascendTimer++;
             this.setDeltaMovement(0, 0.05, 0);
@@ -80,7 +109,21 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                 if (this.ascendTimer >= 300) {
                     this.playSound(SoundEvents.LIGHTNING_BOLT_THUNDER, 1.0f, 1.0f);
                     serverLevel.sendParticles(ParticleTypes.EXPLOSION_EMITTER, this.getX(), this.getY(), this.getZ(), 2, 0, 0, 0, 0);
-                    serverLevel.getServer().getPlayerList().broadcastSystemMessage(Component.translatable("commands.ban.success", Component.literal("The Scourge")).withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC), false);
+                    CompoundTag mobNbt = this.getPersistentData();
+                    if(mobNbt.contains("Player")){
+                        Player player = serverLevel.getPlayerByUUID(mobNbt.getUUID("Player"));
+                        if(player != null){
+                            ServerPlayer serverPlayer = (ServerPlayer) player;
+                            MutableComponent msg = Component.translatable("worldscolliding.dialogue.scourge_ban_message").withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC);
+                            serverPlayer.sendSystemMessage(msg, false);
+
+                            serverPlayer.getPersistentData().putString("CurrentChapter", "chapter_7_after_scourge_banned_set");
+                            serverPlayer.getPersistentData().putBoolean("RespawnsScourge", true);
+                            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("chapter_7_after_scourge_banned_set"), serverPlayer);
+                        }
+
+                    }
+
                     this.discard();
                 }
             }

@@ -178,7 +178,8 @@
     "worldscolliding.dialogue.new_game_plus_choice.2" : "But you will need to choose once again : Light Essence or Dark Essence ?",
 
     "worldscolliding.dialogue.the_one_ban_message" : "The One has been banned.",
-    "worldscolliding.dialogue.scourge_ban_message": "The Scourge has been banned",
+    "worldscolliding.dialogue.the_one_left_message" : "The One has left the game.",
+    "worldscolliding.dialogue.scourge_ban_message": "The Scourge has been banned.",
 
     "block.worldscolliding.story_portal": "Story Portal"
 }
