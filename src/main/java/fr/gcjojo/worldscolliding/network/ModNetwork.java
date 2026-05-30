@@ -134,14 +134,12 @@ public class ModNetwork {
 
                         if (!scourges.isEmpty()) {
                             LivingEntity boss = scourges.get(0);
-                            Vec3 camPos = new Vec3(boss.getX() + 13.0, boss.getY() + 3.0, boss.getZ());
+                            Vec3 camPos = new Vec3(boss.getX() + 13.0, boss.getY() + 2.0, boss.getZ());
                             double dx = boss.getX() - camPos.x;
                             double dy = (boss.getY() + boss.getEyeHeight()) - camPos.y;
                             double dz = boss.getZ() - camPos.z;
                             float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
                             float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
-
-                            player.sendSystemMessage(Component.literal("[DEBUG] Téléportation cinématique : X=" + camPos.x + " Y=" + camPos.y + " Z=" + camPos.z));
 
                             ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), msg.nextSet);
                             player.setGameMode(GameType.SPECTATOR);
@@ -151,7 +149,7 @@ public class ModNetwork {
                             }
                             return;
                         } else {
-                            player.sendSystemMessage(Component.literal("[DEBUG] Scourge introuvable pour l'animation de scellement."));
+                            player.sendSystemMessage(Component.literal("Scourge introuvable pour l'animation de scellement."));
                         }
                     }
 

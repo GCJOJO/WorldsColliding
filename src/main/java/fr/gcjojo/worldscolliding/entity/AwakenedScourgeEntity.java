@@ -75,6 +75,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     private boolean hasSpawnedPhantomsPhase1 = false;
     private boolean hasSpawnedPhantomsPhase2 = false;
 
+    private BlockPos arenaCenter = null;
+
     private final Map<UUID, GameType> previousGameModes = new HashMap<>();
 
     public AwakenedScourgeEntity(EntityType<? extends Monster> type, Level level) {
@@ -125,6 +127,24 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
         this.entityData.define(SPAWNED, false);
         this.entityData.define(IS_DYING, false);
         this.entityData.define(IS_PLAYING_MUSIC, false);
+    }
+
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        if (this.arenaCenter != null) {
+            compound.putInt("ArenaCenterX", this.arenaCenter.getX());
+            compound.putInt("ArenaCenterY", this.arenaCenter.getY());
+            compound.putInt("ArenaCenterZ", this.arenaCenter.getZ());
+        }
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("ArenaCenterX")) {
+            this.arenaCenter = new BlockPos(compound.getInt("ArenaCenterX"), compound.getInt("ArenaCenterY"), compound.getInt("ArenaCenterZ"));
+        }
     }
 
     @Override
@@ -246,7 +266,9 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                 if (this.deathTimer == 1) {
                     List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, this.getBoundingBox().inflate(64.0));
 
-                    Vec3 camPos = this.position().add(13.0, 3.0, 0.0);
+                    Vec3 lookDir = Vec3.directionFromRotation(0, this.getYRot());
+                    Vec3 camPos = this.position().add(lookDir.scale(10.0)).add(0, 3.0, 0);
+
                     double dx = this.getX() - camPos.x;
                     double dy = (this.getY() + this.getEyeHeight()) - camPos.y;
                     double dz = this.getZ() - camPos.z;
@@ -262,7 +284,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
 
                     Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("terramity:chthonian_void"));
                     if (chthonianVoid != null && chthonianVoid != Blocks.AIR) {
-                        BlockPos center = this.blockPosition();
+                        BlockPos center = this.arenaCenter != null ? this.arenaCenter : this.blockPosition();
                         for (BlockPos pos : BlockPos.betweenClosed(center.offset(-30, -10, -30), center.offset(30, 20, 30))) {
                             if (serverLevel.getBlockState(pos).is(chthonianVoid)) {
                                 serverLevel.setBlockAndUpdate(pos, Blocks.STONE.defaultBlockState());
@@ -387,6 +409,8 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
             if (currentState == 1) {
                 this.attackTick++;
                 if (this.attackTick == 400) {
+                    this.arenaCenter = this.blockPosition();
+
                     AABB aabb = new AABB(this.blockPosition()).inflate(50);
                     List<ServerPlayer> players = this.level().getEntitiesOfClass(ServerPlayer.class, aabb);
                     for (ServerPlayer p : players) {
@@ -399,7 +423,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     if (this.level() instanceof ServerLevel serverLevel) {
                         Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("terramity:chthonian_void"));
                         if (chthonianVoid != null && chthonianVoid != Blocks.AIR) {
-                            BlockPos center = this.blockPosition();
+                            BlockPos center = this.arenaCenter;
                             for (BlockPos pos : BlockPos.betweenClosed(center.offset(-30, -10, -30), center.offset(30, 20, 30))) {
                                 if (serverLevel.getBlockState(pos).is(Blocks.STONE)) {
                                     serverLevel.setBlockAndUpdate(pos, chthonianVoid.defaultBlockState());
