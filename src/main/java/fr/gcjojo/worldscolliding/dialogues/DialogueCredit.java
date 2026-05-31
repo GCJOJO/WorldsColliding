@@ -2,16 +2,16 @@ package fr.gcjojo.worldscolliding.dialogues;
 
 import com.eliotlash.mclib.utils.MathUtils;
 import com.google.gson.JsonObject;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import fr.gcjojo.worldscolliding.ModEntry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.util.FastColor;
+import net.minecraft.core.Vec3i;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.core.Vec3i;
-import net.minecraftforge.common.util.TextTable;
+import net.minecraft.util.FastColor;
 
 public class DialogueCredit extends DialogueAction {
     enum DisplayState
@@ -128,6 +128,7 @@ public class DialogueCredit extends DialogueAction {
             return;
 
         this.alpha = 0;
+        RenderSystem.enableBlend();
         PoseStack pose = graphics.pose();
         pose.pushPose();
         switch (state)
@@ -159,28 +160,32 @@ public class DialogueCredit extends DialogueAction {
             }
         }
 
-        MutableComponent textComponent = Component.translatable(this.text);
-
-        int color = FastColor.ARGB32.color(this.alpha, this.color.getX(), this.color.getY(), this.color.getZ());
-
-        //ModEntry.getLogger().info("Alpha : %d, Red : %d, Green : %d, Blue : %d".formatted(this.alpha, this.color.getX(), this.color.getY(), this.color.getZ()));
-
-        int xPos;
-        switch(this.alignment)
+        if(this.alpha >= 8)
         {
-            case LEFT       -> xPos = (int)(screen.width * (this.xPercentage * 0.01f));
-            case RIGHT      -> xPos = (int)(screen.width * (this.xPercentage * 0.01f) - (font.width(textComponent) * scale));
-            default         -> xPos = (int)(screen.width * (this.xPercentage * 0.01f) - (font.width(textComponent) * scale * 0.5f));    // CENTER ALIGNMENT
+            MutableComponent textComponent = Component.translatable(this.text);
+
+            int color = FastColor.ARGB32.color(this.alpha, this.color.getX(), this.color.getY(), this.color.getZ());
+
+            //ModEntry.getLogger().info("Alpha : %d, Red : %d, Green : %d, Blue : %d".formatted(this.alpha, this.color.getX(), this.color.getY(), this.color.getZ()));
+
+            int xPos;
+            switch(this.alignment)
+            {
+                case LEFT       -> xPos = (int)(screen.width * (this.xPercentage * 0.01f));
+                case RIGHT      -> xPos = (int)(screen.width * (this.xPercentage * 0.01f) - (font.width(textComponent) * scale));
+                default         -> xPos = (int)(screen.width * (this.xPercentage * 0.01f) - (font.width(textComponent) * scale * 0.5f));    // CENTER ALIGNMENT
+            }
+
+            int yPos = (int)(screen.height * (this.yPercentage * 0.01f));
+
+            pose.translate(xPos, yPos, 1.0f);
+            pose.scale(this.scale, this.scale, 1.0f);
+            graphics.drawString(font, textComponent, 0, 0, color);
         }
-
-        int yPos = (int)(screen.height * (this.yPercentage * 0.01f));
-
-        pose.translate(xPos, yPos, 1.0f);
-        pose.scale(this.scale, this.scale, 1.0f);
-        graphics.drawString(font, textComponent, 0, 0, color);
         pose.popPose();
 
         currentTime += partialTick;
+        RenderSystem.disableBlend();
     }
 
     @Override
@@ -197,4 +202,7 @@ public class DialogueCredit extends DialogueAction {
     public boolean isBlocking() {
         return false;
     }
+
+    @Override
+    public boolean isSkippable() { return true; }
 }

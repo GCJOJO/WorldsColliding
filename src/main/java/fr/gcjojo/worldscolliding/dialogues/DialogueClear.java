@@ -57,4 +57,7 @@ public class DialogueClear extends DialogueAction {
     public boolean isBlocking() {
         return true;
     }
+
+    @Override
+    public boolean isSkippable() { return true; }
 }

@@ -1,16 +1,21 @@
 package fr.gcjojo.worldscolliding.network;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.gcjojo.worldscolliding.ModEntry;
-import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.events.ModEvents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -21,6 +26,7 @@ import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class ModNetwork {
@@ -51,6 +57,12 @@ public class ModNetwork {
                 .encoder(DialogueCompletedPacket::encode)
                 .decoder(DialogueCompletedPacket::new)
                 .consumerMainThread(DialogueCompletedPacket::handle)
+                .add();
+
+        CHANNEL.messageBuilder(DialogueCommandPacket.class, packetId++, NetworkDirection.PLAY_TO_SERVER)
+                .encoder(DialogueCommandPacket::encode)
+                .decoder(DialogueCommandPacket::new)
+                .consumerMainThread(DialogueCommandPacket::handle)
                 .add();
     }
 
@@ -111,26 +123,37 @@ public class ModNetwork {
                 ServerPlayer player = ctx.get().getSender();
                 if (player != null) {
                     player.getPersistentData().putString("CurrentChapter", msg.saveSet);
-                    PlayerStoryDimensionData data = PlayerStoryDimensionData.load(player.getPersistentData().getCompound("StoryDimension"));
-                    player.teleportTo(data.storyDimensionSpawnpoint.x, data.storyDimensionSpawnpoint.y, data.storyDimensionSpawnpoint.z);
 
                     if (msg.action != null && msg.action.startsWith("seal_")) {
-                        String animName = "sceal" + msg.action.split("_")[1];
+                        String animNum = msg.action.replace("seal_", "");
+                        String animName = "sceal" + animNum;
 
+                        ServerLevel level = (ServerLevel) player.level();
                         AABB searchBox = player.getBoundingBox().inflate(50.0);
-                        List<ScourgeEntity> scourges = player.level().getEntitiesOfClass(ScourgeEntity.class, searchBox);
+                        List<LivingEntity> scourges = level.getEntitiesOfClass(LivingEntity.class, searchBox, e -> e instanceof ScourgeEntity || e instanceof AwakenedScourgeEntity);
 
                         if (!scourges.isEmpty()) {
-                            ScourgeEntity nearestScourge = scourges.get(0);
-                            nearestScourge.triggerAnim("seal_controller", animName);
+                            LivingEntity boss = scourges.get(0);
+                            Vec3 camPos = new Vec3(boss.getX() + 13.0, boss.getY() + 2.0, boss.getZ());
+                            double dx = boss.getX() - camPos.x;
+                            double dy = (boss.getY() + boss.getEyeHeight()) - camPos.y;
+                            double dz = boss.getZ() - camPos.z;
+                            float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+                            float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
+
+                            ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), msg.nextSet);
+                            player.setGameMode(GameType.SPECTATOR);
+
+                            if (boss instanceof software.bernie.geckolib.animatable.GeoEntity geoBoss) {
+                                geoBoss.triggerAnim("seal_controller", animName);
+                            }
+                            return;
+                        } else {
+                            player.sendSystemMessage(Component.literal("Scourge introuvable pour l'animation de scellement."));
                         }
-
-                        GameType previousGameMode = player.gameMode.getGameModeForPlayer();
-                        player.setGameMode(GameType.SPECTATOR);
-
-                        ModEvents.freezePlayer(player.getUUID(), player.position(), 400, previousGameMode, msg.nextSet);
                     }
-                    else if (msg.nextSet != null && !msg.nextSet.isEmpty()) {
+
+                    if (msg.nextSet != null && !msg.nextSet.isEmpty()) {
                         ModNetwork.CHANNEL.send(net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> player),
                                 new OpenDialoguePacket(msg.nextSet));
                     }
@@ -163,22 +186,76 @@ public class ModNetwork {
                     player.getPersistentData().putString("LastReadChapter", msg.setName);
 
                     if(msg.setName.equals("chapter_7_light_set") || msg.setName.equals("chapter_7_dark_set"))
-                        spawnBoss(player);
+                        spawnBoss(player, msg.setName.contains("light"));
                 }
             });
             ctx.get().setPacketHandled(true);
         }
 
-        public static void spawnBoss(ServerPlayer player){
+        public static void spawnBoss(ServerPlayer player, boolean isLight){
             Level level = player.level();
+
+            player.getPersistentData().putBoolean("LightEssence", isLight);
+
             level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
-                Vec3 bossSpawnPos = scourge.getPosition(1.0f);
+                Vec3 bossSpawnPos = scourge.getPosition(1.0f).add(0d, 2.0d, 0d);
+                float xRot = scourge.getXRot();
+                float yRot = scourge.getYRot();
+                if(isLight)
+                    scourge.discard();
+
+                CompoundTag scourgeRespawnPosTag = new CompoundTag();
+                scourgeRespawnPosTag.putDouble("x", bossSpawnPos.x);
+                scourgeRespawnPosTag.putDouble("y", bossSpawnPos.y);
+                scourgeRespawnPosTag.putDouble("z", bossSpawnPos.z);
+
+                player.getPersistentData().put("ScourgeRespawnPosition", scourgeRespawnPosTag);
+
                 level.explode(scourge, bossSpawnPos.x, bossSpawnPos.y, bossSpawnPos.z, 10.0f, Level.ExplosionInteraction.NONE);
                 Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
                 level.addFreshEntity(boss);
                 boss.setPos(bossSpawnPos);
-                scourge.remove(Entity.RemovalReason.DISCARDED);
+                boss.setXRot(xRot);
+                boss.setYRot(yRot);
+
+                boss.teleportTo((ServerLevel) level, bossSpawnPos.x, bossSpawnPos.y + 1.5, bossSpawnPos.z, Set.of(), xRot, yRot);
+                scourge.getPersistentData().putBoolean("BossBattle", isLight); 
+                boss.getPersistentData().putUUID("Player", player.getUUID());
             });
+        }
+    }
+
+    public static class DialogueCommandPacket {
+        private String command;
+
+        public DialogueCommandPacket(String command) {
+            this.command = command;
+        }
+
+        public DialogueCommandPacket(FriendlyByteBuf buf) {
+            this.command = buf.readUtf();
+        }
+
+        public void encode(FriendlyByteBuf buf) {
+            buf.writeUtf(this.command);
+        }
+
+        public static void handle(DialogueCommandPacket msg, Supplier<NetworkEvent.Context> ctx){
+            ctx.get().enqueueWork(() -> {
+                ServerPlayer player = ctx.get().getSender();
+                if(player == null) return;
+                MinecraftServer server = player.getServer();
+                if(server == null) return;
+
+                String formattedCommand = "execute positioned as %s run %s".formatted(player.getName().getString(), msg.command);
+                try {
+                    int success = server.getCommands().getDispatcher().execute(formattedCommand, server.createCommandSourceStack().withEntity(player).withLevel((ServerLevel) player.level()));
+                    ModEntry.getLogger().warn(String.valueOf(success));
+                } catch (CommandSyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            ctx.get().setPacketHandled(true);
         }
     }
 }

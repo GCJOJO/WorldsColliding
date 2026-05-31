@@ -1,20 +1,21 @@
 package fr.gcjojo.worldscolliding;
 
+import com.mojang.logging.LogUtils;
+import fr.gcjojo.worldscolliding.blocks.ModBlocks;
+import fr.gcjojo.worldscolliding.client.AwakenedScourgeRenderer;
+import fr.gcjojo.worldscolliding.client.ScourgeRenderer;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
-import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
-import fr.gcjojo.worldscolliding.client.ScourgeRenderer;
-import fr.gcjojo.worldscolliding.client.AwakenedScourgeRenderer;
-import fr.gcjojo.worldscolliding.client.AwakenedScourgeModel;
+import fr.gcjojo.worldscolliding.items.ModItems;
+import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
-
-import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
@@ -23,7 +24,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -34,8 +37,6 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
 import org.slf4j.Logger;
 
 import java.util.Optional;
@@ -50,6 +51,8 @@ public class ModEntry
     {
         IEventBus modEventBus = context.getModEventBus();
 
+        ModBlocks.register(modEventBus);
+        ModItems.register(modEventBus);
         ModEntities.register(modEventBus);
         ModSounds.register(modEventBus);
 
@@ -111,11 +114,11 @@ public class ModEntry
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
     {
         Player player = event.getEntity();
-        LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
+        //LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
 
         if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
-            LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
+            //LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
             String dimension = event.getFrom().location().getPath();
             Vec3 playerPosition = player.getPosition(1.0f);
             CompoundTag playerPersistentData = player.getPersistentData();
@@ -127,6 +130,24 @@ public class ModEntry
                     playerData.playerPos = playerPosition;
                     playerPersistentData.put("StoryDimension", playerData.save());
                     player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
+
+                    if(playerPersistentData.contains("RespawnsScourge") && playerPersistentData.getBoolean("RespawnsScourge"))
+                    {
+                        CompoundTag respawnPosTag = playerPersistentData.getCompound("ScourgeRespawnPosition");
+
+                        int x = respawnPosTag.getInt("x");
+                        int y = respawnPosTag.getInt("y");
+                        int z = respawnPosTag.getInt("z");
+
+                        BlockPos respawnPos = new BlockPos(x, y, z);
+
+                        ScourgeEntity newScourge = new ScourgeEntity(ModEntities.SCOURGE.get(), player.level());
+                        newScourge.setPos(respawnPos.getX() + 0.5d, respawnPos.getY() - 2.0d, respawnPos.getZ() + 0.5d);
+                        player.level().addFreshEntity(newScourge);
+                        playerPersistentData.remove("ScourgeRespawnPosition");
+                        playerPersistentData.remove("RespawnsScourge");
+                        playerPersistentData.putString("CurrentChapter", "new_game_plus_choice");
+                    }
                     return;
                 }
             }
@@ -149,12 +170,24 @@ public class ModEntry
             StoryDimensionData.setLastSpot(newPlayerSpot);
             StoryDimensionData.save(server.overworld());
         }
+
+        if (event.getFrom() == ModDimensions.STORY_DIM_LEVEL_KEY){
+            if(event.getEntity().level().isClientSide() && !(player instanceof ServerPlayer))
+                return;
+
+            if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
+                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("credits"), (ServerPlayer) player);
+                player.getPersistentData().putBoolean("ShowCredits", false);
+
+                if(player.getPersistentData().contains("ScourgeRespawnPosition"))
+                    player.getPersistentData().putBoolean("RespawnsScourge", true);
+            }
+        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         event.enqueueWork(fr.gcjojo.worldscolliding.network.ModNetwork::register);
-        LOGGER.info("HELLO FROM COMMON SETUP");
     }
 
     @SubscribeEvent
@@ -167,11 +200,7 @@ public class ModEntry
     public static class ClientModEvents
     {
         @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event)
-        {
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-        }
+        public static void onClientSetup(FMLClientSetupEvent event) { }
 
         @SubscribeEvent
         public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {

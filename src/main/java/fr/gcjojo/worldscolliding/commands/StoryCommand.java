@@ -11,7 +11,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Objects;
@@ -30,7 +29,8 @@ public class StoryCommand {
         CompoundTag playerPersistentData = player.getPersistentData();
         if(player.level().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
-            if(playerPersistentData.contains("StoryDimension"))
+            return 0;
+            /*if(playerPersistentData.contains("StoryDimension"))
             {
                 PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
                 ServerLevel toLevel;
@@ -53,7 +53,7 @@ public class StoryCommand {
                 return 1;
             }
             player.teleportTo(player.getServer().overworld(), player.getX(), player.getY(), player.getZ(), Set.of(), 0.0f, 0.0f);
-            return 1;
+            return 1;*/
         }
 
         Vec3 playerPos = new Vec3(player.getX(), player.getY(), player.getZ());

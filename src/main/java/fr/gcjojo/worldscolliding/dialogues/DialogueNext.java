@@ -14,7 +14,7 @@ public class DialogueNext extends DialogueAction {
     @Override
     public void setup(DialogueScreen screen) {
         super.setup(screen);
-        screen.changeSet(nextSet);
+        screen.queueChangeSet(nextSet);
     }
 
     @Override
@@ -31,4 +31,7 @@ public class DialogueNext extends DialogueAction {
 
     @Override
     public boolean isBlocking() { return true; }
+
+    @Override
+    public boolean isSkippable() { return false; }
 }

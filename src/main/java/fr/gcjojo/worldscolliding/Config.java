@@ -1,19 +1,10 @@
 package fr.gcjojo.worldscolliding;
 
-import net.minecraft.core.Vec3i;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Mod.EventBusSubscriber(modid = ModEntry.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class Config
@@ -25,7 +16,7 @@ public class Config
 
     private static final ForgeConfigSpec.IntValue STORY_STRUCTURE_SIZE = BUILDER
             .comment("What the size of the structure in the story dimension is. This value is used to layout the grid of structures for each player.")
-            .defineInRange("story_structure_size", 61, 0, Integer.MAX_VALUE);
+            .defineInRange("story_structure_size", 1000, 0, Integer.MAX_VALUE);
 
     private static final ForgeConfigSpec.DoubleValue STORY_STRUCTURE_PLAYER_SPAWNPOINT_X = BUILDER
             .comment("The x position of the spawnpoint of players in the structure relatives to the structure's origin")

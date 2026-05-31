@@ -92,4 +92,7 @@ public class DialogueFading extends DialogueAction
 
     @Override
     public boolean isBlocking() { return false; }
+
+    @Override
+    public boolean isSkippable() { return true; }
 }
