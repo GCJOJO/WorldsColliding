@@ -131,6 +131,12 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
     }
 
     @Override
+    public boolean isPersistenceRequired(){ return true; }
+
+    @Override
+    public boolean requiresCustomPersistence() { return true; }
+
+    @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "controller", 0, event ->
                 event.setAndContinue(RawAnimation.begin().thenLoop("idle"))));
