@@ -13,7 +13,7 @@ Join our [discord](https://discord.gg/yMcCq7rWbs) !<br><br>
 Share your ideas or bug discoveries with us !<br>
 https://github.com/GCJOJO/WorldsColliding/issues <br>
 
-## Developping with this mod
+## Developing with this mod
 <ins>__How to build__</ins>:
 1) Install Java JDK 17
 2) Open command prompt or any IDE and run : 
@@ -21,13 +21,16 @@ https://github.com/GCJOJO/WorldsColliding/issues <br>
 3) Enjoy !
 
 <ins>__How to use the dialogue system__</ins>: <br>
-First create a datapack using this folder structure
+First create a resource pack using this folder structure
 ```
-    datapack-namespace/
-        lang/
-            en_us.json
-            any other language files...
-        dialogues.json
+    resourcepacks/
+        my_resourcepack/
+            assets/
+                 lang/
+                     en_us.json
+                     any other language files...
+                 dialogues.json
+            pack.mcmeta
 ```
 
 Inside dialogues.json define the different speakers that may speak in your dialogues.
@@ -64,14 +67,25 @@ Here is how you define a dialogue, there are multiple actions that can be define
    
       { "action": "wait", "time": 20 },
    
-      // clears any non blocking actions, 
+      // clears every actions, 
       { "action": "clear" }, 
-   
       //you may specify which action type to clear
       { "action": "clear", "cleared_action": "fade" }, 
    
       // displays an image on the screen, the width and height are the original size of the image, the image should be properly resized once shown to the player
       { "action": "image", "id": 0, "image": "my_resourcepack:textures/gui/my_cool_texture.png", "width": 64, "height": 64},
+      
+      // This actions move the image with id 0 with a duration of 80 ticks. 
+      // The image starts at a position of 10% of the screen and ends at 90% of the screen and blends from 0% transparency to 100%
+      { "action": "move_image", "id": 0, "start_x": 10, "start_y": 10, "end_x": 90, "end_y": 90, "alpha_start": 0, "alpha_end": 255, "time": 80 }
+      
+      // This actions executes a command as the player reading the dialogue. 
+      // The <PLAYER> text will be replaced by the player's name.
+      { "action": "command", "command": "say hello from <PLAYER> !" }
+      
+      // The command is execute as if the player typed it without needing permisions, you don't need to do /execute positioned as ... for any positioned command
+      // You can simply do :
+      { "action": "command", "command": "tp @s ~ ~10 ~" }
   ]
 }
 ```
