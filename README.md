@@ -92,7 +92,7 @@ Here is how you define a dialogue, there are multiple actions that can be define
 When defining text such as message or speaker names, you may use localized keys and translate them inside of `en_us.json` or any other language files.
 
 You may display you dialogues using the following commands : <br>
-``/dialogue set my_datapack:dialogue_1`` <br>
+``/dialogue set my_resourcepack:dialogue_1`` <br>
 ``/dialogue play``
 
 <ins>__What are blocking and non-blocking actions ?__</ins><br>
