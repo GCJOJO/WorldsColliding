@@ -104,12 +104,13 @@ Non-blocking actions can be stacked on top of each others and stack on top of on
 
 Here is a table of Blocking and Non-Blocking Actions
 
-|     Blocking     |  Non-Blocking   |
-|:----------------:|:---------------:|
-|  MessageAction   |   FadeAction    |
-|   ChoiceAction   |   ImageAction   |
-|    WaitAction    |   NextAction    |
-|                  |  CreditAction   |
-|                  |   ClearAction   |
+|       Blocking        |     Non-Blocking      |
+|:---------------------:|:---------------------:|
+|     MessageAction     |      FadeAction       |
+|     ChoiceAction      |      ImageAction      |
+|      WaitAction       |      NextAction       |
+| ExecuteCommandAction  |     CreditAction      |
+|                       |      ClearAction      |
+|                       |    MoveImageAction    |
 
 _This project is currently in active development_
