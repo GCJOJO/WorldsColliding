@@ -84,7 +84,7 @@
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter0_set.11" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.12" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.13" },
-    { "action": "command", "command": "scourge sealeffect remnant" },
+    { "action": "command", "command": "scourge sealeffect first_remnant" },
     { "action": "hide_ui" },
     { "action": "wait", "time": 410 },
     { "action": "command", "command": "struct_unlock @s 1" }
