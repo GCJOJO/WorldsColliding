@@ -220,14 +220,12 @@ public class ModEvents {
         {
             //LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
             String dimension = event.getFrom().location().getPath();
-            Vec3 playerPosition = player.getPosition(1.0f);
+            Vec3 playerPosition = player.position();
             CompoundTag playerPersistentData = player.getPersistentData();
 
             if(playerPersistentData.contains("StoryDimension")){
                 PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
                 if(playerData.scourgeDenPlaced) {
-                    playerData.playerDimension = dimension;
-                    playerData.playerPos = playerPosition;
                     playerPersistentData.put("StoryDimension", playerData.save());
                     player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
 
@@ -274,7 +272,6 @@ public class ModEvents {
         if (event.getFrom() == ModDimensions.STORY_DIM_LEVEL_KEY){
             if(event.getEntity().level().isClientSide() && !(player instanceof ServerPlayer))
                 return;
-
 
 
             if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {

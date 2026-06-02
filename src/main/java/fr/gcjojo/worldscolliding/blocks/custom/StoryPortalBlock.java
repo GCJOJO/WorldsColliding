@@ -39,7 +39,7 @@ public class StoryPortalBlock extends Block {
 
                     ServerLevel toLevel = switch (playerData.playerDimension) {
                         case "the_end" -> Objects.requireNonNull(entity.getServer()).getLevel(Level.END);
-                        case "nether" -> Objects.requireNonNull(entity.getServer()).getLevel(Level.NETHER);
+                        case "the_nether" -> Objects.requireNonNull(entity.getServer()).getLevel(Level.NETHER);
                         default -> Objects.requireNonNull(entity.getServer()).getLevel(Level.OVERWORLD);
                     };
 
