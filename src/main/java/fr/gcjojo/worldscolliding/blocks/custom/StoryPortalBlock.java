@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.Objects;
 import java.util.Set;
 
 public class StoryPortalBlock extends Block {
@@ -35,21 +36,12 @@ public class StoryPortalBlock extends Block {
                 if(playerPersistentData.contains("StoryDimension"))
                 {
                     PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
-                    ServerLevel toLevel;
 
-                    switch(playerData.playerDimension)
-                    {
-                        case "the_end":
-                            toLevel = entity.getServer().getLevel(Level.END);
-                            break;
-                        case "nether":
-                            toLevel = entity.getServer().getLevel(Level.NETHER);
-                            break;
-                        case "overworld":
-                        default:
-                            toLevel = entity.getServer().getLevel(Level.OVERWORLD);
-                            break;
-                    }
+                    ServerLevel toLevel = switch (playerData.playerDimension) {
+                        case "the_end" -> Objects.requireNonNull(entity.getServer()).getLevel(Level.END);
+                        case "nether" -> Objects.requireNonNull(entity.getServer()).getLevel(Level.NETHER);
+                        default -> Objects.requireNonNull(entity.getServer()).getLevel(Level.OVERWORLD);
+                    };
 
                     entity.teleportTo(toLevel, playerData.playerPos.x, playerData.playerPos.y, playerData.playerPos.z, Set.of(), 0.0f, 0.0f);
                     return;

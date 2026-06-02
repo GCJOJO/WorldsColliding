@@ -213,20 +213,22 @@ public class DialogueScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        if(guiVisible && this.currentFadingTime >= 0.0){
+        if(this.currentFadingTime >= 0.0){
             if(this.currentFadingTime >= endFade){
                 this.onClose();
                 return;
             }
 
-            float fadePercentage = currentFadingTime / endFade;
+            if(guiVisible){
+                float fadePercentage = currentFadingTime / endFade;
 
-            int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
-            int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
-            int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
+                int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
+                int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
+                int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
 
-            graphics.fillGradient(0, topPoint, this.width, this.height,
-                    FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
+                graphics.fillGradient(0, topPoint, this.width, this.height,
+                        FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
+            }
             currentFadingTime += partialTick;
             return;
         }
