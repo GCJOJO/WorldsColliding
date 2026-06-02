@@ -30,6 +30,7 @@
   ],
 
   "credits" : [
+    { "action": "hide_ui" },
     { "action": "fade", "from": "00000000", "to": "FF000000", "time": 40 },
     { "action": "wait", "time": 50 },
 

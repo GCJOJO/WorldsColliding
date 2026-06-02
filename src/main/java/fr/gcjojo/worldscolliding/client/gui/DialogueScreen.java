@@ -13,9 +13,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DialogueScreen extends Screen {
@@ -25,17 +27,17 @@ public class DialogueScreen extends Screen {
 
     private String currentSet;
 
-    private List<DialogueAction> currentActions = new ArrayList<>();
+    private final List<DialogueAction> currentActions = new ArrayList<>();
 
     private boolean advanceDialogueAtTickEnd = false;
     private String queuedNextSet = null;
 
     private float currentFadingTime = -1.0f;
-    private static float endFade = 7.5f;
+    private static final float endFade = 7.5f;
 
     private boolean guiVisible = true;
 
-    private List<Button> buttons = new ArrayList<>();
+    private final List<Button> buttons = new ArrayList<>();
 
     public DialogueScreen(String setName) {
         super(Component.literal("Dialogue"));
@@ -149,7 +151,8 @@ public class DialogueScreen extends Screen {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            ModEntry.getLogger().error(e.getMessage());
+            Arrays.stream(e.getStackTrace()).forEach(stackTraceElement -> ModEntry.getLogger().error(stackTraceElement.toString()));
             return null;
         }
         return null;
@@ -158,11 +161,8 @@ public class DialogueScreen extends Screen {
     public static List<DialogueSpeaker> loadSpeakers(String setPath){
         try {
             String namespace = ModEntry.MODID;
-            String setName = setPath;
-            if (setPath.contains(":")) {
+            if (setPath.contains(":"))
                 namespace = setPath.split(":")[0];
-                setName = setPath.split(":")[1];
-            }
 
             ResourceLocation res = ResourceLocation.fromNamespaceAndPath(namespace, "dialogues.json");
             var resourceOpt = Minecraft.getInstance().getResourceManager().getResource(res);
@@ -212,31 +212,28 @@ public class DialogueScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if(this.currentFadingTime >= 0.0){
-            if(this.currentFadingTime >= endFade){
+            if(this.currentFadingTime >= endFade || !this.guiVisible){
                 this.onClose();
                 return;
             }
 
-            if(guiVisible){
-                float fadePercentage = currentFadingTime / endFade;
+            float fadePercentage = currentFadingTime / endFade;
 
-                int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
-                int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
-                int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
+            int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
+            int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
+            int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
 
-                graphics.fillGradient(0, topPoint, this.width, this.height,
-                        FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
-            }
+            graphics.fillGradient(0, topPoint, this.width, this.height,
+                    FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
             currentFadingTime += partialTick;
             return;
         }
 
         if(actionIndex >= dialogueActions.size())
             return;
-        if(guiVisible && !currentSet.contains("credits"))
-            //graphics.fill(0, 0, this.width, this.height, 0x44000000);
+        if(guiVisible)
             graphics.fillGradient(0, 0, this.width, this.height, 0x11000000, 0xDD000000);
 
         currentActions.forEach(action -> action.draw(graphics, mouseX, mouseY, partialTick));

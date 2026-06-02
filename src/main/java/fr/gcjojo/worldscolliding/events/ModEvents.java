@@ -211,7 +211,7 @@ public class ModEvents {
     }
 
     @SubscribeEvent
-    public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
+    public static void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
     {
         Player player = event.getEntity();
         //LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());

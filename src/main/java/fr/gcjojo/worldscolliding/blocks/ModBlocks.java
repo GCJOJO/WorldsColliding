@@ -6,6 +6,7 @@ import fr.gcjojo.worldscolliding.items.ModItems;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -21,7 +22,8 @@ public class ModBlocks {
             DeferredRegister.create(ForgeRegistries.BLOCKS, ModEntry.MODID);
 
     public static final RegistryObject<Block> STORY_PORTAL = registerBlock("story_portal",
-            () -> new StoryPortalBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).noLootTable().noCollission()));
+            () -> new StoryPortalBlock(BlockBehaviour.Properties.of().sound(SoundType.GLASS).noLootTable().noCollission()
+                    .lightLevel(blockstate -> 15)));
 
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block){
         RegistryObject<T> toReturn = BLOCKS.register(name, block);

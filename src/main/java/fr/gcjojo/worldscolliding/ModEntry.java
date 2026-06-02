@@ -66,8 +66,6 @@ public class ModEntry
 
     public static Logger getLogger() { return LOGGER; }
 
-
-
     private void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.SCOURGE.get(), ScourgeEntity.createAttributes().build());
         event.put(ModEntities.AWAKENED_SCOURGE.get(), AwakenedScourgeEntity.createAttributes().build());
