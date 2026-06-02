@@ -124,6 +124,10 @@ public class ModNetwork {
                 if (player != null) {
                     player.getPersistentData().putString("CurrentChapter", msg.saveSet);
 
+                    CompoundTag spawnpointTag = player.getPersistentData().getCompound("StoryDimension").getCompound("Spawnpoint");
+
+                    player.teleportTo(spawnpointTag.getInt("x"), spawnpointTag.getInt("y"), spawnpointTag.getInt("z"));
+
                     if (msg.action != null && msg.action.startsWith("seal_")) {
                         String animNum = msg.action.replace("seal_", "");
                         String animName = "sceal" + animNum;

@@ -117,7 +117,7 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.7" },
     { "action": "command", "command": "scourge sealeffect remnant" },
     { "action": "hide_ui" },
-    { "action": "wait", "time": 410 },
+    { "action": "wait", "time": 90 },
     { "action": "command", "command": "struct_unlock @s 2" }
   ],
 

@@ -182,9 +182,11 @@ public class ModEvents {
         if(oldPersistentData.contains("ScourgeRespawnPosition"))
             newPersistentData.put("ScourgeRespawnPosition", oldPersistentData.getCompound("ScourgeRespawnPosition"));
         if(oldPersistentData.contains("IsInDialogue"))
-            newPersistentData.putBoolean("IsInDialogue", oldPersistentData.getBoolean("IsInDialogue"));
+            newPersistentData.putBoolean("IsInDialogue", false);
+        if(oldPersistentData.contains("CurrentChapter"))
+            newPersistentData.putString("CurrentChapter", oldPersistentData.getString("CurrentChapter"));
         if(oldPersistentData.contains("LastReadChapter"))
-            newPersistentData.putBoolean("LastReadChapter", oldPersistentData.getBoolean("LastReadChapter"));
+            newPersistentData.putString("LastReadChapter", oldPersistentData.getString("LastReadChapter"));
         if(oldPersistentData.contains("RespawnsScourge"))
             newPersistentData.putBoolean("RespawnsScourge", oldPersistentData.getBoolean("RespawnsScourge"));
     }
