@@ -9,6 +9,7 @@ import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
@@ -26,42 +27,26 @@ public class StoryCommand {
     {
         Player player = Objects.requireNonNull(context.getSource().getPlayer(), "Command must be executed via player");
 
-        CompoundTag playerPersistentData = player.getPersistentData();
         if(player.level().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
             return 0;
-            /*if(playerPersistentData.contains("StoryDimension"))
-            {
-                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
-                ServerLevel toLevel;
-
-                switch(playerData.playerDimension)
-                {
-                    case "the_end":
-                        toLevel = player.getServer().getLevel(Level.END);
-                        break;
-                    case "nether":
-                        toLevel = player.getServer().getLevel(Level.NETHER);
-                        break;
-                    case "overworld":
-                    default:
-                        toLevel = player.getServer().getLevel(Level.OVERWORLD);
-                        break;
-                }
-
-                player.teleportTo(toLevel, playerData.playerPos.x, playerData.playerPos.y, playerData.playerPos.z, Set.of(), 0.0f, 0.0f);
-                return 1;
-            }
-            player.teleportTo(player.getServer().overworld(), player.getX(), player.getY(), player.getZ(), Set.of(), 0.0f, 0.0f);
-            return 1;*/
         }
 
+        CompoundTag playerPersistentData = player.getPersistentData();
         Vec3 playerPos = new Vec3(player.getX(), player.getY(), player.getZ());
+        ServerLevel storyLevel = player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
+
         if(playerPersistentData.contains("StoryDimension"))
         {
             var playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
             playerData.playerPos = playerPos;
+            playerData.playerDimension = player.level().dimension().location().getPath();
             playerPersistentData.put("StoryDimension", playerData.save());
+
+            if (playerData.scourgeDenPlaced && playerData.storyDimensionSpawnpoint != null) {
+                player.teleportTo(storyLevel, playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z, Set.of(), Config.storyStructurePlayerRotation, 0.0f);
+                return 1;
+            }
         }
         else
         {
@@ -69,8 +54,8 @@ public class StoryCommand {
             var playerData = new PlayerStoryDimensionData(Vec3.ZERO, dimension, playerPos);
             playerPersistentData.put("StoryDimension", playerData.save());
         }
+
         StoryDimensionData.save(player.getServer().overworld());
-        ServerLevel storyLevel = player.getServer().getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
         player.teleportTo(storyLevel, playerPos.x, playerPos.y, playerPos.z, Set.of(), Config.storyStructurePlayerRotation, 0.0f);
 
         return 1;

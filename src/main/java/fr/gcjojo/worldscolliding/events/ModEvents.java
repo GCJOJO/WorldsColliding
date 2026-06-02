@@ -1,13 +1,28 @@
 package fr.gcjojo.worldscolliding.events;
 
+import fr.gcjojo.worldscolliding.Config;
 import fr.gcjojo.worldscolliding.ModEntry;
+import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
+import fr.gcjojo.worldscolliding.StoryDimensionData;
+import fr.gcjojo.worldscolliding.entity.ModEntities;
+import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.event.level.ExplosionEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -16,12 +31,8 @@ import net.minecraftforge.server.ServerLifecycleHooks;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = ModEntry.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ModEvents {
@@ -160,6 +171,25 @@ public class ModEvents {
     }
 
     @SubscribeEvent
+    public static void onPlayerCloned(PlayerEvent.Clone event){
+        CompoundTag oldPersistentData = event.getOriginal().getPersistentData();
+        CompoundTag newPersistentData = event.getEntity().getPersistentData();
+
+        if(oldPersistentData.contains("StoryDimension"))
+            newPersistentData.put("StoryDimension", oldPersistentData.getCompound("StoryDimension"));
+        if(oldPersistentData.contains("LightEssence"))
+            newPersistentData.putBoolean("LightEssence", oldPersistentData.getBoolean("LightEssence"));
+        if(oldPersistentData.contains("ScourgeRespawnPosition"))
+            newPersistentData.put("ScourgeRespawnPosition", oldPersistentData.getCompound("ScourgeRespawnPosition"));
+        if(oldPersistentData.contains("IsInDialogue"))
+            newPersistentData.putBoolean("IsInDialogue", oldPersistentData.getBoolean("IsInDialogue"));
+        if(oldPersistentData.contains("LastReadChapter"))
+            newPersistentData.putBoolean("LastReadChapter", oldPersistentData.getBoolean("LastReadChapter"));
+        if(oldPersistentData.contains("RespawnsScourge"))
+            newPersistentData.putBoolean("RespawnsScourge", oldPersistentData.getBoolean("RespawnsScourge"));
+    }
+
+    @SubscribeEvent
     public static void onBlockPlaced(BlockEvent.EntityPlaceEvent event){
         if(event.getEntity() instanceof Player && ((Player)event.getEntity()).isCreative())
             return;
@@ -178,5 +208,115 @@ public class ModEvents {
     public static void onExplosion(ExplosionEvent event){
         if(event.getLevel().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
             event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
+    {
+        Player player = event.getEntity();
+        //LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
+
+        if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
+        {
+            //LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
+            String dimension = event.getFrom().location().getPath();
+            Vec3 playerPosition = player.getPosition(1.0f);
+            CompoundTag playerPersistentData = player.getPersistentData();
+
+            if(playerPersistentData.contains("StoryDimension")){
+                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
+                if(playerData.scourgeDenPlaced) {
+                    playerData.playerDimension = dimension;
+                    playerData.playerPos = playerPosition;
+                    playerPersistentData.put("StoryDimension", playerData.save());
+                    player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
+
+                    if(playerPersistentData.contains("RespawnsScourge") && playerPersistentData.getBoolean("RespawnsScourge"))
+                    {
+                        CompoundTag respawnPosTag = playerPersistentData.getCompound("ScourgeRespawnPosition");
+
+                        int x = respawnPosTag.getInt("x");
+                        int y = respawnPosTag.getInt("y");
+                        int z = respawnPosTag.getInt("z");
+
+                        BlockPos respawnPos = new BlockPos(x, y, z);
+
+                        ScourgeEntity newScourge = new ScourgeEntity(ModEntities.SCOURGE.get(), player.level());
+                        newScourge.setPos(respawnPos.getX() + 0.5d, respawnPos.getY() - 2.0d, respawnPos.getZ() + 0.5d);
+                        player.level().addFreshEntity(newScourge);
+                        playerPersistentData.remove("ScourgeRespawnPosition");
+                        playerPersistentData.remove("RespawnsScourge");
+                        playerPersistentData.putString("CurrentChapter", "new_game_plus_choice");
+                    }
+                    return;
+                }
+            }
+
+            Vec3 newPlayerSpot = StoryDimensionData.getNextAvailableSpot();
+            Vec3 newPlayerSpawnpoint = StoryDimensionData.getNextAvailableSpawnpoint();
+            PlayerStoryDimensionData playerData = new PlayerStoryDimensionData(newPlayerSpawnpoint, dimension, playerPosition);
+            playerData.scourgeDenPlaced = true;
+            playerPersistentData.put("StoryDimension", playerData.save());
+
+            BlockPos blockPos = new BlockPos((int)newPlayerSpot.x, (int)newPlayerSpot.y, (int)newPlayerSpot.z);
+
+            MinecraftServer server = player.getServer();
+            assert server != null;
+            ServerLevel storyLevel = server.getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
+            assert storyLevel != null;
+            placeScourgeDenStructure(storyLevel, blockPos);
+
+            player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
+            StoryDimensionData.setLastSpot(newPlayerSpot);
+            StoryDimensionData.save(server.overworld());
+        }
+
+        if (event.getFrom() == ModDimensions.STORY_DIM_LEVEL_KEY){
+            if(event.getEntity().level().isClientSide() && !(player instanceof ServerPlayer))
+                return;
+
+
+
+            if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
+                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("credits"), (ServerPlayer) player);
+                player.getPersistentData().putBoolean("ShowCredits", false);
+
+                if(player.getPersistentData().contains("ScourgeRespawnPosition"))
+                    player.getPersistentData().putBoolean("RespawnsScourge", true);
+            }
+        }
+    }
+
+    private static void placeScourgeDenStructure(ServerLevel level, BlockPos pos)
+    {
+        ResourceLocation structureID = ResourceLocation.tryParse(Config.storyStructure);
+        StructureTemplateManager manager = level.getStructureManager();
+        if(structureID == null) {
+            ModEntry.getLogger().error("Structure ID {} is not a valid structure !", Config.storyStructure);
+            return;
+        }
+
+        Optional<StructureTemplate> templateOpt = manager.get(structureID);
+
+        if (templateOpt.isEmpty()) {
+            ModEntry.getLogger().error("Unable to find structure : {}", structureID);
+            return;
+        }
+
+        StructureTemplate template = templateOpt.get();
+
+        StructurePlaceSettings settings = new StructurePlaceSettings()
+                .setIgnoreEntities(false)
+                .setRotation(Rotation.NONE)
+                .setMirror(Mirror.NONE);
+
+        template.placeInWorld(
+                level,
+                pos,
+                pos,
+                settings,
+                level.random,
+                2
+        );
     }
 }

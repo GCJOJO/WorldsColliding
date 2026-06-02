@@ -31,7 +31,7 @@ public class StoryDimensionData {
 
     public static class StoryDimensionSavedData extends SavedData
     {
-        public Vec3 savedLastSpot;
+        public Vec3 savedLastSpot = new Vec3(0, 100, 0);
 
         private static StoryDimensionSavedData create() {
             return new StoryDimensionSavedData();

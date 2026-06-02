@@ -84,7 +84,10 @@
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter0_set.11" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.12" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter0_set.13" },
-    { "action": "command", "command": "scourge sealeffect remnant" }
+    { "action": "command", "command": "scourge sealeffect first_remnant" },
+    { "action": "hide_ui" },
+    { "action": "wait", "time": 90 },
+    { "action": "command", "command": "struct_unlock @s 1" }
   ],
 
   "chapter_1_set": [
@@ -111,7 +114,10 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.5" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.6" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter1_yes_set.7" },
-    { "action": "command", "command": "scourge sealeffect remnant" }
+    { "action": "command", "command": "scourge sealeffect remnant" },
+    { "action": "hide_ui" },
+    { "action": "wait", "time": 410 },
+    { "action": "command", "command": "struct_unlock @s 2" }
   ],
 
   "chapter_1_no_set": [
@@ -139,7 +145,10 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.4" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.5" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter2_yes_set.6" },
-    { "action": "command", "command": "scourge sealeffect remnant" }
+    { "action": "command", "command": "scourge sealeffect remnant" },
+    { "action": "hide_ui" },
+    { "action": "wait", "time": 410 },
+    { "action": "command", "command": "struct_unlock @s 3" }
   ],
 
   "chapter_2_no_set": [
@@ -171,7 +180,10 @@
   "chapter_3_yes_set": [
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter3_yes_set.1" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter3_yes_set.2" },
-    { "action": "command", "command": "scourge sealeffect remnant" }
+    { "action": "command", "command": "scourge sealeffect remnant" },
+    { "action": "hide_ui" },
+    { "action": "wait", "time": 410 },
+    { "action": "command", "command": "struct_unlock @s 4" }
   ],
 
   "chapter_3_no_set": [
@@ -203,7 +215,10 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.5" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.6" },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter4_yes_set.7" },
-    { "action": "command", "command": "scourge sealeffect remnant" }
+    { "action": "command", "command": "scourge sealeffect remnant" },
+    { "action": "hide_ui" },
+    { "action": "wait", "time": 410 },
+    { "action": "command", "command": "struct_unlock @s 5" }
   ],
 
   "chapter_4_no_set": [
@@ -303,9 +318,12 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_light_set.4"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_light_set.5"  },
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_light_set.6"  },
+    { "action": "hide_ui" },
     { "action": "command", "command": "scourge animate sceal8" },
     { "action": "wait", "time": 410 },
     { "action": "command", "command": "tellraw @s {\"translate\":\"worldscolliding.dialogue.the_one_ban_message\", \"color\" : \"yellow\"}" },
+    { "action": "wait", "time": 40 },
+    { "action": "show_ui" },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_light_set.7"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_light_set.8"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_light_set.9"  }
@@ -320,6 +338,7 @@
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_7_dark_set.1"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.2"  },
     { "action": "message", "speaker": 0, "text": "worldscolliding.dialogue.chapter_7_dark_set.3"  },
+    { "action": "hide_ui" },
     { "action": "command", "command": "scourge animate sceal8" },
     { "action": "wait", "time": 410 }
   ],

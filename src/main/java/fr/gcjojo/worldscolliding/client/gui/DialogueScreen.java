@@ -33,6 +33,8 @@ public class DialogueScreen extends Screen {
     private float currentFadingTime = -1.0f;
     private static float endFade = 7.5f;
 
+    private boolean guiVisible = true;
+
     private List<Button> buttons = new ArrayList<>();
 
     public DialogueScreen(String setName) {
@@ -110,8 +112,7 @@ public class DialogueScreen extends Screen {
         try {
             String namespace = ModEntry.MODID;
             String setName = setPath;
-            if(setPath.contains(":"))
-            {
+            if(setPath.contains(":")) {
                 namespace = setPath.split(":")[0];
                 setName = setPath.split(":")[1];
             }
@@ -140,6 +141,7 @@ public class DialogueScreen extends Screen {
                             case "credit" -> actions.add(new DialogueCredit(obj));
                             case "image_move" -> actions.add(new DialogueMoveImage(obj));
                             case "command" -> actions.add(new DialogueExecuteCommand(obj));
+                            default -> actions.add(new DialogueRawAction(obj));
                         }
 
                     });
@@ -217,21 +219,23 @@ public class DialogueScreen extends Screen {
                 return;
             }
 
-            float fadePercentage = currentFadingTime / endFade;
+            if(guiVisible){
+                float fadePercentage = currentFadingTime / endFade;
 
-            int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
-            int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
-            int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
+                int topColor = Mth.lerpInt(fadePercentage, 0x11, 0x00);
+                int bottomColor = Mth.lerpInt(fadePercentage, 0xDD, 0x00);
+                int topPoint = Mth.lerpInt(fadePercentage, 0, (int)(this.height * 0.5));
 
-            graphics.fillGradient(0, topPoint, this.width, this.height,
-                    FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
+                graphics.fillGradient(0, topPoint, this.width, this.height,
+                        FastColor.ARGB32.color(topColor, 0, 0, 0), FastColor.ARGB32.color(bottomColor, 0, 0, 0));
+            }
             currentFadingTime += partialTick;
             return;
         }
 
         if(actionIndex >= dialogueActions.size())
             return;
-        if(!currentSet.contains("credits"))
+        if(guiVisible && !currentSet.contains("credits"))
             //graphics.fill(0, 0, this.width, this.height, 0x44000000);
             graphics.fillGradient(0, 0, this.width, this.height, 0x11000000, 0xDD000000);
 
@@ -278,7 +282,16 @@ public class DialogueScreen extends Screen {
         for(int i = actionIndex; i <= dialogueActions.size(); i++)
         {
             DialogueAction currentAction = dialogueActions.get(i);
+
+            if(currentAction instanceof DialogueRawAction){
+                switch(((DialogueRawAction) currentAction).getRawAction()){
+                    case "hide_ui" -> hideGui();
+                    case "show_ui" -> showGui();
+                }
+                continue;
+            }
             currentActions.add(currentAction);
+
             currentAction.setup(this);
             if(currentAction.isBlocking())
             {
@@ -308,10 +321,15 @@ public class DialogueScreen extends Screen {
             case "message" -> classToRemove = DialogueMessage.class;
             case "credit" -> classToRemove = DialogueCredit.class;
             case "fade" -> classToRemove = DialogueFading.class;
+            case "image" -> classToRemove = DialogueImage.class;
+            case "move_image" -> classToRemove = DialogueMoveImage.class;
         }
         if(classToRemove != null)
             currentActions.removeIf(classToRemove::isInstance);
     }
+
+    public void showGui() { this.guiVisible = true; }
+    public void hideGui() { this.guiVisible = false; }
 
     @Override
     public boolean shouldCloseOnEsc() { return false; }

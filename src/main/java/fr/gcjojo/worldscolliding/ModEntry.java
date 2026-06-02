@@ -66,38 +66,7 @@ public class ModEntry
 
     public static Logger getLogger() { return LOGGER; }
 
-    private static void placeScourgeDenStructure(ServerLevel level, BlockPos pos)
-    {
-        ResourceLocation structureID = ResourceLocation.tryParse(Config.storyStructure);
-        StructureTemplateManager manager = level.getStructureManager();
-        if(structureID == null) {
-            LOGGER.error("Structure ID {} is not a valid structure !", Config.storyStructure);
-            return;
-        }
 
-        Optional<StructureTemplate> templateOpt = manager.get(structureID);
-
-        if (templateOpt.isEmpty()) {
-            LOGGER.error("Unable to find structure : {}", structureID);
-            return;
-        }
-
-        StructureTemplate template = templateOpt.get();
-
-        StructurePlaceSettings settings = new StructurePlaceSettings()
-                .setIgnoreEntities(false)
-                .setRotation(Rotation.NONE)
-                .setMirror(Mirror.NONE);
-
-        template.placeInWorld(
-                level,
-                pos,
-                pos,
-                settings,
-                level.random,
-                2
-        );
-    }
 
     private void registerAttributes(EntityAttributeCreationEvent event) {
         event.put(ModEntities.SCOURGE.get(), ScourgeEntity.createAttributes().build());
@@ -108,81 +77,6 @@ public class ModEntry
     public void onServerStarted(ServerStartedEvent event)
     {
         StoryDimensionData.read(event.getServer().overworld());
-    }
-
-    @SubscribeEvent
-    public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event)
-    {
-        Player player = event.getEntity();
-        //LOGGER.info("Player {} changed dimension {}", player.getName().getString(), event.getTo().toString());
-
-        if(event.getTo() == ModDimensions.STORY_DIM_LEVEL_KEY)
-        {
-            //LOGGER.info("Player {} joined STORY Dimension", player.getName().getString());
-            String dimension = event.getFrom().location().getPath();
-            Vec3 playerPosition = player.getPosition(1.0f);
-            CompoundTag playerPersistentData = player.getPersistentData();
-
-            if(playerPersistentData.contains("StoryDimension")){
-                PlayerStoryDimensionData playerData = PlayerStoryDimensionData.load(playerPersistentData.getCompound("StoryDimension"));
-                if(playerData.scourgeDenPlaced) {
-                    playerData.playerDimension = dimension;
-                    playerData.playerPos = playerPosition;
-                    playerPersistentData.put("StoryDimension", playerData.save());
-                    player.teleportTo(playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z);
-
-                    if(playerPersistentData.contains("RespawnsScourge") && playerPersistentData.getBoolean("RespawnsScourge"))
-                    {
-                        CompoundTag respawnPosTag = playerPersistentData.getCompound("ScourgeRespawnPosition");
-
-                        int x = respawnPosTag.getInt("x");
-                        int y = respawnPosTag.getInt("y");
-                        int z = respawnPosTag.getInt("z");
-
-                        BlockPos respawnPos = new BlockPos(x, y, z);
-
-                        ScourgeEntity newScourge = new ScourgeEntity(ModEntities.SCOURGE.get(), player.level());
-                        newScourge.setPos(respawnPos.getX() + 0.5d, respawnPos.getY() - 2.0d, respawnPos.getZ() + 0.5d);
-                        player.level().addFreshEntity(newScourge);
-                        playerPersistentData.remove("ScourgeRespawnPosition");
-                        playerPersistentData.remove("RespawnsScourge");
-                        playerPersistentData.putString("CurrentChapter", "new_game_plus_choice");
-                    }
-                    return;
-                }
-            }
-
-            Vec3 newPlayerSpot = StoryDimensionData.getNextAvailableSpot();
-            Vec3 newPlayerSpawnpoint = StoryDimensionData.getNextAvailableSpawnpoint();
-            PlayerStoryDimensionData playerData = new PlayerStoryDimensionData(newPlayerSpawnpoint, dimension, playerPosition);
-            playerData.scourgeDenPlaced = true;
-            playerPersistentData.put("StoryDimension", playerData.save());
-
-            BlockPos blockPos = new BlockPos((int)newPlayerSpot.x, (int)newPlayerSpot.y, (int)newPlayerSpot.z);
-
-            MinecraftServer server = player.getServer();
-            assert server != null;
-            ServerLevel storyLevel = server.getLevel(ModDimensions.STORY_DIM_LEVEL_KEY);
-            assert storyLevel != null;
-            placeScourgeDenStructure(storyLevel, blockPos);
-
-            player.teleportTo(newPlayerSpawnpoint.x, newPlayerSpawnpoint.y, newPlayerSpawnpoint.z);
-            StoryDimensionData.setLastSpot(newPlayerSpot);
-            StoryDimensionData.save(server.overworld());
-        }
-
-        if (event.getFrom() == ModDimensions.STORY_DIM_LEVEL_KEY){
-            if(event.getEntity().level().isClientSide() && !(player instanceof ServerPlayer))
-                return;
-
-            if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
-                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("credits"), (ServerPlayer) player);
-                player.getPersistentData().putBoolean("ShowCredits", false);
-
-                if(player.getPersistentData().contains("ScourgeRespawnPosition"))
-                    player.getPersistentData().putBoolean("RespawnsScourge", true);
-            }
-        }
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)

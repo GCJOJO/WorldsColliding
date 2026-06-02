@@ -52,9 +52,9 @@ public class DialogueCommand {
         List<String> chapters = Arrays.asList("dogcheck", "credits", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_set", "chapter_5_past_set", "chapter_5_set", "chapter_5_ask", "chapter_6_set", "chapter_6_ask", "chapter_7_prologue_set", "chapter_7_light_set", "chapter_7_dark_set");
         List<String> animations = Arrays.asList("sceal1", "sceal2", "sceal3", "sceal4", "sceal5", "sceal6", "sceal7", "sceal8", "ascend");
         List<String> cinematics = Arrays.asList("laugh", "tp_effect");
-        List<String> sealTypes = Arrays.asList("remnant", "dark", "light");
+        List<String> sealTypes = Arrays.asList("remnant", "dark", "light", "first_remnant");
 
-        event.getDispatcher().register(Commands.literal("dialogue").requires(commandSourceStack -> commandSourceStack.hasPermission(4))
+        event.getDispatcher().register(Commands.literal("dialogue").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                 .then(Commands.literal("play")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();
@@ -93,7 +93,7 @@ public class DialogueCommand {
                                 })))
         );
 
-        event.getDispatcher().register(Commands.literal("scourge").requires(commandSourceStack -> commandSourceStack.hasPermission(4))
+        event.getDispatcher().register(Commands.literal("scourge").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                 .then(Commands.literal("cinematic")
                         .then(Commands.argument("action", StringArgumentType.string())
                                 .suggests((context, builder) -> SharedSuggestionProvider.suggest(cinematics, builder))
@@ -169,28 +169,30 @@ public class DialogueCommand {
                                         Level level = scourge.level();
                                         BlockPos center = scourge.blockPosition();
 
-                                        String[] prefixes = {"dark", "mana", "elf", "sunny", "blaze", "e", "lavender"};
-                                        for (BlockPos pos : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
-                                            BlockState state = level.getBlockState(pos);
-                                            ResourceLocation loc = ForgeRegistries.BLOCKS.getKey(state.getBlock());
+                                        if (!itemType.equals("first_remnant")) {
+                                            String[] prefixes = {"dark", "mana", "elf", "sunny", "blaze", "e", "lavender"};
+                                            for (BlockPos pos : BlockPos.betweenClosed(center.offset(-3, -3, -3), center.offset(3, 3, 3))) {
+                                                BlockState state = level.getBlockState(pos);
+                                                ResourceLocation loc = ForgeRegistries.BLOCKS.getKey(state.getBlock());
 
-                                            if (loc != null && loc.getNamespace().equals("botania") && loc.getPath().contains("_quartz")) {
-                                                String path = loc.getPath();
-                                                for (int i = 0; i < prefixes.length - 1; i++) {
-                                                    if (path.startsWith(prefixes[i] + "_quartz")) {
-                                                        String newPath = path.replace(prefixes[i] + "_quartz", prefixes[i+1] + "_quartz");
-                                                        Block newBlock = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("botania", newPath));
+                                                if (loc != null && loc.getNamespace().equals("botania") && loc.getPath().contains("_quartz")) {
+                                                    String path = loc.getPath();
+                                                    for (int i = 0; i < prefixes.length - 1; i++) {
+                                                        if (path.contains(prefixes[i] + "_quartz")) {
+                                                            String newPath = path.replace(prefixes[i] + "_quartz", prefixes[i+1] + "_quartz");
+                                                            Block newBlock = ForgeRegistries.BLOCKS.getValue(ResourceLocation.fromNamespaceAndPath("botania", newPath));
 
-                                                        if (newBlock != null && newBlock != Blocks.AIR) {
-                                                            BlockState newState = newBlock.defaultBlockState();
-                                                            for (Property<?> prop : state.getProperties()) {
-                                                                if (newState.hasProperty(prop)) {
-                                                                    newState = copyProperty(state, newState, prop);
+                                                            if (newBlock != null && newBlock != Blocks.AIR) {
+                                                                BlockState newState = newBlock.defaultBlockState();
+                                                                for (Property<?> prop : state.getProperties()) {
+                                                                    if (newState.hasProperty(prop)) {
+                                                                        newState = copyProperty(state, newState, prop);
+                                                                    }
                                                                 }
+                                                                level.setBlockAndUpdate(pos, newState);
                                                             }
-                                                            level.setBlockAndUpdate(pos, newState);
+                                                            break;
                                                         }
-                                                        break;
                                                     }
                                                 }
                                             }

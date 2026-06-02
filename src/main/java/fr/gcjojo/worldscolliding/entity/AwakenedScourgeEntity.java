@@ -256,6 +256,12 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
     }
 
     @Override
+    public boolean isPersistenceRequired(){ return true; }
+
+    @Override
+    public boolean requiresCustomPersistence() { return true; }
+
+    @Override
     public void tick() {
         super.tick();
 
