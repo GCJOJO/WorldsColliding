@@ -275,7 +275,6 @@ public class ModEvents {
             if(event.getEntity().level().isClientSide() && !(player instanceof ServerPlayer))
                 return;
 
-
             if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
                 ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("credits"), (ServerPlayer) player);
                 player.getPersistentData().putBoolean("ShowCredits", false);

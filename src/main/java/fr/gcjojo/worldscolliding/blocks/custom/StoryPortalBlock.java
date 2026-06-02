@@ -1,19 +1,24 @@
 package fr.gcjojo.worldscolliding.blocks.custom;
 
+import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.RelativeMovement;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.EnumSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -30,7 +35,9 @@ public class StoryPortalBlock extends Block {
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos blockPos, Entity entity) {
-        if(entity instanceof Player) {
+        if(level.isClientSide()) return;
+
+        if(entity instanceof ServerPlayer) {
             if (entity.canChangeDimensions()) {
                 CompoundTag playerPersistentData = entity.getPersistentData();
                 if(playerPersistentData.contains("StoryDimension"))
@@ -43,8 +50,9 @@ public class StoryPortalBlock extends Block {
                         default -> Objects.requireNonNull(entity.getServer()).getLevel(Level.OVERWORLD);
                     };
 
-                    entity.teleportTo(toLevel, playerData.playerPos.x, playerData.playerPos.y, playerData.playerPos.z, Set.of(), 0.0f, 0.0f);
-                    return;
+                    entity.resetFallDistance();
+                    entity.changeDimension(toLevel);
+                    entity.teleportTo(toLevel, playerData.playerPos.x, playerData.playerPos.y, playerData.playerPos.z, EnumSet.noneOf(RelativeMovement.class), 0.0f, 0.0f);
                 }
                 //entity.teleportTo(entity.getServer().getLevel(level.OVERWORLD), entity.getX(), entity.getY(), entity.getZ(), Set.of(), 0.0f, 0.0f);
             }

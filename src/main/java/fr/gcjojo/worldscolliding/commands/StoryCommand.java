@@ -6,6 +6,7 @@ import fr.gcjojo.worldscolliding.Config;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.StoryDimensionData;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.nbt.CompoundTag;
@@ -29,6 +30,7 @@ public class StoryCommand {
 
         if(player.level().dimension() == ModDimensions.STORY_DIM_LEVEL_KEY)
         {
+            player.sendSystemMessage(Component.literal("/story cannot be executed inside of the story dimension. Teleport back using the Portal inside the room.").withStyle(ChatFormatting.RED));
             return 0;
         }
 
@@ -45,6 +47,7 @@ public class StoryCommand {
 
             if (playerData.scourgeDenPlaced && playerData.storyDimensionSpawnpoint != null) {
                 player.teleportTo(storyLevel, playerData.storyDimensionSpawnpoint.x, playerData.storyDimensionSpawnpoint.y, playerData.storyDimensionSpawnpoint.z, Set.of(), Config.storyStructurePlayerRotation, 0.0f);
+                player.resetFallDistance();
                 return 1;
             }
         }
@@ -57,6 +60,7 @@ public class StoryCommand {
 
         StoryDimensionData.save(player.getServer().overworld());
         player.teleportTo(storyLevel, playerPos.x, playerPos.y, playerPos.z, Set.of(), Config.storyStructurePlayerRotation, 0.0f);
+        player.resetFallDistance();
 
         return 1;
     }

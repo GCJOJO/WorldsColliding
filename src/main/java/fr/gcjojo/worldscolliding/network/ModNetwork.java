@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 public class ModNetwork {
-    private static final String PROTOCOL_VERSION = "1";
+    private static final String PROTOCOL_VERSION = "1.1.6";
     public static final SimpleChannel CHANNEL = NetworkRegistry.ChannelBuilder
             .named(ResourceLocation.fromNamespaceAndPath(ModEntry.MODID, "main"))
             .clientAcceptedVersions(PROTOCOL_VERSION::equals)
