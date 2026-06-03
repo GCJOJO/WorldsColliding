@@ -149,7 +149,8 @@ dependencies {
     implementation("com.eliotlash.mclib:mclib:20")
 
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_api_version}")
-    implementation fg.deobf("io.github.gcjojo:blablalib-forge:${blablalib_version}")
+    implementation fg.deobf("curse.maven:blablalib-1563558:${blablalib_file_id}")
+    //implementation fg.deobf("io.github.gcjojo:blablalib-forge:${blablalib_version}")
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -167,6 +168,7 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
+            blablalib_version_range: blablalib_version_range
     ]
     inputs.properties replaceProperties
 
