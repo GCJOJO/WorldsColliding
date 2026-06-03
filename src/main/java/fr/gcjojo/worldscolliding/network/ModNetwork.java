@@ -2,7 +2,6 @@ package fr.gcjojo.worldscolliding.network;
 
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import fr.gcjojo.worldscolliding.ModEntry;
-import fr.gcjojo.worldscolliding.client.gui.DialogueScreen;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
@@ -90,7 +89,7 @@ public class ModNetwork {
         }
 
         public static void handle(OpenDialoguePacket msg, Supplier<NetworkEvent.Context> ctx) {
-            ctx.get().enqueueWork(() -> DialogueScreen.openForSet(msg.setName));
+            //ctx.get().enqueueWork(() -> DialogueScreen.openForSet(msg.setName));
             ctx.get().setPacketHandled(true);
         }
     }
@@ -184,48 +183,9 @@ public class ModNetwork {
 
         public static void handle(DialogueCompletedPacket msg, Supplier<NetworkEvent.Context> ctx){
             ctx.get().enqueueWork(() -> {
-                ServerPlayer player = ctx.get().getSender();
-                if(player != null) {
-                    player.getPersistentData().putBoolean("IsInDialogue", false);
-                    player.getPersistentData().putString("LastReadChapter", msg.setName);
 
-                    if(msg.setName.equals("chapter_7_light_set") || msg.setName.equals("chapter_7_dark_set"))
-                        spawnBoss(player, msg.setName.contains("light"));
-                }
             });
             ctx.get().setPacketHandled(true);
-        }
-
-        public static void spawnBoss(ServerPlayer player, boolean isLight){
-            Level level = player.level();
-
-            player.getPersistentData().putBoolean("LightEssence", isLight);
-
-            level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
-                Vec3 bossSpawnPos = scourge.getPosition(1.0f).add(0d, 2.0d, 0d);
-                float xRot = scourge.getXRot();
-                float yRot = scourge.getYRot();
-                if(isLight)
-                    scourge.discard();
-
-                CompoundTag scourgeRespawnPosTag = new CompoundTag();
-                scourgeRespawnPosTag.putDouble("x", bossSpawnPos.x);
-                scourgeRespawnPosTag.putDouble("y", bossSpawnPos.y);
-                scourgeRespawnPosTag.putDouble("z", bossSpawnPos.z);
-
-                player.getPersistentData().put("ScourgeRespawnPosition", scourgeRespawnPosTag);
-
-                level.explode(scourge, bossSpawnPos.x, bossSpawnPos.y, bossSpawnPos.z, 10.0f, Level.ExplosionInteraction.NONE);
-                Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
-                level.addFreshEntity(boss);
-                boss.setPos(bossSpawnPos);
-                boss.setXRot(xRot);
-                boss.setYRot(yRot);
-
-                boss.teleportTo((ServerLevel) level, bossSpawnPos.x, bossSpawnPos.y + 1.5, bossSpawnPos.z, Set.of(), xRot, yRot);
-                scourge.getPersistentData().putBoolean("BossBattle", isLight); 
-                boss.getPersistentData().putUUID("Player", player.getUUID());
-            });
         }
     }
 

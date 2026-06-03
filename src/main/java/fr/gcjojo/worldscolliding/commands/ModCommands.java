@@ -1,11 +1,13 @@
 package fr.gcjojo.worldscolliding.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
+import com.mojang.brigadier.context.CommandContext;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
-import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.ModSounds;
+import io.github.gcjojo.blablalib.commands.DialogueCommand;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraft.network.chat.Component;
@@ -39,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Mod.EventBusSubscriber(modid = "worldscolliding", bus = Mod.EventBusSubscriber.Bus.FORGE)
-public class DialogueCommand {
+public class ModCommands {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private static BlockState copyProperty(BlockState from, BlockState to, Property property) {
@@ -49,12 +51,35 @@ public class DialogueCommand {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         // Load chapters dynamically
-        List<String> chapters = Arrays.asList("dogcheck", "credits", "chapter_0_set", "chapter_1_set", "chapter_1_ask", "chapter_2_set", "chapter_2_ask", "chapter_3_set", "chapter_3_ask", "chapter_4_set", "chapter_5_6_set", "chapter_5_past_set", "chapter_5_set", "chapter_5_ask", "chapter_6_set", "chapter_6_ask", "chapter_7_prologue_set", "chapter_7_light_set", "chapter_7_dark_set");
+        List<String> chapters = Arrays.asList("\"worldscolliding:dogcheck\"", "\"worldscolliding:credits\"", "\"worldscolliding:chapter_0_set\"", "\"worldscolliding:chapter_1_set\"", "\"worldscolliding:chapter_1_ask\"", "\"worldscolliding:chapter_2_set", "\"worldscolliding:chapter_2_ask\"", "\"worldscolliding:chapter_3_set\"", "\"worldscolliding:chapter_3_ask", "\"worldscolliding:chapter_4_set\"", "\"worldscolliding:chapter_5_6_set", "\"worldscolliding:chapter_5_past_set", "\"worldscolliding:chapter_5_set", "\"worldscolliding:chapter_5_ask", "\"worldscolliding:chapter_6_set\"", "\"worldscolliding:chapter_6_ask\"", "\"worldscolliding:chapter_7_prologue_set", "\"worldscolliding:chapter_7_light_set\"", "\"worldscolliding:chapter_7_dark_set\"");
         List<String> animations = Arrays.asList("sceal1", "sceal2", "sceal3", "sceal4", "sceal5", "sceal6", "sceal7", "sceal8", "ascend");
         List<String> cinematics = Arrays.asList("laugh", "tp_effect");
         List<String> sealTypes = Arrays.asList("remnant", "dark", "light", "first_remnant");
 
-        event.getDispatcher().register(Commands.literal("dialogue").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
+        DialogueCommand.register(event.getDispatcher(), chapters, (CommandContext<CommandSourceStack> context, String dialogue) -> {
+            if(!dialogue.equalsIgnoreCase("chapter_5_6_set") ||
+                    !context.getSource().isPlayer() ||
+                    context.getSource().getPlayer() == null)
+                return dialogue;
+
+            ServerPlayer player = context.getSource().getPlayer();
+
+            String chapterName = "";
+            if(!player.getPersistentData().contains("Chapter5") || !player.getPersistentData().getBoolean("Chapter5"))
+            {
+                chapterName = "chapter_5_set";
+                player.getPersistentData().putBoolean("Chapter5", true);
+            }
+            else
+            {
+                chapterName = "chapter_6_set";
+                player.getPersistentData().putBoolean("Chapter5", false);
+            }
+
+            return chapterName;
+        });
+
+        /*event.getDispatcher().register(Commands.literal("dialogue").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                 .then(Commands.literal("play")
                         .executes(context -> {
                             ServerPlayer player = context.getSource().getPlayerOrException();
@@ -91,7 +116,7 @@ public class DialogueCommand {
                                     context.getSource().sendSuccess(() -> Component.literal("Chapitre mis à jour avec succès : " + finalChapterName), true);
                                     return 1;
                                 })))
-        );
+        );*/
 
         event.getDispatcher().register(Commands.literal("scourge").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                 .then(Commands.literal("cinematic")

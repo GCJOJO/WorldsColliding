@@ -1,20 +1,26 @@
 package fr.gcjojo.worldscolliding.events;
 
+import dev.architectury.event.EventResult;
 import fr.gcjojo.worldscolliding.Config;
 import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import fr.gcjojo.worldscolliding.StoryDimensionData;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
+import io.github.gcjojo.blablalib.BlablaLib;
+import io.github.gcjojo.blablalib.events.BlablalibEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -316,5 +322,47 @@ public class ModEvents {
                 level.random,
                 2
         );
+    }
+
+    public static void registerBlablaLibEvents(){
+        BlablalibEvents.DIALOGUE_COMPLETED.register((ServerPlayer player, String dialogue) -> {
+            if(player != null) {
+                if(dialogue.equals("worldscolliding:chapter_7_light_set") || dialogue.equals("worldscolliding:chapter_7_dark_set"))
+                    spawnBoss(player, dialogue.contains("light"));
+            }
+            return EventResult.pass();
+        });
+    }
+
+    private static void spawnBoss(ServerPlayer player, boolean isLight){
+        Level level = player.level();
+
+        player.getPersistentData().putBoolean("LightEssence", isLight);
+
+        level.getEntities(player, player.getBoundingBox().inflate(15.0f), entity -> entity instanceof ScourgeEntity).forEach(scourge -> {
+            Vec3 bossSpawnPos = scourge.getPosition(1.0f).add(0d, 2.0d, 0d);
+            float xRot = scourge.getXRot();
+            float yRot = scourge.getYRot();
+            if(isLight)
+                scourge.discard();
+
+            CompoundTag scourgeRespawnPosTag = new CompoundTag();
+            scourgeRespawnPosTag.putDouble("x", bossSpawnPos.x);
+            scourgeRespawnPosTag.putDouble("y", bossSpawnPos.y);
+            scourgeRespawnPosTag.putDouble("z", bossSpawnPos.z);
+
+            player.getPersistentData().put("ScourgeRespawnPosition", scourgeRespawnPosTag);
+
+            level.explode(scourge, bossSpawnPos.x, bossSpawnPos.y, bossSpawnPos.z, 10.0f, Level.ExplosionInteraction.NONE);
+            Entity boss = new AwakenedScourgeEntity(ModEntities.AWAKENED_SCOURGE.get(), level);
+            level.addFreshEntity(boss);
+            boss.setPos(bossSpawnPos);
+            boss.setXRot(xRot);
+            boss.setYRot(yRot);
+
+            boss.teleportTo((ServerLevel) level, bossSpawnPos.x, bossSpawnPos.y + 1.5, bossSpawnPos.z, Set.of(), xRot, yRot);
+            scourge.getPersistentData().putBoolean("BossBattle", isLight);
+            boss.getPersistentData().putUUID("Player", player.getUUID());
+        });
     }
 }

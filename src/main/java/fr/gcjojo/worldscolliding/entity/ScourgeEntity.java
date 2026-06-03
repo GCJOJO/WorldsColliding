@@ -2,6 +2,7 @@ package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
+import io.github.gcjojo.blablalib.BlablaLib;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -20,6 +21,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.apache.logging.log4j.core.jmx.Server;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;
@@ -63,29 +65,27 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
         if(level().isClientSide())
             return;
 
-        level().getEntities(this, getBoundingBox().inflate(5), entity -> entity instanceof Player).forEach(player -> {
-            if(!(player instanceof Player))
+        level().getEntities(this, getBoundingBox().inflate(5), entity -> entity instanceof Player).forEach(playerEntity -> {
+            if(!(playerEntity instanceof ServerPlayer))
                 return;
 
+            ServerPlayer player = (ServerPlayer) playerEntity;
             if(!this.getPersistentData().contains("Player"))
                 this.getPersistentData().putUUID("Player", player.getUUID());
 
-            boolean isInDialogue = player.getPersistentData().getBoolean("IsInDialogue");
-            if(isInDialogue)
+            if(BlablaLib.isPlayerInDialogue(player))
                 return;
 
-            String currentChapter = player.getPersistentData().getString("CurrentChapter");
-            String lastReadChapter = player.getPersistentData().getString("LastReadChapter");
-            if (currentChapter.isEmpty()) {
+            String currentChapter = BlablaLib.getPlayerDialogue(player);
+            String lastReadChapter = BlablaLib.getPlayerLastReadDialogue(player);
+
+            if (currentChapter.isEmpty())
                 currentChapter = "chapter_0_set";
-                player.getPersistentData().putString("CurrentChapter", currentChapter);
-            }
+
+            BlablaLib.setPlayerDialogue(player, currentChapter);
 
             if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
-            {
-                player.getPersistentData().putBoolean("IsInDialogue", true);
-                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), (ServerPlayer) player);
-            }
+                BlablaLib.openDialogue(player);
         });
 
         if (this.entityData.get(ASCENDING)) {
