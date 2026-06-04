@@ -14,10 +14,12 @@ import io.github.gcjojo.blablalib.BlablaLib;
 import io.github.gcjojo.blablalib.events.BlablalibEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -26,6 +28,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplateManager;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -122,7 +125,7 @@ public class ModEvents {
                         player.connection.teleport(data.originalPosition.x, data.originalPosition.y, data.originalPosition.z, player.getYRot(), player.getXRot());
                         player.setGameMode(data.previousGameMode);
                         if (!data.nextDialogue.isEmpty()) {
-                            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(data.nextDialogue), player);
+                            BlablaLib.openDialogue(player, data.nextDialogue);
                         }
                     }
                     iterator.remove();
@@ -154,7 +157,7 @@ public class ModEvents {
                     item.setDeltaMovement(0, 0.02, 0);
                 }
                 else if (age < 120) {
-                    Player player = item.level().getNearestPlayer(item, 20.0);
+                    Player player = item.level().getNearestPlayer(item, 50.0d);
                     if (player != null) {
                         Vec3 dir = player.position().add(0, 1, 0).subtract(item.position()).normalize();
                         item.setDeltaMovement(dir.scale(0.15));
@@ -187,12 +190,6 @@ public class ModEvents {
             newPersistentData.putBoolean("LightEssence", oldPersistentData.getBoolean("LightEssence"));
         if(oldPersistentData.contains("ScourgeRespawnPosition"))
             newPersistentData.put("ScourgeRespawnPosition", oldPersistentData.getCompound("ScourgeRespawnPosition"));
-        if(oldPersistentData.contains("IsInDialogue"))
-            newPersistentData.putBoolean("IsInDialogue", false);
-        if(oldPersistentData.contains("CurrentChapter"))
-            newPersistentData.putString("CurrentChapter", oldPersistentData.getString("CurrentChapter"));
-        if(oldPersistentData.contains("LastReadChapter"))
-            newPersistentData.putString("LastReadChapter", oldPersistentData.getString("LastReadChapter"));
         if(oldPersistentData.contains("RespawnsScourge"))
             newPersistentData.putBoolean("RespawnsScourge", oldPersistentData.getBoolean("RespawnsScourge"));
     }
@@ -252,7 +249,7 @@ public class ModEvents {
                         player.level().addFreshEntity(newScourge);
                         playerPersistentData.remove("ScourgeRespawnPosition");
                         playerPersistentData.remove("RespawnsScourge");
-                        playerPersistentData.putString("CurrentChapter", "new_game_plus_choice");
+                        BlablaLib.setPlayerDialogue((ServerPlayer) player, "worldscolliding:new_game_plus_choice");
                     }
                     return;
                 }
@@ -282,7 +279,7 @@ public class ModEvents {
                 return;
 
             if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
-                ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("credits"), (ServerPlayer) player);
+                BlablaLib.openDialogue((ServerPlayer) player, "worldscolliding:player");
                 player.getPersistentData().putBoolean("ShowCredits", false);
 
                 if(player.getPersistentData().contains("ScourgeRespawnPosition"))
@@ -325,13 +322,54 @@ public class ModEvents {
     }
 
     public static void registerBlablaLibEvents(){
-        BlablalibEvents.DIALOGUE_COMPLETED.register((ServerPlayer player, String dialogue) -> {
-            if(player != null) {
-                if(dialogue.equals("worldscolliding:chapter_7_light_set") || dialogue.equals("worldscolliding:chapter_7_dark_set"))
-                    spawnBoss(player, dialogue.contains("light"));
+        BlablalibEvents.DIALOGUE_COMPLETED.register(ModEvents::onDialogueCompleted);
+        BlablalibEvents.DIALOGUE_CHOICE_MADE.register(ModEvents::onDialogueChoiceMade);
+    }
+
+    private static EventResult onDialogueCompleted(ServerPlayer player, String dialogue) {
+        if(player != null) {
+            if(dialogue.equals("worldscolliding:chapter_7_light_set") || dialogue.equals("worldscolliding:chapter_7_dark_set"))
+                spawnBoss(player, dialogue.contains("light"));
+        }
+        return EventResult.pass();
+    }
+
+    private static EventResult onDialogueChoiceMade(ServerPlayer player, String nextDialogue, String saveDialogue, String action) {
+        if (player != null) {
+            CompoundTag spawnpointTag = player.getPersistentData().getCompound("StoryDimension").getCompound("Spawnpoint");
+
+            player.teleportTo(spawnpointTag.getInt("x"), spawnpointTag.getInt("y"), spawnpointTag.getInt("z"));
+
+            if (action != null && action.startsWith("seal_")) {
+                String animNum = action.replace("seal_", "");
+                String animName = "sceal" + animNum;
+
+                ServerLevel level = (ServerLevel) player.level();
+                AABB searchBox = player.getBoundingBox().inflate(50.0);
+                List<LivingEntity> scourges = level.getEntitiesOfClass(LivingEntity.class, searchBox, e -> e instanceof ScourgeEntity || e instanceof AwakenedScourgeEntity);
+
+                if (!scourges.isEmpty()) {
+                    LivingEntity boss = scourges.get(0);
+                    Vec3 camPos = new Vec3(boss.getX() + 13.0, boss.getY() + 2.0, boss.getZ());
+                    double dx = boss.getX() - camPos.x;
+                    double dy = (boss.getY() + boss.getEyeHeight()) - camPos.y;
+                    double dz = boss.getZ() - camPos.z;
+                    float yaw = (float)(Math.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+                    float pitch = (float)(-(Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180D / Math.PI)));
+
+                    ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), nextDialogue);
+                    player.setGameMode(GameType.SPECTATOR);
+
+                    if (boss instanceof software.bernie.geckolib.animatable.GeoEntity geoBoss) {
+                        geoBoss.triggerAnim("seal_controller", animName);
+                    }
+                    return EventResult.pass();
+                } else {
+                    player.sendSystemMessage(Component.literal("Scourge introuvable pour l'animation de scellement."));
+                }
             }
-            return EventResult.pass();
-        });
+        }
+        return EventResult.pass();
     }
 
     private static void spawnBoss(ServerPlayer player, boolean isLight){

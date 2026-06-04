@@ -3,6 +3,7 @@ package fr.gcjojo.worldscolliding.entity;
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
+import io.github.gcjojo.blablalib.BlablaLib;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
@@ -340,9 +341,9 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     boolean isLight = playerData.getBoolean("LightEssence");
                     playerData.remove("LightEssence");
                     playerData.putBoolean("RespawnsScourge", isLight);
-                    String setName = isLight ? "chapter_7_after_boss_light_set" : "chapter_7_after_boss_dark_set";
-                    playerData.putString("CurrentChapter", setName);
-                    ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(setName), (ServerPlayer) player);
+                    String setName = isLight ? "worldscolliding:chapter_7_after_boss_light_set" : "worldscolliding:chapter_7_after_boss_dark_set";
+
+                    BlablaLib.openDialogue((ServerPlayer) player, setName);
                 }
 
                 this.discard();

@@ -80,12 +80,10 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
             String lastReadChapter = BlablaLib.getPlayerLastReadDialogue(player);
 
             if (currentChapter.isEmpty())
-                currentChapter = "chapter_0_set";
-
-            BlablaLib.setPlayerDialogue(player, currentChapter);
+                currentChapter = "worldscolliding:chapter_0_set";
 
             if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
-                BlablaLib.openDialogue(player);
+                BlablaLib.openDialogue(player, currentChapter);
         });
 
         if (this.entityData.get(ASCENDING)) {
@@ -117,9 +115,8 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                             MutableComponent msg = Component.translatable("worldscolliding.dialogue.scourge_ban_message").withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC);
                             serverPlayer.sendSystemMessage(msg, false);
 
-                            serverPlayer.getPersistentData().putString("CurrentChapter", "chapter_7_after_scourge_banned_set");
+                            BlablaLib.openDialogue(serverPlayer, "worldscolliding:chapter_7_after_scourge_banned_set");
                             serverPlayer.getPersistentData().putBoolean("RespawnsScourge", true);
-                            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket("chapter_7_after_scourge_banned_set"), serverPlayer);
                         }
 
                     }
