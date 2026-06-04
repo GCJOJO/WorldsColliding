@@ -149,8 +149,8 @@ dependencies {
     implementation("com.eliotlash.mclib:mclib:20")
 
     implementation fg.deobf("dev.architectury:architectury-forge:${architectury_api_version}")
-    //implementation fg.deobf("curse.maven:blablalib-1563558:${blablalib_file_id}")
-    implementation fg.deobf("io.github.gcjojo:blablalib-forge:${blablalib_version}")
+    implementation fg.deobf("curse.maven:blablalib-1563558:${blablalib_file_id}")
+    //implementation fg.deobf("io.github.gcjojo:blablalib-forge:${blablalib_version}")
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
