@@ -8,7 +8,6 @@ import fr.gcjojo.worldscolliding.StoryDimensionData;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
-import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
 import io.github.gcjojo.blablalib.BlablaLib;
 import io.github.gcjojo.blablalib.events.BlablalibEvents;
@@ -279,7 +278,7 @@ public class ModEvents {
                 return;
 
             if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
-                BlablaLib.openDialogue((ServerPlayer) player, "worldscolliding:player");
+                BlablaLib.openDialogue((ServerPlayer) player, "worldscolliding:credits");
                 player.getPersistentData().putBoolean("ShowCredits", false);
 
                 if(player.getPersistentData().contains("ScourgeRespawnPosition"))
