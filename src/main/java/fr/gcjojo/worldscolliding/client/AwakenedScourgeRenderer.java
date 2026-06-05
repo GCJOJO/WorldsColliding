@@ -1,10 +1,10 @@
 package fr.gcjojo.worldscolliding.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.math.Axis;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import software.bernie.geckolib.renderer.GeoEntityRenderer;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.math.Axis;
 
 public class AwakenedScourgeRenderer extends GeoEntityRenderer<AwakenedScourgeEntity> {
     public AwakenedScourgeRenderer(EntityRendererProvider.Context renderManager) {

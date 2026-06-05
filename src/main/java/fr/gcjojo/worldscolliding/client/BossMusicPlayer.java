@@ -1,7 +1,7 @@
 package fr.gcjojo.worldscolliding.client;
 
-import net.minecraft.client.Minecraft;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
+import net.minecraft.client.Minecraft;
 
 public class BossMusicPlayer {
     private static BossMusicSound current;

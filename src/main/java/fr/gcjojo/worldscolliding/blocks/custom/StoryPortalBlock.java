@@ -1,6 +1,5 @@
 package fr.gcjojo.worldscolliding.blocks.custom;
 
-import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.PlayerStoryDimensionData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -9,18 +8,15 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.RelativeMovement;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.EnumSet;
 import java.util.Objects;
-import java.util.Set;
 
 public class StoryPortalBlock extends Block {
 

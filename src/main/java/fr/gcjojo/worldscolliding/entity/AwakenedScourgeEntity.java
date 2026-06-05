@@ -2,7 +2,6 @@ package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.events.ModEvents;
-import fr.gcjojo.worldscolliding.network.ModNetwork;
 import io.github.gcjojo.blablalib.BlablaLib;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;

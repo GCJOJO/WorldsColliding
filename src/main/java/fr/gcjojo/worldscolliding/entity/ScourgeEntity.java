@@ -1,7 +1,6 @@
 package fr.gcjojo.worldscolliding.entity;
 
 import fr.gcjojo.worldscolliding.ModSounds;
-import fr.gcjojo.worldscolliding.network.ModNetwork;
 import io.github.gcjojo.blablalib.BlablaLib;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -21,7 +20,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import org.apache.logging.log4j.core.jmx.Server;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimatableManager;

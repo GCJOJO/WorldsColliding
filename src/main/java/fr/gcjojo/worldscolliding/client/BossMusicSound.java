@@ -1,11 +1,10 @@
 package fr.gcjojo.worldscolliding.client;
 
+import fr.gcjojo.worldscolliding.ModSounds;
+import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import net.minecraft.client.resources.sounds.AbstractTickableSoundInstance;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
-import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
-import fr.gcjojo.worldscolliding.ModSounds;
 
 public class BossMusicSound extends AbstractTickableSoundInstance {
     private AwakenedScourgeEntity boss;
