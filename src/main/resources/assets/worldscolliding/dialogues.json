@@ -248,15 +248,16 @@
 
   "chapter_5_seal_ask": [
     { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_seal_ask.text" },
-    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "none", "next1": "worldscolliding:chapter_5_yes_set", "save1": "worldscolliding:chapter_5_yes_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "worldscolliding:chapter_5_seal_no_set", "save2": "worldscolliding:chapter_5_seal_ask" }
+    { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "seal_5", "next1": "worldscolliding:chapter_5_yes_set", "save1": "worldscolliding:chapter_5_yes_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "worldscolliding:chapter_5_seal_no_set", "save2": "worldscolliding:chapter_5_seal_ask" }
   ],
 
   "chapter_5_yes_set" : [
-
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_seal_yes.1" },
+    { "action": "command", "command": "scourge sealeffect remnant" }
   ],
 
   "chapter_5_no_set" : [
-
+    { "action": "message", "speaker": 1, "text": "worldscolliding.dialogue.chapter_5_seal_no.1" }
   ],
 
   "chapter_6_set": [
