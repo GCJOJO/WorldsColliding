@@ -57,7 +57,7 @@ public class ModCommands {
         List<String> sealTypes = Arrays.asList("remnant", "dark", "light", "first_remnant");
 
         DialogueCommand.register(event.getDispatcher(), chapters, (CommandContext<CommandSourceStack> context, String dialogue) -> {
-            if(!dialogue.equalsIgnoreCase("chapter_5_6_set") ||
+            if(!dialogue.equalsIgnoreCase("worldscolliding:chapter_5_6_set") ||
                     !context.getSource().isPlayer() ||
                     context.getSource().getPlayer() == null)
                 return dialogue;
@@ -67,12 +67,12 @@ public class ModCommands {
             String chapterName = "";
             if(!player.getPersistentData().contains("Chapter5") || !player.getPersistentData().getBoolean("Chapter5"))
             {
-                chapterName = "chapter_5_set";
+                chapterName = "worldscolliding:chapter_5_set";
                 player.getPersistentData().putBoolean("Chapter5", true);
             }
             else
             {
-                chapterName = "chapter_6_set";
+                chapterName = "worldscolliding:chapter_6_set";
                 player.getPersistentData().putBoolean("Chapter5", false);
             }
 
