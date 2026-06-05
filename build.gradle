@@ -4,6 +4,11 @@ plugins {
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '[6.0,6.2)'
     id 'org.spongepowered.mixin' version '0.7.+'
+    id 'architectury-plugin' version '3.4-SNAPSHOT'
+}
+
+architectury {
+    minecraft = project.minecraft_version
 }
 
 version = mod_version
@@ -115,17 +120,7 @@ sourceSets.main.resources { srcDir 'src/generated/resources' }
 repositories {
     // Put repositories for dependencies here
     // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html#sub:flat_dir_resolver
-     flatDir {
-         dir 'libs'
-    }
-    maven
-    {
-        url = uri("https://maven.bai.lol")
-    }
-
+    mavenLocal()
 
     maven {
         name = 'GeckoLib'
@@ -136,11 +131,7 @@ repositories {
         }
     }
 
-    dependencies {
-        implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}")
-        implementation("com.eliotlash.mclib:mclib:20")
-    }
-
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -151,16 +142,12 @@ dependencies {
     // then special handling is done to allow a setup of a vanilla dependency without the use of an external repository.
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    // Example mod dependency with JEI - using fg.deobf() ensures the dependency is remapped to your development mappings
-    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-common-api:${jei_version}")
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}-forge-api:${jei_version}")
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}-forge:${jei_version}")
+    implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${minecraft_version}:${geckolib_version}")
+    implementation("com.eliotlash.mclib:mclib:20")
 
-    // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
-    // The group id is ignored when searching -- in this case, it is "blank"
-    //implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
+    implementation fg.deobf("dev.architectury:architectury-forge:${architectury_api_version}")
+    implementation fg.deobf("com.github.GCJOJO.BlablaLib:blablalib-forge:${blablalib_version}")
+    //implementation fg.deobf("io.github.gcjojo.blablalib:blablalib-forge:${blablalib_version}")
 
     // For more info:
     // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
@@ -178,6 +165,7 @@ tasks.named('processResources', ProcessResources).configure {
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: mod_version,
             mod_authors: mod_authors, mod_description: mod_description,
+            blablalib_version_range: blablalib_version_range
     ]
     inputs.properties replaceProperties
 
@@ -211,16 +199,7 @@ tasks.named('jar', Jar).configure {
 
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
-            artifact jar
-        }
-    }
-    repositories {
-        maven {
-            url "file://${project.projectDir}/mcmodsrepo"
-        }
-    }
+
 }
 
 tasks.withType(JavaCompile).configureEach {

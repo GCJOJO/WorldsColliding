@@ -7,6 +7,7 @@ import fr.gcjojo.worldscolliding.client.ScourgeRenderer;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
+import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.items.ModItems;
 import fr.gcjojo.worldscolliding.network.ModNetwork;
 import fr.gcjojo.worldscolliding.worldgen.dimension.ModDimensions;
@@ -62,6 +63,8 @@ public class ModEntry
         MinecraftForge.EVENT_BUS.register(this);
 
         context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        ModEvents.registerBlablaLibEvents();
     }
 
     public static Logger getLogger() { return LOGGER; }
