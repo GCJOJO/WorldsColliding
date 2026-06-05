@@ -335,12 +335,13 @@ public class ModEvents {
     }
 
     private static EventResult onDialogueChoiceMade(ServerPlayer player, String nextDialogue, String saveDialogue, String action) {
-        if (player != null) {
-            CompoundTag spawnpointTag = player.getPersistentData().getCompound("StoryDimension").getCompound("Spawnpoint");
+        if (player != null && action != null) {
+            if(!action.equalsIgnoreCase("no_tp")){
+                CompoundTag spawnpointTag = player.getPersistentData().getCompound("StoryDimension").getCompound("Spawnpoint");
+                player.teleportTo(spawnpointTag.getInt("x"), spawnpointTag.getInt("y"), spawnpointTag.getInt("z"));
+            }
 
-            player.teleportTo(spawnpointTag.getInt("x"), spawnpointTag.getInt("y"), spawnpointTag.getInt("z"));
-
-            if (action != null && action.startsWith("seal_")) {
+            if (action.startsWith("seal_")) {
                 String animNum = action.replace("seal_", "");
                 String animName = "sceal" + animNum;
 
@@ -363,7 +364,7 @@ public class ModEvents {
                     if (boss instanceof software.bernie.geckolib.animatable.GeoEntity geoBoss) {
                         geoBoss.triggerAnim("seal_controller", animName);
                     }
-                    return EventResult.pass();
+                    return EventResult.interruptFalse();
                 } else {
                     player.sendSystemMessage(Component.literal("Scourge introuvable pour l'animation de scellement."));
                 }
