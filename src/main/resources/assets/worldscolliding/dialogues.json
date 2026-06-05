@@ -251,11 +251,11 @@
     { "action": "choice", "option1": "worldscolliding.dialogue.choice.yes", "action1": "none", "next1": "worldscolliding:chapter_5_yes_set", "save1": "worldscolliding:chapter_5_yes_set", "option2": "worldscolliding.dialogue.choice.no", "action2": "none", "next2": "worldscolliding:chapter_5_seal_no_set", "save2": "worldscolliding:chapter_5_seal_ask" }
   ],
 
-  "worldscolliding:chapter_5_yes_set" : [
+  "chapter_5_yes_set" : [
 
   ],
 
-  "worldscolliding:chapter_5_no_set" : [
+  "chapter_5_no_set" : [
 
   ],
 
