@@ -7,7 +7,7 @@ Worlds Colliding is the core foundation of the modpack of the same name. This mo
 
 - Custom Story Dimension : Added a Story Dimension where all the story takes place. This dimensions ensures that every players can enjoy the story even in a multiplayer environment. 
 
-- Narrative Engine: Implements a custom dialogue system with fading and image rendering.
+- Custom Story: Adds dialogues to the game using [BlablaLib](https://github.com/GCJOJO/BlablaLib).
 
 ## Community
 
