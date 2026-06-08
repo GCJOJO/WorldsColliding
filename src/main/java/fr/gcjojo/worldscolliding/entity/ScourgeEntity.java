@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.entity;
 
+import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.ModSounds;
 import io.github.gcjojo.blablalib.BlablaLib;
 import net.minecraft.core.particles.ParticleTypes;
@@ -9,6 +10,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -74,13 +76,13 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
             if(BlablaLib.isPlayerInDialogue(player))
                 return;
 
-            String currentChapter = BlablaLib.getPlayerDialogue(player);
-            String lastReadChapter = BlablaLib.getPlayerLastReadDialogue(player);
+            ResourceLocation currentChapter = BlablaLib.getPlayerDialogue(player);
+            ResourceLocation lastReadChapter = BlablaLib.getPlayerLastReadDialogue(player);
 
-            if (currentChapter.isEmpty())
-                currentChapter = "worldscolliding:chapter_0_set";
+            if (currentChapter == null)
+                currentChapter = ResourceLocation.tryBuild(ModEntry.MODID,"chapter_0_set");
 
-            if(lastReadChapter.isEmpty() || !lastReadChapter.equals(currentChapter))
+            if(lastReadChapter == null || !lastReadChapter.equals(currentChapter))
                 BlablaLib.openDialogue(player, currentChapter);
         });
 
@@ -113,7 +115,7 @@ public class ScourgeEntity extends PathfinderMob implements GeoEntity {
                             MutableComponent msg = Component.translatable("worldscolliding.dialogue.scourge_ban_message").withStyle(net.minecraft.ChatFormatting.GRAY, net.minecraft.ChatFormatting.ITALIC);
                             serverPlayer.sendSystemMessage(msg, false);
 
-                            BlablaLib.openDialogue(serverPlayer, "worldscolliding:chapter_7_after_scourge_banned_set");
+                            BlablaLib.openDialogue(serverPlayer, ResourceLocation.tryBuild(ModEntry.MODID, "chapter_7_after_scourge_banned_set"));
                             serverPlayer.getPersistentData().putBoolean("RespawnsScourge", true);
                         }
 

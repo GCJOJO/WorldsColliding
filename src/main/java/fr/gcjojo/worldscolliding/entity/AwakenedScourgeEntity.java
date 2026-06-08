@@ -1,5 +1,6 @@
 package fr.gcjojo.worldscolliding.entity;
 
+import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import io.github.gcjojo.blablalib.BlablaLib;
@@ -285,7 +286,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                         GameType prevMode = player.gameMode.getGameModeForPlayer();
                         previousGameModes.put(player.getUUID(), prevMode);
                         player.setGameMode(GameType.SPECTATOR);
-                        ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, prevMode, "");
+                        ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, prevMode, null);
                     }
 
                     Block chthonianVoid = ForgeRegistries.BLOCKS.getValue(ResourceLocation.parse("terramity:chthonian_void"));
@@ -340,7 +341,7 @@ public class AwakenedScourgeEntity extends Monster implements GeoEntity {
                     boolean isLight = playerData.getBoolean("LightEssence");
                     playerData.remove("LightEssence");
                     playerData.putBoolean("RespawnsScourge", isLight);
-                    String setName = isLight ? "worldscolliding:chapter_7_after_boss_light_set" : "worldscolliding:chapter_7_after_boss_dark_set";
+                    ResourceLocation setName = isLight ? ResourceLocation.tryBuild(ModEntry.MODID, "chapter_7_after_boss_light_set") : ResourceLocation.tryBuild(ModEntry.MODID, "chapter_7_after_boss_dark_set");
 
                     BlablaLib.openDialogue((ServerPlayer) player, setName);
                 }

@@ -53,9 +53,9 @@ public class ModEvents {
         boolean setLook;
         int ticksLeft;
         GameType previousGameMode;
-        String nextDialogue;
+        ResourceLocation nextDialogue;
 
-        FreezeData(Vec3 originalPosition, Vec3 cameraPosition, float yaw, float pitch, boolean setLook, int ticksLeft, GameType previousGameMode, String nextDialogue) {
+        FreezeData(Vec3 originalPosition, Vec3 cameraPosition, float yaw, float pitch, boolean setLook, int ticksLeft, GameType previousGameMode, ResourceLocation nextDialogue) {
             this.originalPosition = originalPosition;
             this.cameraPosition = cameraPosition;
             this.yaw = yaw;
@@ -70,7 +70,7 @@ public class ModEvents {
     private static final Map<UUID, FreezeData> frozenPlayers = new HashMap<>();
     public static final List<ItemEntity> sealItems = new ArrayList<>();
 
-    public static void freezePlayer(UUID playerId, Vec3 position, float yaw, float pitch, int ticks, GameType prevMode, String nextDialogue) {
+    public static void freezePlayer(UUID playerId, Vec3 position, float yaw, float pitch, int ticks, GameType prevMode, ResourceLocation nextDialogue) {
         ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerId);
         if (player != null) {
             Vec3 orig = player.position();
@@ -79,7 +79,7 @@ public class ModEvents {
         }
     }
 
-    public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, String nextDialogue) {
+    public static void freezePlayer(UUID playerId, Vec3 position, int ticks, GameType prevMode, ResourceLocation nextDialogue) {
         ServerPlayer player = ServerLifecycleHooks.getCurrentServer().getPlayerList().getPlayer(playerId);
         if (player != null) {
             Vec3 orig = player.position();
@@ -123,7 +123,7 @@ public class ModEvents {
                     if (player != null) {
                         player.connection.teleport(data.originalPosition.x, data.originalPosition.y, data.originalPosition.z, player.getYRot(), player.getXRot());
                         player.setGameMode(data.previousGameMode);
-                        if (!data.nextDialogue.isEmpty()) {
+                        if (data.nextDialogue != null) {
                             BlablaLib.openDialogue(player, data.nextDialogue);
                         }
                     }
@@ -248,7 +248,7 @@ public class ModEvents {
                         player.level().addFreshEntity(newScourge);
                         playerPersistentData.remove("ScourgeRespawnPosition");
                         playerPersistentData.remove("RespawnsScourge");
-                        BlablaLib.setPlayerDialogue((ServerPlayer) player, "worldscolliding:new_game_plus_choice");
+                        BlablaLib.setPlayerDialogue((ServerPlayer) player, ResourceLocation.tryBuild(ModEntry.MODID, "new_game_plus_choice"));
                     }
                     return;
                 }
@@ -278,7 +278,7 @@ public class ModEvents {
                 return;
 
             if(player.getPersistentData().contains("ShowCredits") && player.getPersistentData().getBoolean("ShowCredits")) {
-                BlablaLib.openDialogue((ServerPlayer) player, "worldscolliding:credits");
+                BlablaLib.openDialogue((ServerPlayer) player, ResourceLocation.tryBuild(ModEntry.MODID ,"credits"));
                 player.getPersistentData().putBoolean("ShowCredits", false);
 
                 if(player.getPersistentData().contains("ScourgeRespawnPosition"))
@@ -325,15 +325,15 @@ public class ModEvents {
         BlablalibEvents.DIALOGUE_CHOICE_MADE.register(ModEvents::onDialogueChoiceMade);
     }
 
-    private static EventResult onDialogueCompleted(ServerPlayer player, String dialogue) {
+    private static EventResult onDialogueCompleted(ServerPlayer player, ResourceLocation dialogue) {
         if(player != null) {
-            if(dialogue.equals("worldscolliding:chapter_7_light_set") || dialogue.equals("worldscolliding:chapter_7_dark_set"))
-                spawnBoss(player, dialogue.contains("light"));
+            if(dialogue.equals(ResourceLocation.tryBuild(ModEntry.MODID, "chapter_7_light_set")) || dialogue.equals(ResourceLocation.tryBuild(ModEntry.MODID, "chapter_7_dark_set")))
+                spawnBoss(player, dialogue.toString().contains("light"));
         }
         return EventResult.pass();
     }
 
-    private static EventResult onDialogueChoiceMade(ServerPlayer player, String nextDialogue, String saveDialogue, String action) {
+    private static EventResult onDialogueChoiceMade(ServerPlayer player, ResourceLocation nextDialogue, ResourceLocation saveDialogue, String action) {
         if (player != null && action != null) {
             if(!action.equalsIgnoreCase("no_tp")){
                 CompoundTag spawnpointTag = player.getPersistentData().getCompound("StoryDimension").getCompound("Spawnpoint");

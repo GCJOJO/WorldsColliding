@@ -9,7 +9,6 @@ import fr.gcjojo.worldscolliding.entity.ModEntities;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
 import fr.gcjojo.worldscolliding.events.ModEvents;
 import fr.gcjojo.worldscolliding.items.ModItems;
-import io.github.gcjojo.blablalib.forge.BlablaLibForgeConfig;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -66,7 +65,6 @@ public class ModEntry
     private void commonSetup(final FMLCommonSetupEvent event)
     {
         event.enqueueWork(fr.gcjojo.worldscolliding.network.ModNetwork::register);
-        BlablaLibForgeConfig.enableCommand = false;
     }
 
     @SubscribeEvent

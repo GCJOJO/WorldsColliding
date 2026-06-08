@@ -2,6 +2,7 @@ package fr.gcjojo.worldscolliding.commands;
 
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
+import fr.gcjojo.worldscolliding.ModEntry;
 import fr.gcjojo.worldscolliding.ModSounds;
 import fr.gcjojo.worldscolliding.entity.AwakenedScourgeEntity;
 import fr.gcjojo.worldscolliding.entity.ScourgeEntity;
@@ -51,72 +52,33 @@ public class ModCommands {
     @SubscribeEvent
     public static void onRegisterCommands(RegisterCommandsEvent event) {
         // Load chapters dynamically
-        List<String> chapters = Arrays.asList("\"worldscolliding:dogcheck\"", "\"worldscolliding:credits\"", "\"worldscolliding:chapter_0_set\"", "\"worldscolliding:chapter_1_set\"", "\"worldscolliding:chapter_1_ask\"", "\"worldscolliding:chapter_2_set\"", "\"worldscolliding:chapter_2_ask\"", "\"worldscolliding:chapter_3_set\"", "\"worldscolliding:chapter_3_ask\"", "\"worldscolliding:chapter_4_set\"", "\"worldscolliding:chapter_5_set\"", "\"worldscolliding:chapter_5_past_set\"", "\"worldscolliding:chapter_5_seal_ask\"", "\"worldscolliding:chapter_6_set\"", "\"worldscolliding:chapter_6_ask\"", "\"worldscolliding:chapter_7_prologue_set\"", "\"worldscolliding:chapter_7_light_set\"", "\"worldscolliding:chapter_7_dark_set\"");
+        //List<String> chapters = Arrays.asList("\"worldscolliding:dogcheck\"", "\"worldscolliding:credits\"", "\"worldscolliding:chapter_0_set\"", "\"worldscolliding:chapter_1_set\"", "\"worldscolliding:chapter_1_ask\"", "\"worldscolliding:chapter_2_set\"", "\"worldscolliding:chapter_2_ask\"", "\"worldscolliding:chapter_3_set\"", "\"worldscolliding:chapter_3_ask\"", "\"worldscolliding:chapter_4_set\"", "\"worldscolliding:chapter_5_set\"", "\"worldscolliding:chapter_5_past_set\"", "\"worldscolliding:chapter_5_seal_ask\"", "\"worldscolliding:chapter_6_set\"", "\"worldscolliding:chapter_6_ask\"", "\"worldscolliding:chapter_7_prologue_set\"", "\"worldscolliding:chapter_7_light_set\"", "\"worldscolliding:chapter_7_dark_set\"");
         List<String> animations = Arrays.asList("sceal1", "sceal2", "sceal3", "sceal4", "sceal5", "sceal6", "sceal7", "sceal8", "ascend");
         List<String> cinematics = Arrays.asList("laugh", "tp_effect");
         List<String> sealTypes = Arrays.asList("remnant", "dark", "light", "first_remnant");
 
-        DialogueCommand.register(event.getDispatcher(), chapters, (CommandContext<CommandSourceStack> context, String dialogue) -> {
-            if(!dialogue.equalsIgnoreCase("worldscolliding:chapter_5_6_set") ||
+        DialogueCommand.registerTransformation((CommandContext<CommandSourceStack> context, ResourceLocation dialogue) -> {
+            if(!dialogue.equals(ResourceLocation.tryBuild(ModEntry.MODID, "chapter_5_6_set")) ||
                     !context.getSource().isPlayer() ||
                     context.getSource().getPlayer() == null)
                 return dialogue;
 
             ServerPlayer player = context.getSource().getPlayer();
 
-            String chapterName = "";
+            ResourceLocation chapterName = dialogue;
             if(!player.getPersistentData().contains("Chapter5") || !player.getPersistentData().getBoolean("Chapter5"))
             {
-                chapterName = "worldscolliding:chapter_5_set";
+                chapterName = ResourceLocation.tryBuild(ModEntry.MODID, "chapter_5_set");
                 player.getPersistentData().putBoolean("Chapter5", true);
             }
             else
             {
-                chapterName = "worldscolliding:chapter_6_set";
+                chapterName = ResourceLocation.tryBuild(ModEntry.MODID, "chapter_6_set");
                 player.getPersistentData().putBoolean("Chapter5", false);
             }
 
             return chapterName;
         });
-
-        /*event.getDispatcher().register(Commands.literal("dialogue").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
-                .then(Commands.literal("play")
-                        .executes(context -> {
-                            ServerPlayer player = context.getSource().getPlayerOrException();
-                            String currentChapter = player.getPersistentData().getString("CurrentChapter");
-                            if (currentChapter.isEmpty()) {
-                                currentChapter = "chapter_0_set";
-                                player.getPersistentData().putString("CurrentChapter", currentChapter);
-                            }
-                            ModNetwork.sendToPlayer(new ModNetwork.OpenDialoguePacket(currentChapter), player);
-                            return 1;
-                        }))
-                .then(Commands.literal("set")
-                        .then(Commands.argument("chapterName", StringArgumentType.string())
-                                .suggests((context, builder) -> SharedSuggestionProvider.suggest(chapters, builder))
-                                .executes(context -> {
-                                    ServerPlayer player = context.getSource().getPlayerOrException();
-                                    String chapterName = StringArgumentType.getString(context, "chapterName");
-
-                                    if(chapterName.equalsIgnoreCase("chapter_5_6_set")){
-                                        if(!player.getPersistentData().contains("Chapter5") || !player.getPersistentData().getBoolean("Chapter5"))
-                                        {
-                                            chapterName = "chapter_5_set";
-                                            player.getPersistentData().putBoolean("Chapter5", true);
-                                        }
-                                        else
-                                        {
-                                            chapterName = "chapter_6_set";
-                                            player.getPersistentData().putBoolean("Chapter5", false);
-                                        }
-                                    }
-
-                                    player.getPersistentData().putString("CurrentChapter", chapterName);
-                                    String finalChapterName = chapterName;
-                                    context.getSource().sendSuccess(() -> Component.literal("Chapitre mis à jour avec succès : " + finalChapterName), true);
-                                    return 1;
-                                })))
-        );*/
 
         event.getDispatcher().register(Commands.literal("scourge").requires(commandSourceStack -> commandSourceStack.hasPermission(2))
                 .then(Commands.literal("cinematic")
@@ -165,7 +127,7 @@ public class ModCommands {
 
                                                 player.sendSystemMessage(Component.literal("[DEBUG] Téléportation de la caméra en : X=" + camPos.x + " Y=" + camPos.y + " Z=" + camPos.z));
 
-                                                ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), "");
+                                                ModEvents.freezePlayer(player.getUUID(), camPos, yaw, pitch, 400, player.gameMode.getGameModeForPlayer(), null);
                                                 player.setGameMode(GameType.SPECTATOR);
                                             }
 
